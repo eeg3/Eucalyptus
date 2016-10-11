@@ -1,0 +1,21 @@
+{
+  "name": "eucalyptus",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Earl Gay",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "basic-auth": "^1.0.4",
+    "body-parser": "^1.15.2",
+    "busboy-body-parser": "^0.1.0",
+    "express": "^4.14.0",
+    "gridfs-stream": "^1.1.1",
+    "mongoose": "^4.6.3",
+    "request": "^2.75.0"
+  }
+}
