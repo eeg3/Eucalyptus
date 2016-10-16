@@ -72,6 +72,11 @@ body {
   color: rgba(113, 114, 116, 0.79);
   margin: 0;
 }
+.sp-databox-item-body {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin: 0;
+}
 .sp-databox-table {
   font-size:  .8em;
 }
