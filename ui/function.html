@@ -23,14 +23,14 @@
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
 
     <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <script src="/js/jquery-3.1.1.slim.min.js"></script>
 
     <!-- Bootstrap -->
     <script src="/js/bootstrap/bootstrap.min.js"></script>
     <script src="/js/bootstrap/ie10-viewport-bug-workaround.js"></script>
 
     <!-- Customer JS -->
-    <script src="/js/ApiHelper.js"></script>
+    <!-- <script src="/js/ApiHelper.js"></script> -->
     <script src="/js/root.js"></script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -55,7 +55,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#"><i class="fa fa-leaf"></i>&nbsp;&nbsp;&nbsp;Eucalyptus</a>
+        <a class="navbar-brand" href="/"><i class="fa fa-leaf"></i>&nbsp;&nbsp;&nbsp;Eucalyptus</a>
       </div>
       <div id="navbar" class="collapse navbar-collapse">
         <ul class="nav navbar-nav navbar-right">
@@ -106,43 +106,24 @@
     </div>
     <!-- End Search Section -->
 
-    <!-- Begin View Install Section -->
+    <!-- Begin Step 1 -->
     <div class="row">
-      <div class="col-sm-6">
+      <div class="col-sm-12">
         <div class="row">
           <div class="col-md-12">
             <div class="panel">
               <div class="panel-heading sp-databox-panel-heading">
-                Installation
+                Step 1
               </div>
               <div class="panel-body sp-databox-panel-body">
                 <table class="table table-bordered table-striped sp-databox-table">
+                  <thead>
+                    <tr><td>Sub-Step</td><td>Details</td><td>Action</td><td>Notes</td><td>Status</td></tr>
+                  </thead>
                   <tbody>
-                    <tr><td><a href="/image.html#create">Install View Composer</a></td></tr>
-                    <tr><td><a href="/image.html#create">Install View Connection Servers</a></td></tr>
-                    <tr><td><a href="/image.html#create">Install View Persona Management</a></td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> <!-- End Column -->
-
-      <div class="col-sm-6">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="panel">
-              <div class="panel-heading sp-databox-panel-heading">
-                Configuration
-              </div>
-              <div class="panel-body sp-databox-panel-body">
-                <table class="table table-bordered table-striped sp-databox-table">
-                  <tbody>
-                    <tr><td><a href="/image.html#create">Configure Events Database</a></td></tr>
-                    <tr><td><a href="/image.html#create">Configure Role-Based Administrations</a></td></tr>
-                    <tr><td><a href="/image.html#create">Configure External Access</a></td></tr>
-                    <tr><td><a href="/image.html#create">Configure SSL Certificates</a></td></tr>
+                    <tr id="substep-1-1"><td class="st-substep-col">A</td><td id="details-1-1" class="st-details-col">Sub-step item to do.</td><td id="action-1-1" class="st-action-col">RDP to ServerA</td><td><input type="text" id="notes-1-1" class="form-control input-sm" placeholder="Notes" /></td><td><input type="checkbox" id="status-1-1"></td></tr>
+                    <tr id="substep-1-2"><td class="st-substep-col">B</td><td id="details-1-2" class="st-details-col">Sub-step item to do.</td><td id="action-1-2" class="st-action-col">Open Citrix Studio</td><td><input type="text" id="notes-1-2" class="form-control input-sm" placeholder="Notes" /></td><td><input type="checkbox" id="status-1-2" disabled></td></tr>
+                    <tr id="substep-1-3"><td class="st-substep-col">C</td><td id="details-1-3" class="st-details-col">Sub-step item to do.</td><td id="action-1-3" class="st-action-col">Open PVS Console</td><td><input type="text" id="notes-1-3" class="form-control input-sm" placeholder="Notes" /></td><td><input type="checkbox" id="status-1-3" disabled></td></tr>
                   </tbody>
                 </table>
               </div>
@@ -151,47 +132,26 @@
         </div>
       </div> <!-- End Column -->
     </div> <!-- End Row -->
-    <!-- End View Install Section -->
+    <!-- End Step 1 -->
 
-    <!-- Begin View Manage & Monitor Section -->
+    <!-- Begin Step 2 -->
     <div class="row">
-      <div class="col-sm-6">
+      <div class="col-sm-12">
         <div class="row">
           <div class="col-md-12">
             <div class="panel">
               <div class="panel-heading sp-databox-panel-heading">
-                Manage
+                Step 2
               </div>
               <div class="panel-body sp-databox-panel-body">
                 <table class="table table-bordered table-striped sp-databox-table">
+                  <thead>
+                    <tr><td>Sub-Step</td><td>Details</td><td>Action</td><td>Notes</td><td>Status</td></tr>
+                  </thead>
                   <tbody>
-                    <tr><td><a href="/image.html#create">Create View Virtual Desktop Image</a></td></tr>
-                    <tr><td><a href="/image.html#create">Update View Virtual Desktop Image</a></td></tr>
-                    <tr><td><a href="/image.html#create">Delete View Virtual Desktop Image</a></td></tr>
-                    <tr><td><a href="/image.html#create">Create View Desktop Pool</a></td></tr>
-                    <tr><td><a href="/image.html#create">Update View Desktop Pool</a></td></tr>
-                    <tr><td><a href="/image.html#create">Delete View Desktop Pool</a></td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> <!-- End Column -->
-
-      <div class="col-sm-6">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="panel">
-              <div class="panel-heading sp-databox-panel-heading">
-                Monitor
-              </div>
-              <div class="panel-body sp-databox-panel-body">
-                <table class="table table-bordered table-striped sp-databox-table">
-                  <tbody>
-                    <tr><td><a href="/image.html#create">Create View Desktop Pool</a></td></tr>
-                    <tr><td><a href="/image.html#create">Delete View Desktop Pool</a></td></tr>
-                    <tr><td><a href="/image.html#create">View All...</a></td></tr>
+                    <tr id="substep-2-1"><td class="st-substep-col">A</td><td id="details-2-1" class="st-details-col">Sub-step item to do.</td><td id="action-2-1" class="st-action-col">RDP to ServerA</td><td><input type="text" id="notes-2-1" class="form-control input-sm" placeholder="Notes" /></td><td><input type="checkbox" id="status-2-1" disabled></td></tr>
+                    <tr id="substep-2-2"><td class="st-substep-col">B</td><td id="details-2-2" class="st-details-col">Sub-step item to do.</td><td id="action-2-2" class="st-action-col">Open Citrix Studio</td><td><input type="text" id="notes-2-2" class="form-control input-sm" placeholder="Notes" /></td><td><input type="checkbox" id="status-2-2" disabled></td></tr>
+                    <tr id="substep-2-3"><td class="st-substep-col">C</td><td id="details-2-3" class="st-details-col">Sub-step item to do.</td><td id="action-2-3" class="st-action-col">Open PVS Console</td><td><input type="text" id="notes-2-3"class="form-control input-sm" placeholder="Notes" /></td><td><input type="checkbox" id="status-2-3" disabled></td></tr>
                   </tbody>
                 </table>
               </div>
@@ -200,7 +160,7 @@
         </div>
       </div> <!-- End Column -->
     </div> <!-- End Row -->
-    <!-- End View Install Section -->
+    <!-- End Step 2 -->
 
 
   </div> <!-- End Container -->

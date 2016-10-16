@@ -139,3 +139,9 @@ canvas {
 #desktopsTable td:hover {
   box-shadow: 4px 4px 10px #777;
 }
+.st-substep-col {
+  font-size: 1.3em;
+  font-weight: bold;
+}
+.st-details-col, .st-action-col {
+}

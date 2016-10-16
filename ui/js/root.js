@@ -1,36 +1,7 @@
 window.onload = init;
 
-function drawCompHealth(canvas, context, items, total) {
 
-  // Health Coloring is deprecating for now. In the meantime, just make it green.
-  /*
-  var health = 100;
-  // Color code the fill based on health
-  if (health > 70 && health < 100) { context.fillStyle = "#F28500"; }
-  else if (health == 100) { context.fillStyle = "green"; }
-  else { context.fillStyle = "red"; }
-  */
-  context.fillStyle = "green";
-
-  // Get the items number in a percentage for filling amount.
-  var fillAmount = 100 - ( (items/total) * 100 );
-
-  /*
-  fillRect = x, y, width, height
-  Want to always start from the bottom (x=0)
-  Want to fill in the progress out of total (y=progress)
-  Want the width to always be the total of the square (canvas width)
-  Want the height to always fill in (since going up, just make sure its >canvas height)
-  */
-  context.fillRect(0, fillAmount, 100, 100);
-
-  // Write the percent in the middle
-  context.fillStyle = "black";
-  context.font = "30px Roboto";
-  context.textAlign = "center";
-  context.fillText(items, canvas.width/2, canvas.height/1.6);
-}
-
+/*
 // Check the API and update the Dashboard Item sent
 function checkAPI (dashboardItem, key, value) {
   var availableDesktops = 0;
@@ -60,7 +31,9 @@ function checkAPI (dashboardItem, key, value) {
 
     });
 }
+*/
 
+/*
 function initializeDashboard() {
   // Store all Component Health Dashboard items
   // Key is the object value we're looking for, and value is any value we're looking for.
@@ -74,7 +47,7 @@ function initializeDashboard() {
     checkAPI(compDashList[i], compDashListKey[i], compDashListValue[i]);
   }
 }
-
+*/
 
 function currentTimestamp() {
   var date = new Date();
@@ -87,7 +60,51 @@ function currentTimestamp() {
   $('#footer').append("<br /> Current Time: " + timestamp);
 }
 
+function checkboxProcess(steps, substeps) {
+  // The following for section makes it so checkboxes are enabled or disabled if the previous checkbox is checked or unchecked
+
+  // Take action per step
+  for (var i = 1; i<steps+1; i++) {
+
+    // Take action per substep
+    for (var j = 1; j<substeps+1; j++) {
+
+      // Set checkbox names for current and next item
+      var checkboxA = "status-" + i + "-" + j;
+      var checkboxB = "status-" + i + "-" + (j*1 + 1);
+
+      // Setting checkboxA's onclick to modify checkboxB's enabled/disabled status
+      $("input#" + checkboxA).click(function(){
+        checkboxA = this.id;
+        checkboxB = this.id.split("-")[0] + "-" + this.id.split("-")[1] + "-" + (this.id.split("-")[2]*1 + 1);
+
+        // If checkboxB's length is 0 then time to modify next step's substep instead of a non-existing substep in this current step
+        if (!($("#" + checkboxB).length)) {
+          checkboxB = this.id.split("-")[0] + "-" + (this.id.split("-")[1]*1 +1) + "-" + 1;
+        }
+
+        // If checkboxA is checked, then enable the next checkbox; if it isn't, then disable the next checkbox
+        if(this.checked) {
+          console.log("its checked");
+          $("input#" + checkboxB).attr("disabled", false);
+        } else {
+          console.log("its not checked");
+          $("input#" + checkboxB).attr("disabled", true);
+        }
+
+      });
+    } // End action per substep
+
+  } // End action per step
+}
+
 function init () {
   currentTimestamp();
-  initializeDashboard();
+
+  // These should be calculated on the fly, but we'll set them statically for now
+  var steps=2;
+  var substeps=3;
+
+  checkboxProcess(steps, substeps);
+
 }
