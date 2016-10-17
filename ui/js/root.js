@@ -1,5 +1,7 @@
 window.onload = init;
 
+// Global variables
+var stepsComplete = 0;
 
 /*
 // Check the API and update the Dashboard Item sent
@@ -60,7 +62,7 @@ function currentTimestamp() {
   $('#footer').append("<br /> Current Time: " + timestamp);
 }
 
-function checkboxProcess(steps, substeps) {
+function initiateSteps(steps, substeps) {
   // The following for section makes it so checkboxes are enabled or disabled if the previous checkbox is checked or unchecked
 
   // Take action per step
@@ -72,24 +74,46 @@ function checkboxProcess(steps, substeps) {
       // Set checkbox names for current and next item
       var checkboxA = "status-" + i + "-" + j;
       var checkboxB = "status-" + i + "-" + (j*1 + 1);
+      var row = "row-substep-" + i + "-" + j;
+
+      // White out everything except the first row at page open.
+      if ((i == 1) && (j == 1)) { } else {
+        $("#" + row).css("color", "white");
+      }
 
       // Setting checkboxA's onclick to modify checkboxB's enabled/disabled status
       $("input#" + checkboxA).click(function(){
         checkboxA = this.id;
         checkboxB = this.id.split("-")[0] + "-" + this.id.split("-")[1] + "-" + (this.id.split("-")[2]*1 + 1);
+        nextRow = "row-substep-" + checkboxB.split("-")[1] + "-" + checkboxB.split("-")[2];
 
         // If checkboxB's length is 0 then time to modify next step's substep instead of a non-existing substep in this current step
         if (!($("#" + checkboxB).length)) {
           checkboxB = this.id.split("-")[0] + "-" + (this.id.split("-")[1]*1 +1) + "-" + 1;
+          nextRow = "row-substep-" + checkboxB.split("-")[1] + "-1";
         }
 
         // If checkboxA is checked, then enable the next checkbox; if it isn't, then disable the next checkbox
         if(this.checked) {
-          console.log("its checked");
-          $("input#" + checkboxB).attr("disabled", false);
+          $("input#" + checkboxB).prop("disabled", false);
+          stepsComplete++;
+          updateCompletionStatus();
+          $("#" + nextRow).css("color", "black"); // Unhide next sub-step since this sub-step is complete.
         } else {
-          console.log("its not checked");
-          $("input#" + checkboxB).attr("disabled", true);
+          // If trying to uncheck a checkbox way up the chain where others are checked, don't allow it
+          try { // Perform a try otherwise the last checkbox will break when trying to un-check it
+            nextItem = document.getElementById(checkboxB).checked;
+          } catch(err) {
+            nextItem = 0;
+          }
+          if (nextItem) {
+            $("input#" + checkboxA).prop("checked", true);
+          } else {
+            $("input#" + checkboxB).prop("disabled", true);
+            $("#" + nextRow).css("color", "white"); // Hide next sub-step until this sub-step is complete.
+            stepsComplete--;
+            updateCompletionStatus();
+          }
         }
 
       });
@@ -98,6 +122,25 @@ function checkboxProcess(steps, substeps) {
   } // End action per step
 }
 
+function updateCompletionStatus() {
+  var steps = 2;
+  var substeps = 3;
+  var totalSteps = steps * substeps;
+  var percentComplete = (stepsComplete / totalSteps) * 100;
+  if (stepsComplete == 0) { percentComplete = 1; } // Always keep at least 1% so the bar is visible.
+  $("#completionStatus").css("width", percentComplete + '%');
+}
+
+/*
+// Sample of how we could export the manifest for printing
+function exportManifest() {
+    console.log($("td#substep-1-1").html());
+    console.log($("td#details-1-1").html());
+    console.log($("td#action-1-1").html());
+    console.log($("input#notes-1-1").val());
+}
+*/
+
 function init () {
   currentTimestamp();
 
@@ -105,6 +148,7 @@ function init () {
   var steps=2;
   var substeps=3;
 
-  checkboxProcess(steps, substeps);
+  initiateSteps(steps, substeps);
 
+  $("#generateReport").click(function(){ window.print(); }); // Hook clicking Generate Completion Report button into printing the page
 }

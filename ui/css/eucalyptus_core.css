@@ -145,3 +145,7 @@ canvas {
 }
 .st-details-col, .st-action-col {
 }
+
+#intro-panel-header {
+  color: #2D2D2D;
+}
