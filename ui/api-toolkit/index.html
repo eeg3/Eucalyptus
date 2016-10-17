@@ -23,7 +23,11 @@
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
 
     <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <script src="/js/jquery/jquery-2.1.4.min.js"></script>
+
+    <!-- Promises and tablesorter are broken in 3.1.1
+    <script src="/js/jquery-3.1.1.slim.min.js"></script>
+    -->
 
     <!-- Bootstrap -->
     <script src="/js/bootstrap/bootstrap.min.js"></script>
@@ -32,6 +36,7 @@
     <!-- Tablesorter -->
     <link href="/css/tablesorter.default.min.css" rel="stylesheet">
     <script src="/js/tablesorter/jquery.tablesorter.min.js"></script>
+
 
     <!-- Customer JS -->
     <script src="/js/ApiHelper.js"></script>
@@ -45,7 +50,12 @@
   </head>
 
 
-<body>
+  <header class="container-fluid">
+    <h1 id="intro"><i class="fa fa-leaf"></i> Eucalyptus</h1>
+    <p class="lead">A better way to manage operational tasks.</p>
+  </header>
+
+  <body>
   <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
       <div class="navbar-header">
@@ -55,30 +65,9 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#"><i class="fa fa-cube"></i> Eucalyptus</a>
+        <a class="navbar-brand" href="#"><i class="fa fa-leaf"></i>&nbsp;&nbsp;&nbsp;Eucalyptus</a>
       </div>
       <div id="navbar" class="collapse navbar-collapse">
-        <ul class="nav navbar-nav">
-          <li><a href="/index.html">Main</a></li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="fa fa-desktop fa-lg"></span>&nbsp;&nbsp;Resources<span class="caret"></span></a>
-              <ul class="dropdown-menu inverse-dropdown">
-                <li><a href="/desktopDetails.html">Desktops</a></li>
-                <li><a href="#">Applications</a></li>
-                <li><a href="#">Profiles</a></li>
-              </ul>
-          </li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="fa fa-server fa-lg"></span>&nbsp;&nbsp;Infrastructure<span class="caret"></span></a>
-              <ul class="dropdown-menu inverse-dropdown">
-                <li><a href="#">Broker</a></li>
-                <li><a href="#">Hypervisor</a></li>
-              </ul>
-          </li>
-          <li><a href="#"><span class="btn btn-danger badge">42</a></li>
-          <li><a href="#"><span class="btn btn-warning badge">42</a></li>
-          <li><a href="#"><span class="btn btn-primary badge">42</a></li>
-        </ul>
         <ul class="nav navbar-nav navbar-right">
           <li><a href="#"><span class="fa fa-search fa-lg"></span></a></li>
           <li class="dropdown">
@@ -102,22 +91,17 @@
     </div>
   </nav>
 
-  <header class="container-fluid">
-    <h1><i class="fa fa-cube"></i> Eucalyptus</h1>
-    <p class="lead">A better way to operate and optimize virtual desktops.</p>
-  </header>
-
   <div class="container-fluid">
 
     <div class="alert alert-gray">
-      The following are tools to directly interact with the Spectrum API without having to send HTTP queries with POST, GET, PATCH, and DELETE.
+      The following are tools to directly interact with the Eucalyptus API without having to send HTTP queries with POST, GET, PATCH, and DELETE.
     </div>
 
       <div class="row">
         <div class="col-sm-12">
-          <table id="desktopDetailsTable" class="table table-bordered">
+          <table id="manifestDetailsTable" class="table table-bordered">
             <thead>
-              <th>ID</th><th>Name</th><th>User</th><th>OS</th><th>Status</th><th>Session State</th><th>Last Communication</th>
+              <th>ID</th><th>Title</th><th>Author</th><th>Revision</th><th>Category</th><th>Product</th><th>Description</th><th>Outcome</th><th>Steps</th>
             </thead>
             <tbody>
               <tr></tr>
@@ -128,35 +112,43 @@
       <div class="row">
       <div class="col-sm-4">
         <div class="panel panel-inverse">
-          <div class="panel-heading">Add Desktop</div>
+          <div class="panel-heading">Add Manifest</div>
           <div class="panel-body">
-            <form action="/api/desktop/" enctype="application/x-www-form-urlencoded" method="post" >
+            <form action="/api/manifest/" enctype="application/x-www-form-urlencoded" method="post" >
               <div class="form-group">
-                <label for="name">Name</label>
-                <input type="text" class="form-control" name="name"></input>
+                <label for="title">Title</label>
+                <input type="text" class="form-control" name="title"></input>
               </div>
               <div class="form-group">
-                <label for="user">User</label>
-                <input type="text" class="form-control" name="user"></input>
+                <label for="author">Author</label>
+                <input type="text" class="form-control" name="author"></input>
               </div>
               <div class="form-group">
-                <label for="os">OS</label>
-                <input type="text" class="form-control" name="os"></input>
+                <label for="revision">Revision</label>
+                <input type="text" class="form-control" name="revision"></input>
               </div>
               <div class="form-group">
-                <label for="status">Status</label>
-                <input type="text" class="form-control" name="status"></input>
+                <label for="category">Category</label>
+                <input type="text" class="form-control" name="category"></input>
               </div>
               <div class="form-group">
-                <label for="sessionState">Session State</label>
-                <input type="text" class="form-control" name="sessionState"></input>
+                <label for="product">Product</label>
+                <input type="text" class="form-control" name="product"></input>
               </div>
               <div class="form-group">
-                <label for="lastCommunication">Last Communication</label>
-                <input type="text" class="form-control" name="lastCommunication"></input>
+                <label for="description">Description</label>
+                <input type="text" class="form-control" name="description"></input>
+              </div>
+              <div class="form-group">
+                <label for="outcome">Outcome</label>
+                <input type="text" class="form-control" name="outcome"></input>
+              </div>
+              <div class="form-group">
+                <label for="steps">Steps</label>
+                <input type="text" class="form-control" name="steps"></input>
               </div>
 
-              <input type="submit" class="btn btn-default btn-block" value="Add Desktop"></button>
+              <input type="submit" class="btn btn-default btn-block" value="Add Manifest"></button>
             </form>
           </div>
         </div>
@@ -164,12 +156,12 @@
 
         <div class="col-sm-4">
           <div class="panel panel-inverse">
-            <div class="panel-heading">Delete Desktop</div>
+            <div class="panel-heading">Delete Manifest</div>
             <div class="panel-body">
               <form id="deleteForm">
                 <div class="form-group">
-                  <label for="desktop">Desktop ID</label>
-                  <input type="text" class="form-control" name="delDesktop"></input>
+                  <label for="manifest">Manifest ID</label>
+                  <input type="text" class="form-control" name="delManifest"></input>
                 </div>
 
               </form>
@@ -177,59 +169,48 @@
             </div>
           </div>
 
-          <div class="panel panel-inverse">
-            <div class="panel-heading">Screenshot Upload</div>
-            <div class="panel-body">
-              <form action="/api/screenshot/upload" enctype="multipart/form-data" method="post" >
-                <div class="form-group">
-                  <label for="desktop">Desktop ID</label>
-                  <input type="text" class="form-control" name="desktopId"></input>
-                </div>
-                <div class="form-group">
-                  <label for="filefield">Screenshot</label>
-                  <input type="file" class="form-control" name="filefield"></input>
-                  <p class="help-block">File size limit: 5MB</p>
-                </div>
-                <input type="submit" class="btn btn-default btn-block" value="Upload"></button>
-              </form>
-            </div>
-          </div>
-
-
         </div>
 
       <div class="col-sm-4">
         <div class="panel panel-inverse">
-          <div class="panel-heading">Patch Desktop</div>
+          <div class="panel-heading">Patch Manifest</div>
           <div class="panel-body">
-            <form action="/api/desktop/" enctype="application/x-www-form-urlencoded" method="post" >
+            <form action="/api/manifest/" enctype="application/x-www-form-urlencoded" method="post" >
               <div class="form-group">
                 <label for="patchId">ID</label>&nbsp;<span class="label label-danger" id="warningPatch"></span>
                 <input type="text" class="form-control" name="patchId"></input>
               </div>
               <div class="form-group">
-                <label for="patchName">Name</label>
-                <input type="text" class="form-control" name="patchName"></input>
+                <label for="patchTitle">Title</label>
+                <input type="text" class="form-control" name="patchTitle"></input>
               </div>
               <div class="form-group">
-                <label for="patchUser">User</label>
-                <input type="text" class="form-control" name="patchUser"></input>
+                <label for="patchAuthor">Author</label>
+                <input type="text" class="form-control" name="patchAuthor"></input>
               </div>
               <div class="form-group">
-                <label for="patchOs">OS</label>
-                <input type="text" class="form-control" name="patchOs"></input>
+                <label for="patchRevision">Revision</label>
+                <input type="text" class="form-control" name="patchRevision"></input>
               </div>
               <div class="form-group">
-                <label for="patchStatus">Status</label>
-                <input type="text" class="form-control" name="patchStatus"></input>
+                <label for="patchCategory">Category</label>
+                <input type="text" class="form-control" name="patchCategory"></input>
               </div>
               <div class="form-group">
-                <label for="patchSessionState">Session State</label>
-                <input type="text" class="form-control" name="patchSessionState"></input>
+                <label for="patchProduct">Product</label>
+                <input type="text" class="form-control" name="patchProduct"></input>
               </div>
               <div class="form-group">
-                <label for="patchLastCommunication">Last Communication</label>
-                <input type="text" class="form-control" name="patchLastCommunication"></input>
+                <label for="patchDescription">Description</label>
+                <input type="text" class="form-control" name="patchDescription"></input>
+              </div>
+              <div class="form-group">
+                <label for="patchOutcome">Outcome</label>
+                <input type="text" class="form-control" name="patchOutcome"></input>
+              </div>
+              <div class="form-group">
+                <label for="patchSteps">Steps</label>
+                <input type="text" class="form-control" name="patchSteps"></input>
               </div>
             </form>
 
@@ -245,7 +226,7 @@
 
   <footer class="container-fluid">
     <div class="alert alert-gray">
-      <p id="footer">Written via Amateur Javascript.</p>
+      <p id="footer">Written by RoundTower EUC.</p>
     </div>
   </footer>
 

@@ -38,13 +38,11 @@ var db = mongoose.connect(dbConnection, function() {
 /***** Initialize express *****/
 var app = express();
 
-/* Desktop API not needed yet
-      /***** Desktop API *****
-      // Create a ORM Model based on the desktopModel Schema
-      var Desktop = require('./models/Desktop');
-      // Load the desktop routes that handle POST/GET/PATCH/DELETE for the API; also holds the controller functionality
-      desktopRouter = require('./routes/desktopRoutes')(Desktop);
-*/
+/***** Manfiest API *****/
+// Create a ORM Model based on the manifestModel Schema
+var Manifest = require('./models/Manifest');
+// Load the desktop routes that handle POST/GET/PATCH/DELETE for the API; also holds the controller functionality
+manifestRouter = require('./routes/manifestRoutes')(Manifest);
 
 /* Screenshot API not needed yet
       /***** Screenshot API *****
@@ -60,16 +58,14 @@ var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
-/* Routers not needed yet
-      /***** Attach the routers to the app *****
-      if (lockAPI) {
-        app.use('/api/desktop', auth, desktopRouter);
-        app.use('/api/screenshot', auth, screenshotRouter);
-      } else {
-        app.use('/api/desktop', desktopRouter);
-        app.use('/api/screenshot', screenshotRouter);
-      }
-*/
+/***** Attach the routers to the app *****/
+if (lockAPI) {
+  app.use('/api/manifest', auth, manifestRouter);
+  //app.use('/api/screenshot', auth, screenshotRouter);
+} else {
+  app.use('/api/manifest', manifestRouter);
+  //app.use('/api/screenshot', screenshotRouter);
+}
 
 /***** Serve the static assets *****/
 // The 'ui' folder holds all of the front-end code.

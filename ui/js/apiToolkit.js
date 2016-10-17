@@ -1,80 +1,88 @@
 window.onload = init;
 
-function getDesktopsFromApi() {
+function getManifestsFromApi() {
   /*
-  helper.get("api/desktop/"):
-    Will return an array of desktop objects.
+  helper.get("api/manifest/"):
+    Will return an array of manifest objects.
     Those objects can then be sorted through with a for() loop based on .length.
     Inside that for() object[i].parameter can be used.
   */
-  helper.get("/api/desktop/")
+  helper.get("/api/manifest/")
     .then(function(data){
-      var desktops = data;
+      var manifest = data;
 
       for (var i = 0; i < data.length; i++) {
-        var nodesToDisplay = ["_id", "name", "user", "os", "status", "sessionState", "lastCommunication"];
+        var nodesToDisplay = ["_id", "title", "author", "revision", "category", "product", "description", "outcome", "steps"];
         var rowToAdd = "<tr>";
         for (var j = 0; j < nodesToDisplay.length; j++) {
-          if (nodesToDisplay[j] === "lastCommunication" && desktops[i][nodesToDisplay[j]] !== "Never") {
-            rowToAdd += '<td><a href="/api/screenshot/' + desktops[i][nodesToDisplay[j]] + '">' + desktops[i][nodesToDisplay[j]] + '</a></td>';
+          if (nodesToDisplay[j] === "lastCommunication" && manifest[i][nodesToDisplay[j]] !== "Never") {
+            //rowToAdd += '<td><a href="/api/screenshot/' + manifests[i][nodesToDisplay[j]] + '">' + manifests[i][nodesToDisplay[j]] + '</a></td>';
           } else {
-            rowToAdd += "<td>" + desktops[i][nodesToDisplay[j]] + "</td>";
+            rowToAdd += "<td>" + manifest[i][nodesToDisplay[j]] + "</td>";
           }
         }
         rowToAdd += "</tr>";
-        $('#desktopDetailsTable tr:last').after(rowToAdd);
+        $('#manifestDetailsTable tr:last').after(rowToAdd);
       }
-      $('#desktopDetailsTable').trigger("update");
+      $('#manifestDetailsTable').trigger("update");
     });
 }
 
 function init () {
-  $('#desktopDetailsTable').tablesorter();
-  getDesktopsFromApi();
+  $('#manifestDetailsTable').tablesorter();
+  getManifestsFromApi();
 
   $('#deleteButton').click(function() {
-    var desktopId = $('input:text[name=delDesktop]').val();
-    console.log("text: " + $('input:text[name=delDesktop]').val());
-    helper.del("/api/desktop/" + desktopId);
+    var manifestId = $('input:text[name=delManifest]').val();
+    console.log("text: " + $('input:text[name=delManifest]').val());
+    helper.del("/api/manifest/" + manifestId);
     location.reload();
   });
 
   $('#patchButton').click(function() {
 
-    var desktopId = $('input:text[name=patchId]').val();
-    var name = $('input:text[name=patchName]').val();
-    var user = $('input:text[name=patchUser]').val();
-    var os = $('input:text[name=patchOs]').val();
-    var status = $('input:text[name=patchStatus]').val();
-    var sessionState = $('input:text[name=patchSessionState]').val();
-    var lastCommunication = $('input:text[name=patchLastCommunication]').val();
+    var manifestId = $('input:text[name=patchId]').val();
+    var title = $('input:text[name=patchTitle]').val();
+    var author = $('input:text[name=patchAuthor]').val();
+    var revision = $('input:text[name=patchRevision]').val();
+    var category = $('input:text[name=patchCategory]').val();
+    var product = $('input:text[name=patchProduct]').val();
+    var description = $('input:text[name=patchDescription]').val();
+    var outcome = $('input:text[name=patchOutcome]').val();
+    var steps = $('input:text[name=patchSteps]').val();
 
-    var desktopPatch = {};
+    var manifestPatch = {};
 
-    if (desktopId === "") {
+    if (manifestId === "") {
       $('#warningPatch').html("Required")
       return;
     }
-    if (name !== "") {
-      desktopPatch["name"] = name;
+    if (title !== "") {
+      manifestPatch["title"] = title;
     }
-    if (user !== "") {
-      desktopPatch["user"] = user;
+    if (author !== "") {
+      manifestPatch["author"] = author;
     }
-    if (os !== "") {
-      desktopPatch["os"] = os;
+    if (revision !== "") {
+      manifestPatch["revision"] = revision;
     }
-    if (status !== "") {
-      desktopPatch["status"] = status;
+    if (category !== "") {
+      manifestPatch["category"] = category;
     }
-    if (sessionState !== "") {
-      desktopPatch["sessionState"] = sessionState;
+    if (product !== "") {
+      manifestPatch["product"] = product;
     }
-    if (lastCommunication !== "") {
-      desktopPatch["lastCommunication"] = lastCommunication;
+    if (description !== "") {
+      manifestPatch["description"] = description;
+    }
+    if (outcome !== "") {
+      manifestPatch["outcome"] = outcome;
+    }
+    if (steps !== "") {
+      manifestPatch["steps"] = steps;
     }
 
-    helper.patch("/api/desktop/" + desktopId, desktopPatch)
+    helper.patch("/api/manifest/" + manifestId, manifestPatch)
     location.reload();
   });
 }
