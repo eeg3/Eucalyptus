@@ -149,3 +149,8 @@ canvas {
 #intro-panel-header {
   color: #2D2D2D;
 }
+
+#manJumbo {
+  padding-top: 10px;
+  padding-bottom: 30px;
+}
