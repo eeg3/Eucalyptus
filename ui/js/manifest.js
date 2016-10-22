@@ -165,48 +165,50 @@ function getManifest() {
       var manifest = data;
       var manifestEntry = "";
 
+      var passedId = urlParam('id');
+      console.log("passedId: " + passedId);
+
       for (var i = 0; i < data.length; i++) {
         var nodesToDisplay = ["_id", "title", "author", "revision", "category", "product", "description", "outcome", "steps"];
 
-        if (manifest[i]["_id"] == "5805252fe3c160dcd7e3990a") { // Need to make this dynamic from last page call
+        if (manifest[i]["_id"] == passedId) { // Need to make this dynamic from last page call
           for (var j = 0; j < nodesToDisplay.length; j++) {
             manifestEntry += manifest[i][nodesToDisplay[j]] + "~";
           }
+
+          console.log("ID: " + manifestEntry.split("~")[0]);
+
+          var manifestTitle = manifestEntry.split("~")[1];
+          console.log("Title: " + manifestTitle);
+          $("#manifestTitle").html(manifestTitle);
+
+          var manifestAuthor = manifestEntry.split("~")[2];
+          console.log("Author: " + manifestAuthor);
+          $("#manifestAuthor").html(manifestAuthor);
+
+          var manifestRevision = manifestEntry.split("~")[3]
+          console.log("Revision: " + manifestRevision);
+          $("#manifestRevision").html(manifestRevision);
+
+          var manifestCategory = manifestEntry.split("~")[4];
+          console.log("Category: " + manifestCategory);
+          $("#manifestCategory").html(manifestCategory);
+
+          var manifestProduct = manifestEntry.split("~")[5]
+          console.log("Product: " + manifestProduct);
+          $("#manifestProduct").html(manifestProduct);
+
+          var manifestDescription = manifestEntry.split("~")[6];
+          console.log("Description: " + manifestDescription);
+          $("#manifestDescription").html(manifestDescription);
+
+          var manifestOutcome = manifestEntry.split("~")[7];
+          console.log("Outcome: " + manifestOutcome);
+          $("#manifestOutcome").html(manifestOutcome);
+
+          var manifestSteps = manifestEntry.split("~")[8];
+          parseSteps(manifestSteps);
         }
-
-        console.log("ID: " + manifestEntry.split("~")[0]);
-
-        var manifestTitle = manifestEntry.split("~")[1];
-        console.log("Title: " + manifestTitle);
-        $("#manifestTitle").html(manifestTitle);
-
-        var manifestAuthor = manifestEntry.split("~")[2];
-        console.log("Author: " + manifestAuthor);
-        $("#manifestAuthor").html(manifestAuthor);
-
-        var manifestRevision = manifestEntry.split("~")[3]
-        console.log("Revision: " + manifestRevision);
-        $("#manifestRevision").html(manifestRevision);
-
-        var manifestCategory = manifestEntry.split("~")[4];
-        console.log("Category: " + manifestCategory);
-        $("#manifestCategory").html(manifestCategory);
-
-        var manifestProduct = manifestEntry.split("~")[5]
-        console.log("Product: " + manifestProduct);
-        $("#manifestProduct").html(manifestProduct);
-
-        var manifestDescription = manifestEntry.split("~")[6];
-        console.log("Description: " + manifestDescription);
-        $("#manifestDescription").html(manifestDescription);
-
-        var manifestOutcome = manifestEntry.split("~")[7];
-        console.log("Outcome: " + manifestOutcome);
-        $("#manifestOutcome").html(manifestOutcome);
-
-        var manifestSteps = manifestEntry.split("~")[8];
-        parseSteps(manifestSteps);
-
       }
 
       // These should be calculated on the fly, but we'll set them statically for now
@@ -222,9 +224,19 @@ function getManifest() {
 
 }
 
+function urlParam(name, url) {
+    if (!url) {
+     url = window.location.href;
+    }
+    var results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(url);
+    if (!results) {
+        return undefined;
+    }
+    return results[1] || undefined;
+}
+
 function init () {
   currentTimestamp();
   getManifest();
   $("#generateReport").click(function(){ window.print(); }); // Hook clicking Generate Completion Report button into printing the page
-
 }
