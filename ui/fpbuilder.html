@@ -23,7 +23,8 @@
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
 
     <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <!-- <script src="/js/jquery-3.1.1.slim.min.js"></script> -->
+    <script src="/js/jquery/jquery-2.1.4.min.js"></script>
 
     <!-- Bootstrap -->
     <script src="/js/bootstrap/bootstrap.min.js"></script>
@@ -31,7 +32,7 @@
 
     <!-- Customer JS -->
     <script src="/js/ApiHelper.js"></script>
-    <script src="/js/root.js"></script>
+    <script src="/js/fpbuilder.js"></script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -55,7 +56,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#"><i class="fa fa-leaf leafLogo"></i>&nbsp;&nbsp;&nbsp;Eucalyptus</a>
+        <a class="navbar-brand" href="/"><i class="fa fa-leaf leafLogo"></i>&nbsp;&nbsp;&nbsp;Eucalyptus</a>
       </div>
       <div id="navbar" class="collapse navbar-collapse">
         <ul class="nav navbar-nav navbar-right">
@@ -83,47 +84,49 @@
 
   <!-- Search Section -->
   <div class="container-fluid">
-    <div id="searchBar">
-      <div class="row">
-        <div class="col-sm-12">
-          <div class="panel panel-inverse">
-            <div class="panel-heading">What would you like to do?</div>
-            <div class="panel-body">
-              <div id="custom-search-input">
-                <div class="input-group col-md-12">
-                  <input type="text" class="form-control input-lg" placeholder="What would you like to do?" />
-                  <span class="input-group-btn">
-                    <button class="btn btn-info btn-lg" type="button">
-                      <i class="fa fa-search"></i>
-                    </button>
-                  </span>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="panel panel-inverse">
+          <div id="intro-panel-header" class="panel-heading">Summary</div>
+          <div class="panel-body">
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" class="form-control" name="title" placeholder="Install View Composer"></input>
+                  </div>
+                  <div class="form-group">
+                    <label for="description">Description</label>
+                    <input type="text" class="form-control" name="description" placeholder="Deploy the Composer Service responsible for desktop deployment."></input>
+                  </div>
+                  <div class="form-group">
+                    <label for="category">Category</label>
+                    <input type="text" class="form-control" name="category" placeholder="Installation"></input>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="author">Author</label>
+                    <input type="text" class="form-control" name="author" placeholder="Earl Gay"></input>
+                  </div>
+                  <div class="form-group">
+                    <label for="product">Product</label>
+                    <input type="text" class="form-control" name="product" placeholder="View-7"></input>
+                  </div>
+                  <div class="form-group">
+                    <label for="revision">Revision</label>
+                    <input type="text" class="form-control" name="revision" placeholder="1.0"></input>
+                  </div>
                 </div>
               </div>
-              <br />
-              <div id="toggles">
-                <div class="checkbox-inline col-md-12">
-                  <label class="checkbox-inline">
-                    <input type="checkbox" name="installation-checkbox" checked> Installation
-                  </label>
-                  <label class="checkbox-inline">
-                    <input type="checkbox" name="configuration-checkbox" checked> Configuration
-                  </label>
-                  <label class="checkbox-inline">
-                    <input type="checkbox" name="manage-checkbox" checked> Manage
-                  </label>
-                  <label class="checkbox-inline">
-                    <input type="checkbox" name="monitor-checkbox" checked> Monitor
-                  </label>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
     </div>
     <!-- End Search Section -->
 
-    <div id="categorySection">
+    <div id="stepsSection">
 
     </div>
 
