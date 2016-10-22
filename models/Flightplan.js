@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var manifestModel = new Schema({
+var flightplanModel = new Schema({
   title: {
     type: String
   },
@@ -28,4 +28,4 @@ var manifestModel = new Schema({
   }
 });
 
-module.exports = mongoose.model('Manifest', manifestModel);
+module.exports = mongoose.model('Flightplan', flightplanModel);

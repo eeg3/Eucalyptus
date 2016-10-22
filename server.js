@@ -39,10 +39,10 @@ var db = mongoose.connect(dbConnection, function() {
 var app = express();
 
 /***** Manfiest API *****/
-// Create a ORM Model based on the manifestModel Schema
-var Manifest = require('./models/Manifest');
+// Create a ORM Model based on the flightplanModel Schema
+var Flightplan = require('./models/Flightplan');
 // Load the desktop routes that handle POST/GET/PATCH/DELETE for the API; also holds the controller functionality
-manifestRouter = require('./routes/manifestRoutes')(Manifest);
+flightplanRouter = require('./routes/flightplanRoutes')(Flightplan);
 
 /* Screenshot API not needed yet
       /***** Screenshot API *****
@@ -60,10 +60,10 @@ app.use(bodyParser.urlencoded({extended:true}));
 
 /***** Attach the routers to the app *****/
 if (lockAPI) {
-  app.use('/api/manifest', auth, manifestRouter);
+  app.use('/api/flightplan', auth, flightplanRouter);
   //app.use('/api/screenshot', auth, screenshotRouter);
 } else {
-  app.use('/api/manifest', manifestRouter);
+  app.use('/api/flightplan', flightplanRouter);
   //app.use('/api/screenshot', screenshotRouter);
 }
 

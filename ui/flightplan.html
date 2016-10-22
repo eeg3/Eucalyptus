@@ -32,7 +32,7 @@
 
     <!-- Customer JS -->
     <script src="/js/ApiHelper.js"></script>
-    <script src="/js/manifest.js"></script>
+    <script src="/js/flightplan.js"></script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -91,16 +91,16 @@
           <div id="intro-panel-header" class="panel-heading">Summary</div>
           <div class="panel-body">
             <div id="manJumbo" class="jumbotron">
-              <h1><span id="manifestTitle">Title</span></h1>
-              <div id="manifestHeaderSection">
+              <h1><span id="flightplanTitle">Title</span></h1>
+              <div id="flightplanHeaderSection">
                 <table class="table table-bordered table-striped sp-databox-table">
                   <tbody>
-                    <tr><td>Category <span data-toggle="tooltip" data-placement="right" title="Categories are groupings of similar manifests."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></td><td><span id="manifestCategory" class="manifestHeader"></span></td></tr>
-                    <tr><td>Product <span data-toggle="tooltip" data-placement="right" title="Manifests are tied to products and versions so they stay relevant."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></td><td><span id="manifestProduct" class="manifestHeader"></span></td></tr>
-                    <tr><td>Description <span data-toggle="tooltip" data-placement="right" title="The purpose of the manifest."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></td><td><span id="manifestDescription" class="manifestHeader"></span></td></tr>
-                    <tr><td>Outcome <span data-toggle="tooltip" data-placement="right" title="The outcome of completion of the manifest."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></td><td><span id="manifestOutcome" class="manifestHeader"></span></td></tr>
-                    <tr><td>Revision <span data-toggle="tooltip" data-placement="right" title="As manifests are updated, revisions are added."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></td><td><span id="manifestRevision" class="manifestHeader"></span></td></tr>
-                    <tr><td>Author <span data-toggle="tooltip" data-placement="right" title="The creator of the manifest."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></td><td><span id="manifestAuthor" class="manifestHeader"></span></td></tr></tr>
+                    <tr><td>Category <span data-toggle="tooltip" data-placement="right" title="Categories are groupings of similar flightplans."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></td><td><span id="flightplanCategory" class="flightplanHeader"></span></td></tr>
+                    <tr><td>Product <span data-toggle="tooltip" data-placement="right" title="Flightplans are tied to products and versions so they stay relevant."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></td><td><span id="flightplanProduct" class="flightplanHeader"></span></td></tr>
+                    <tr><td>Description <span data-toggle="tooltip" data-placement="right" title="The purpose of the flightplan."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></td><td><span id="flightplanDescription" class="flightplanHeader"></span></td></tr>
+                    <tr><td>Outcome <span data-toggle="tooltip" data-placement="right" title="The outcome of completion of the flightplan."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></td><td><span id="flightplanOutcome" class="flightplanHeader"></span></td></tr>
+                    <tr><td>Revision <span data-toggle="tooltip" data-placement="right" title="As flightplans are updated, revisions are added."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></td><td><span id="flightplanRevision" class="flightplanHeader"></span></td></tr>
+                    <tr><td>Author <span data-toggle="tooltip" data-placement="right" title="The creator of the flightplan."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></td><td><span id="flightplanAuthor" class="flightplanHeader"></span></td></tr></tr>
                   </tbody>
                 </table>
               </div>
@@ -109,7 +109,7 @@
                 </div>
               </div>
               <div class="btn-group">
-                <button id="generateReport" type="button" class="btn btn-success">Generate Completion Report</button>&nbsp;&nbsp;<span data-toggle="tooltip" data-placement="top" title="Print manifest as a document of record."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span>
+                <button id="generateReport" type="button" class="btn btn-success">Generate Completion Report</button>&nbsp;&nbsp;<span data-toggle="tooltip" data-placement="top" title="Print flightplan as a document of record."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span>
               </div>
             </div>
           </div>
@@ -126,7 +126,7 @@
 
   <footer class="container-fluid">
     <div class="alert alert-gray">
-      <p id="footer">Developed by RoundTower EUC</p>
+      <p id="footer"><i class="fa fa-copyright"></i>&nbsp;2016 <a href="https://github.com/eeg3">https://github.com/eeg3</a>
     </div>
   </footer>
 

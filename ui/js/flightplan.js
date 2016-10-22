@@ -144,8 +144,8 @@ function updateCompletionStatus() {
 }
 
 /*
-// Sample of how we could export the manifest for printing
-function exportManifest() {
+// Sample of how we could export the flightplan for printing
+function exportFlightplan() {
     console.log($("td#substep-1-1").html());
     console.log($("td#details-1-1").html());
     console.log($("td#action-1-1").html());
@@ -153,17 +153,17 @@ function exportManifest() {
 }
 */
 
-function getManifest() {
+function getFlightplan() {
   /*
-  helper.get("api/manifest/"):
-    Will return an array of manifest objects.
+  helper.get("api/flightplan/"):
+    Will return an array of flightplan objects.
     Those objects can then be sorted through with a for() loop based on .length.
     Inside that for() object[i].parameter can be used.
   */
-  helper.get("/api/manifest/")
+  helper.get("/api/flightplan/")
     .then(function(data){
-      var manifest = data;
-      var manifestEntry = "";
+      var flightplan = data;
+      var flightplanEntry = "";
 
       var passedId = urlParam('id');
       console.log("passedId: " + passedId);
@@ -171,43 +171,44 @@ function getManifest() {
       for (var i = 0; i < data.length; i++) {
         var nodesToDisplay = ["_id", "title", "author", "revision", "category", "product", "description", "outcome", "steps"];
 
-        if (manifest[i]["_id"] == passedId) { // Need to make this dynamic from last page call
+        if (flightplan[i]["_id"] == passedId) { // Need to make this dynamic from last page call
           for (var j = 0; j < nodesToDisplay.length; j++) {
-            manifestEntry += manifest[i][nodesToDisplay[j]] + "~";
+            flightplanEntry += flightplan[i][nodesToDisplay[j]] + "~";
           }
 
-          console.log("ID: " + manifestEntry.split("~")[0]);
+          console.log("ID: " + flightplanEntry.split("~")[0]);
 
-          var manifestTitle = manifestEntry.split("~")[1];
-          console.log("Title: " + manifestTitle);
-          $("#manifestTitle").html(manifestTitle);
+          var flightplanTitle = flightplanEntry.split("~")[1];
+          console.log("Title: " + flightplanTitle);
+          $("#flightplanTitle").html(flightplanTitle);
 
-          var manifestAuthor = manifestEntry.split("~")[2];
-          console.log("Author: " + manifestAuthor);
-          $("#manifestAuthor").html(manifestAuthor);
+          var flightplanAuthor = flightplanEntry.split("~")[2];
+          console.log("Author: " + flightplanAuthor);
+          $("#flightplanAuthor").html(flightplanAuthor);
 
-          var manifestRevision = manifestEntry.split("~")[3]
-          console.log("Revision: " + manifestRevision);
-          $("#manifestRevision").html(manifestRevision);
+          var flightplanRevision = flightplanEntry.split("~")[3]
+          console.log("Revision: " + flightplanRevision);
+          $("#flightplanRevision").html(flightplanRevision);
 
-          var manifestCategory = manifestEntry.split("~")[4];
-          console.log("Category: " + manifestCategory);
-          $("#manifestCategory").html(manifestCategory);
+          var flightplanCategory = flightplanEntry.split("~")[4];
+          console.log("Category: " + flightplanCategory);
+          $("#flightplanCategory").html(flightplanCategory);
 
-          var manifestProduct = manifestEntry.split("~")[5]
-          console.log("Product: " + manifestProduct);
-          $("#manifestProduct").html(manifestProduct);
+          var flightplanProduct = flightplanEntry.split("~")[5]
+          console.log("Product: " + flightplanProduct);
+          $("#flightplanProduct").html(flightplanProduct);
 
-          var manifestDescription = manifestEntry.split("~")[6];
-          console.log("Description: " + manifestDescription);
-          $("#manifestDescription").html(manifestDescription);
+          var flightplanDescription = flightplanEntry.split("~")[6];
+          console.log("Description: " + flightplanDescription);
+          $("#flightplanDescription").html(flightplanDescription);
 
-          var manifestOutcome = manifestEntry.split("~")[7];
-          console.log("Outcome: " + manifestOutcome);
-          $("#manifestOutcome").html(manifestOutcome);
+          var flightplanOutcome = flightplanEntry.split("~")[7];
+          console.log("Outcome: " + flightplanOutcome);
+          $("#flightplanOutcome").html(flightplanOutcome);
 
-          var manifestSteps = manifestEntry.split("~")[8];
-          parseSteps(manifestSteps);
+          // Example steps string: "A,Sub-step item to do from object,RDP to ServerA|B,Sub-step item to do from object again,Open Citrix Studio|C,Sub-step item to do lastly,Open PVS Console;A,Sub-step item to do in 2,RDP to ServerB|B,Sub-step item to do in 2,RDP to Server|C,Sub-step item to do in 2,RDP to ServerD"
+          var flightplanSteps = flightplanEntry.split("~")[8];
+          parseSteps(flightplanSteps);
         }
       }
 
@@ -237,6 +238,6 @@ function urlParam(name, url) {
 
 function init () {
   currentTimestamp();
-  getManifest();
+  getFlightplan();
   $("#generateReport").click(function(){ window.print(); }); // Hook clicking Generate Completion Report button into printing the page
 }

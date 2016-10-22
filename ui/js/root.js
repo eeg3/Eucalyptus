@@ -14,7 +14,7 @@ function currentTimestamp() {
   $('#footer').append("<br /> Current Time: " + timestamp);
 }
 
-function parseManifests(id, title, category) {
+function parseFlightplans(id, title, category) {
 
   // Create new row
   if (numOfColumns % 2 == 0) { // If it's even, time to create a new row
@@ -35,14 +35,14 @@ function parseManifests(id, title, category) {
     var table = $('<table id="' + category + 'Table"></table>').addClass('table table-bordered table-striped sp-databox-table');
     var body = $('<tbody>');
     table.append(body);
-    var tableLineItem = '<tr><td><a href="/function-api.html?id=' + id + '">' + title + '</a></td></tr>';
+    var tableLineItem = '<tr><td><a href="/flightplan.html?id=' + id + '">' + title + '</a></td></tr>';
     table.append(tableLineItem);
     var tableEnd = $('</tbody>');
     table.append(tableEnd);
 
     $("#" + category).append(table);
   } else { // Add to section if it already exists
-    var tableLineItem = '<tr><td><a href="/function-api.html?id=' + id + '">' + title + '</a></td></tr>';
+    var tableLineItem = '<tr><td><a href="/flightplan.html?id=' + id + '">' + title + '</a></td></tr>';
     $('#' + category + 'Table tr:last').after(tableLineItem);
     $('#' + category + 'Table tr:last').trigger("update");
   }
@@ -52,10 +52,10 @@ function parseManifests(id, title, category) {
 function init () {
   currentTimestamp();
 
-  helper.get("/api/manifest/")
+  helper.get("/api/flightplan/")
     .then(function(data){
       for (var i = 0; i < data.length; i++) {
-        parseManifests(data[i]._id, data[i].title, data[i].category);
+        parseFlightplans(data[i]._id, data[i].title, data[i].category);
       }
 
       $(document).ready(function(){ // Enable tooltips after all the steps are processed.
