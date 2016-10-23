@@ -85,7 +85,7 @@ function parseSteps(steps) {
   for (var i = 0;i < steps.length; i++) { // This for loop processes each step
     var stepNumber = i+1;
 
-    var newDivHTML = '<div class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step ' + stepNumber + '</div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
+    var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step ' + stepNumber + '</div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
     $("#stepsSection").append(newDivHTML);
 
     var substeps = steps[i].split("|");
@@ -136,9 +136,7 @@ function parseSteps(steps) {
 }
 
 function updateCompletionStatus() {
-  var steps = 2;
-  var substeps = 3;
-  var totalSteps = steps * substeps;
+  var totalSteps = findTotalStepQuantity();
   var percentComplete = (stepsComplete / totalSteps) * 100;
   if (stepsComplete == 0) { percentComplete = 5; } // Always keep at least 5% so the bar is visible.
   $("#completionStatus").css("width", percentComplete + '%');
@@ -226,6 +224,21 @@ function getFlightplan() {
 
 }
 
+function findTotalStepQuantity() {
+  // Cycle through every step and substep and find how many there are total. Based off of the div row for the step and then the tr row for each substep.
+  var totalSteps = 0;
+  for(var i = 0; i < 50; i++) {
+    if($("#row-" + i).length) {
+      for (var j = 0; j < 50; j++) {
+        if($("#row-substep-" + i + "-" + j).length) {
+          totalSteps++;
+        }
+      }
+    }
+  }
+  return totalSteps;
+}
+
 function urlParam(name, url) {
     if (!url) {
      url = window.location.href;
@@ -240,5 +253,6 @@ function urlParam(name, url) {
 function init () {
   currentTimestamp();
   getFlightplan();
+
   $("#generateReport").click(function(){ window.print(); }); // Hook clicking Generate Completion Report button into printing the page
 }

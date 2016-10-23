@@ -270,6 +270,43 @@ function exportFlightplan() {
   console.log("Steps: " + stepsString);
 
   // Insert code to actually post to API
+  //var flightplanId = $('input:text[name=patchId]').val();
+  var titlePost = $("#title").val();
+  var authorPost = $("#author").val();
+  var revisionPost = $("#revision").val();
+  var categoryPost = $("#category").val();
+  var productPost = $("#product").val();
+  var descriptionPost = $("#description").val();
+  //var outcome = $('input:text[name=patchOutcome]').val();
+  var stepsPost = stepsString;
+
+  var flightplanPost = {};
+
+  if (titlePost !== "") {
+    flightplanPost["title"] = titlePost;
+  }
+  if (authorPost !== "") {
+    flightplanPost["author"] = authorPost;
+  }
+  if (revisionPost !== "") {
+    flightplanPost["revision"] = revisionPost;
+  }
+  if (categoryPost !== "") {
+    flightplanPost["category"] = categoryPost;
+  }
+  if (productPost !== "") {
+    flightplanPost["product"] = productPost;
+  }
+  if (descriptionPost !== "") {
+    flightplanPost["description"] = descriptionPost;
+  }
+  if (stepsPost !== "") {
+    flightplanPost["steps"] = stepsPost;
+  }
+
+  helper.post("/api/flightplan/", flightplanPost)
+  location.reload();
+
 }
 
 function init () {
