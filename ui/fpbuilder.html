@@ -71,10 +71,10 @@
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="fa fa-cog fa-lg"></span>&nbsp;<span class="caret"></span></a>
               <ul class="dropdown-menu inverse-dropdown">
-                <li><a href="#">Settings</a></li>
-                <li><a href="/api-toolkit/index.html">API Toolkit</a></li>
-                <li><a href="/about.html">About</a></li>
-                <li><a href="#">Help</a></li>
+                <li><a href="/index.html">Home</a></li>
+                <li><a href="/fpbuilder.html">FlightPlan Builder</a></li>
+                <li><a href="/docs/about.html">About Eucalyptus</a></li>
+                <li><a href="/docs/help.html">Help</a></li>
               </ul>
           </li>
         </ul>
@@ -94,29 +94,29 @@
                 <div class="col-sm-6">
                   <div class="form-group">
                     <label for="title">Title</label>
-                    <input type="text" class="form-control" name="title" placeholder="Install View Composer"></input>
+                    <input type="text" class="form-control" id="title" placeholder="Install View Composer"></input>
                   </div>
                   <div class="form-group">
                     <label for="description">Description</label>
-                    <input type="text" class="form-control" name="description" placeholder="Deploy the Composer Service responsible for desktop deployment."></input>
+                    <input type="text" class="form-control" id="description" placeholder="Deploy the Composer Service responsible for desktop deployment."></input>
                   </div>
                   <div class="form-group">
                     <label for="category">Category</label>
-                    <input type="text" class="form-control" name="category" placeholder="Installation"></input>
+                    <input type="text" class="form-control" id="category" placeholder="Installation"></input>
                   </div>
                 </div>
                 <div class="col-sm-6">
                   <div class="form-group">
                     <label for="author">Author</label>
-                    <input type="text" class="form-control" name="author" placeholder="Earl Gay"></input>
+                    <input type="text" class="form-control" id="author" placeholder="Earl Gay"></input>
                   </div>
                   <div class="form-group">
                     <label for="product">Product</label>
-                    <input type="text" class="form-control" name="product" placeholder="View-7"></input>
+                    <input type="text" class="form-control" id="product" placeholder="View-7"></input>
                   </div>
                   <div class="form-group">
                     <label for="revision">Revision</label>
-                    <input type="text" class="form-control" name="revision" placeholder="1.0"></input>
+                    <input type="text" class="form-control" id="revision" placeholder="1.0"></input>
                   </div>
                 </div>
               </div>
@@ -128,6 +128,10 @@
 
     <div id="stepsSection">
 
+    </div>
+
+    <div id="submitFlightplan" class="btn-group">
+      <button id="createFlightplan" type="button" class="btn btn-success">Create FlightPlan</button>
     </div>
 
   </div> <!-- End Container -->

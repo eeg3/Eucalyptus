@@ -109,6 +109,7 @@ function parseSteps(steps) {
       tableLineItem += '<td id="details-' + substepCode + '" class="st-details-col">' + substepDetails + '</td>';
       tableLineItem += '<td id="action-' + substepCode + '" class="st-action-col">' + substepAction + '</td>';
       tableLineItem += '<td><input type="text" id="notes-' + substepCode + '" class="form-control input-sm" placeholder="Notes" /></td>';
+      //tableLineItem += '<td><textarea" id="notes-' + substepCode + '" class="form-control input-sm" placeholder="Notes" /></td>';
       if (i == 0 && j == 0) {
         tableLineItem += '<td><input type="checkbox" id="status-' + substepCode + '"></td>';
       } else {
