@@ -60,19 +60,18 @@
       </div>
       <div id="navbar" class="collapse navbar-collapse">
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="#"><span class="fa fa-search fa-lg"></span></a></li>
-          <li class="dropdown">
+          <li><a href="/index.html"><span class="fa fa-search fa-lg"></span></a></li>
+          <li><a href="/fpbuilder.html"><span class="fa fa-plus fa-lg"></span></a></li>
+          <!--<li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="fa fa-user fa-lg"></span>&nbsp;<span class="caret"></span></a>
               <ul class="dropdown-menu inverse-dropdown">
                 <li><a href="#">User Info</a></li>
                 <li><a href="#">Logout</a></li>
               </ul>
-          </li>
+          </li> -->
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="fa fa-cog fa-lg"></span>&nbsp;<span class="caret"></span></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="fa fa-question fa-lg"></span></a>
               <ul class="dropdown-menu inverse-dropdown">
-                <li><a href="/index.html">Home</a></li>
-                <li><a href="/fpbuilder.html">FlightPlan Builder</a></li>
                 <li><a href="/docs/about.html">About Eucalyptus</a></li>
                 <li><a href="/docs/help.html">Help</a></li>
               </ul>
@@ -88,7 +87,7 @@
     <div class="row">
       <div class="col-sm-12">
         <div class="panel panel-inverse">
-          <div id="intro-panel-header" class="panel-heading">Summary</div>
+          <div id="intro-panel-header" class="panel-heading">FlightPlan Builder</div>
           <div class="panel-body">
               <div class="row">
                 <div class="col-sm-6">
@@ -133,6 +132,8 @@
     <div id="submitFlightplan" class="btn-group">
       <button id="createFlightplan" type="button" class="btn btn-success">Create FlightPlan</button>
     </div>
+    <div id="errorMessage"></div>
+
 
   </div> <!-- End Container -->
 

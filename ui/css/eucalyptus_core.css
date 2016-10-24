@@ -146,10 +146,6 @@ canvas {
 .st-details-col, .st-action-col {
 }
 
-#intro-panel-header {
-  color: #2D2D2D;
-}
-
 #manJumbo {
   padding-top: 10px;
   padding-bottom: 30px;
@@ -163,9 +159,14 @@ canvas {
 }
 
 #submitFlightplan {
-  padding-bottom: 50px;
+  
 }
 
 .borderTD {
   width:  100px;
+}
+
+#errorMessage {
+  color: red;
+  padding-bottom: 50px;
 }

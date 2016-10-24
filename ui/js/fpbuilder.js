@@ -2,6 +2,11 @@ window.onload = init;
 
 // Global variables
 var stepsComplete = 0;
+var invalidInput = 0;
+var staticFields = ["title", "description", "category", "author", "product", "revision"];
+var cleanOfSemicolons = new RegExp("^[^;]+$"); // Steps can't have semicolons
+var cleanOfPipes = new RegExp("^[^|]+$"); // Steps can't have pipes
+var cleanOfTildes = new RegExp("^[^~]+$"); // Steps can't have tildes
 
 function currentTimestamp() {
   var date = new Date();
@@ -174,6 +179,7 @@ function addSubStep(stepNumber) {
   var tableLineItem = '<tr id="row-' + substepCode + '">';
   tableLineItem += '<td id="' + substepCode + '" class="st-substep-col borderTD">' + substepName + '</td>';
   tableLineItem += '<td ><input type="text" id="details-' + substepCode + '" class="form-control input-sm" placeholder="Sub-Step Details" /></td>';
+
   tableLineItem += '<td><input type="text" id="action-' + substepCode + '" class="form-control input-sm" placeholder="Sub-Step Action" /></td>';
   if (substepNumber == 1) {
     tableLineItem += '<td class="borderTD"><a id="addButton-' + substepCode + '" class="btn btn-small leafLogo"><i class="fa fa-plus"></i></a>&nbsp;&nbsp;</td>';
@@ -183,6 +189,7 @@ function addSubStep(stepNumber) {
   tableLineItem += '</tr>';
 
   $('#table-' + stepNumber + ' tr:last').after(tableLineItem);
+
 }
 
 function hookUpAddDelButtons() {
@@ -234,20 +241,89 @@ function findStepQuantity() {
   return totalSteps;
 }
 
-function exportFlightplan() {
+function hookUpInputValidation() {
 
-  console.log("Title: " + $("#title").val());
-  console.log("Author: " + $("#author").val());
-  console.log("Description: " + $("#description").val());
-  console.log("Product: " + $("#product").val());
-  console.log("Category: " + $("#category").val());
-  console.log("Revision: " + $("#revision").val());
+  staticFields.forEach(function(entry) {
+    $("#" + entry).on('input', function() {
+      //if($("#" + this.id).val() == "") {
+        $("#" + this.id).css("border", "1px solid #ccc");
+        //$("#errorMessage").html("");
+    //  }
+    });
+  });
+
+  for (var i = 0; i < 50; i++) {
+    for (var j = 0; j < 50; j++) {
+      $("#action-substep-" + i + "-" + j).on('input', function() {
+        if($("#" + this.id).val() == "") {
+          $("#" + this.id).css("border", "1px solid #ccc");
+          //$("#errorMessage").html("");
+        } else {
+
+          //$("#errorMessage").html("");
+          if (cleanOfSemicolons.test( $("#" + this.id).val() ) == false) {
+            //$("#errorMessage").html("ERROR: Steps cannot contain the ';' character.");
+            $("#" + this.id).css("border", "1px solid red");
+            return;
+          } else if (cleanOfPipes.test( $("#" + this.id).val() ) == false) {
+            //$("#errorMessage").html("ERROR: Steps cannot contain the '|' character.");
+            $("#" + this.id).css("border", "1px solid red");
+            return;
+          } else if (cleanOfTildes.test( $("#" + this.id).val() ) == false) {
+            //$("#errorMessage").html("ERROR: Steps cannot contain the '~' character.");
+            $("#" + this.id).css("border", "1px solid red");
+            return;
+          } else {
+            $("#" + this.id).css("border", "1px solid #ccc");
+          }
+        }
+      });
+
+      $("#details-substep-" + i + "-" + j).on('input', function() {
+        if($("#" + this.id).val() == "") {
+          $("#" + this.id).css("border", "1px solid #ccc");
+          //$("#errorMessage").html("");
+        } else {
+
+          $("#errorMessage").html("");
+          if (cleanOfSemicolons.test( $("#" + this.id).val() ) == false) {
+            //$("#errorMessage").html("ERROR: Steps cannot contain the ';' character.");
+            $("#" + this.id).css("border", "1px solid red");
+            return;
+          } else if (cleanOfPipes.test( $("#" + this.id).val() ) == false) {
+            //$("#errorMessage").html("ERROR: Steps cannot contain the '|' character.");
+            $("#" + this.id).css("border", "1px solid red");
+            return;
+          } else if (cleanOfTildes.test( $("#" + this.id).val() ) == false) {
+            //$("#errorMessage").html("ERROR: Steps cannot contain the '~' character.");
+            $("#" + this.id).css("border", "1px solid red");
+            return;
+          } else {
+            $("#" + this.id).css("border", "1px solid #ccc");
+          }
+        }
+      });
+
+    }
+  }
+}
+
+function exportFlightplan() {
 
   // We set these and base off of them because we due to adding/removing of steps/substeps by user in weird ways, the actual element could be out of order.
   var stepNumber = 1;
   var substepNumber = 1;
 
+  var validated = 1;
   var stepsString = "";
+
+  staticFields.forEach(function(entry) {
+    if ($("#" + entry).val() == "") {
+      validated = 0;
+      $("#errorMessage").html("ERROR: Cannot have empty steps.");
+      $("#" + entry).css("border", "1px solid red");
+    }
+  });
 
   // Check for a place to put the step
   for(var i = 1; i < 50; i++) {
@@ -255,7 +331,41 @@ function exportFlightplan() {
       stepNumber++;
       substepNumber = 1;
       for (var j = 1; j < 50; j++) {
+
         if ($("#row-substep-" + i + "-" + j).length) {
+          if($("#details-substep-" + i + "-" + j).val() == "") {
+            $("#errorMessage").html("ERROR: Cannot have empty steps.");
+            $("#details-substep-" + i + "-" + j).css("border", "1px solid red");
+            validated = 0;
+            return;
+          }
+          if($("#action-substep-" + i + "-" + j).val() == "") {
+            $("#errorMessage").html("ERROR: Cannot have empty steps.");
+            $("#action-substep-" + i + "-" + j).css("border", "1px solid red");
+            validated = 0;
+            return;
+          }
+          if (cleanOfSemicolons.test( $("#details-substep-" + i + "-" + j).val() ) == false) {
+            $("#errorMessage").html("ERROR: Steps cannot contain the ';' character.");
+            validated = 0;
+          } else if (cleanOfPipes.test( $("#details-substep-" + i + "-" + j).val() ) == false) {
+            $("#errorMessage").html("ERROR: Steps cannot contain the '|' character.");
+            validated = 0;
+          } else if (cleanOfTildes.test( $("#details-substep-" + i + "-" + j).val() ) == false) {
+            $("#errorMessage").html("ERROR: Steps cannot contain the '~' character.");
+            validated = 0;
+          }
+
+          if (cleanOfSemicolons.test( $("#action-substep-" + i + "-" + j).val() ) == false) {
+            $("#errorMessage").html("ERROR: Steps cannot contain the ';' character.");
+            validated = 0;
+          } else if (cleanOfPipes.test( $("#action-substep-" + i + "-" + j).val() ) == false) {
+            $("#errorMessage").html("ERROR: Steps cannot contain the '|' character.");
+            validated = 0;
+          } else if (cleanOfTildes.test( $("#action-substep-" + i + "-" + j).val() ) == false) {
+            $("#errorMessage").html("ERROR: Steps cannot contain the '~' character.");
+            validated = 0;
+          }
           stepsString += substepNumber + "," + $("#details-substep-" + i + "-" + j).val() + "," + $("#action-substep-" + i + "-" + j).val() + "|";
           //console.log(substepNumber + " Details: " + $("#details-substep-" + i + "-" + j).val() );
           //console.log(substepNumber + " Action:" + $("#action-substep-" + i + "-" + j).val() );
@@ -267,45 +377,65 @@ function exportFlightplan() {
     }
   }
   stepsString = stepsString.slice(0, -1); // Slice off the last ;
-  console.log("Steps: " + stepsString);
 
-  // Insert code to actually post to API
-  //var flightplanId = $('input:text[name=patchId]').val();
-  var titlePost = $("#title").val();
-  var authorPost = $("#author").val();
-  var revisionPost = $("#revision").val();
-  var categoryPost = $("#category").val();
-  var productPost = $("#product").val();
-  var descriptionPost = $("#description").val();
-  //var outcome = $('input:text[name=patchOutcome]').val();
-  var stepsPost = stepsString;
 
-  var flightplanPost = {};
 
-  if (titlePost !== "") {
-    flightplanPost["title"] = titlePost;
-  }
-  if (authorPost !== "") {
-    flightplanPost["author"] = authorPost;
-  }
-  if (revisionPost !== "") {
-    flightplanPost["revision"] = revisionPost;
-  }
-  if (categoryPost !== "") {
-    flightplanPost["category"] = categoryPost;
-  }
-  if (productPost !== "") {
-    flightplanPost["product"] = productPost;
-  }
-  if (descriptionPost !== "") {
-    flightplanPost["description"] = descriptionPost;
-  }
-  if (stepsPost !== "") {
-    flightplanPost["steps"] = stepsPost;
-  }
+  if(validated) {
+    console.log("Title: " + $("#title").val());
+    console.log("Author: " + $("#author").val());
+    console.log("Description: " + $("#description").val());
+    console.log("Product: " + $("#product").val());
+    console.log("Category: " + $("#category").val());
+    console.log("Revision: " + $("#revision").val());
+    console.log("Steps: " + stepsString);
 
-  helper.post("/api/flightplan/", flightplanPost)
-  location.reload();
+    // Insert code to actually post to API
+    //var flightplanId = $('input:text[name=patchId]').val();
+    var titlePost = $("#title").val();
+    var authorPost = $("#author").val();
+    var revisionPost = $("#revision").val();
+    var categoryPost = $("#category").val();
+    var productPost = $("#product").val();
+    var descriptionPost = $("#description").val();
+    //var outcome = $('input:text[name=patchOutcome]').val();
+    var stepsPost = stepsString;
+
+    // Begin validation code
+
+    //var cleanInput = new RegExp("^[^;]+$");
+    //console.log("validate: " + cleanInput.test('abc1;23') ); // Returns true if it is clean, and false if it is unclean
+
+    // End validation code
+
+    var flightplanPost = {};
+
+    if (titlePost !== "") {
+      flightplanPost["title"] = titlePost;
+    }
+    if (authorPost !== "") {
+      flightplanPost["author"] = authorPost;
+    }
+    if (revisionPost !== "") {
+      flightplanPost["revision"] = revisionPost;
+    }
+    if (categoryPost !== "") {
+      flightplanPost["category"] = categoryPost;
+    }
+    if (productPost !== "") {
+      flightplanPost["product"] = productPost;
+    }
+    if (descriptionPost !== "") {
+      flightplanPost["description"] = descriptionPost;
+    }
+    if (stepsPost !== "") {
+      flightplanPost["steps"] = stepsPost;
+    }
+
+    helper.post("/api/flightplan/", flightplanPost)
+    location.reload();
+  } else {
+    console.log("Form invald.");
+  }
 
 }
 
@@ -326,5 +456,6 @@ function init () {
   }); // Hook clicking Create FlightPlan
 
   hookUpAddDelButtons(); // Cycle through every step and substep created and hook them up.
+  hookUpInputValidation();
 
 }
