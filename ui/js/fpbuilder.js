@@ -325,12 +325,61 @@ function exportFlightplan() {
   });
 
   // Check for a place to put the step
-  for(var i = 1; i < 50; i++) {
+  //for(var i = 1; i < 50; i++) {
+  stepOrder.forEach(function(i) {
     if($("#row-" + i).length) { // If step exists
       stepNumber++;
       substepNumber = 1;
-      for (var j = 1; j < 50; j++) {
 
+      for (var o = 0; o < substepOrder.length; o++) {
+        if (substepOrder[o].split(",")[0] == i) {
+          console.log("Substep parsing: " + substepOrder[o]);
+          j = substepOrder[o].split(",")[1];
+
+          if ($("#row-substep-" + i + "-" + j).length) {
+            if($("#details-substep-" + i + "-" + j).val() == "") {
+              $("#errorMessage").html("ERROR: Cannot have empty steps.");
+              $("#details-substep-" + i + "-" + j).css("border", "1px solid red");
+              validated = 0;
+              return;
+            }
+            if($("#action-substep-" + i + "-" + j).val() == "") {
+              $("#errorMessage").html("ERROR: Cannot have empty steps.");
+              $("#action-substep-" + i + "-" + j).css("border", "1px solid red");
+              validated = 0;
+              return;
+            }
+            if (cleanOfSemicolons.test( $("#details-substep-" + i + "-" + j).val() ) == false) {
+              $("#errorMessage").html("ERROR: Steps cannot contain the ';' character.");
+              validated = 0;
+            } else if (cleanOfPipes.test( $("#details-substep-" + i + "-" + j).val() ) == false) {
+              $("#errorMessage").html("ERROR: Steps cannot contain the '|' character.");
+              validated = 0;
+            } else if (cleanOfTildes.test( $("#details-substep-" + i + "-" + j).val() ) == false) {
+              $("#errorMessage").html("ERROR: Steps cannot contain the '~' character.");
+              validated = 0;
+            }
+
+            if (cleanOfSemicolons.test( $("#action-substep-" + i + "-" + j).val() ) == false) {
+              $("#errorMessage").html("ERROR: Steps cannot contain the ';' character.");
+              validated = 0;
+            } else if (cleanOfPipes.test( $("#action-substep-" + i + "-" + j).val() ) == false) {
+              $("#errorMessage").html("ERROR: Steps cannot contain the '|' character.");
+              validated = 0;
+            } else if (cleanOfTildes.test( $("#action-substep-" + i + "-" + j).val() ) == false) {
+              $("#errorMessage").html("ERROR: Steps cannot contain the '~' character.");
+              validated = 0;
+            }
+            stepsString += substepNumber + "," + $("#details-substep-" + i + "-" + j).val() + "," + $("#action-substep-" + i + "-" + j).val() + "|";
+            //console.log(substepNumber + " Details: " + $("#details-substep-" + i + "-" + j).val() );
+            //console.log(substepNumber + " Action:" + $("#action-substep-" + i + "-" + j).val() );
+            substepNumber++;
+          }
+
+        }
+      }
+      /*for (var j = 1; j < 50; j++) {
+        /*
         if ($("#row-substep-" + i + "-" + j).length) {
           if($("#details-substep-" + i + "-" + j).val() == "") {
             $("#errorMessage").html("ERROR: Cannot have empty steps.");
@@ -370,11 +419,12 @@ function exportFlightplan() {
           //console.log(substepNumber + " Action:" + $("#action-substep-" + i + "-" + j).val() );
           substepNumber++;
         }
-      }
+      }*/
       stepsString = stepsString.slice(0, -1); // Slice off the last |
       stepsString += ";";
     }
-  }
+  });
+
   stepsString = stepsString.slice(0, -1); // Slice off the last ;
 
 
