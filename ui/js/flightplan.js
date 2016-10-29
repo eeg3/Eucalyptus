@@ -14,7 +14,7 @@ function currentTimestamp() {
   $('#footer').append("<br /> Current Time: " + timestamp);
 }
 
-function initiateSteps(steps, substeps) {
+function initiateStepFlow(steps, substeps) {
   // The following for section makes it so checkboxes are enabled or disabled if the previous checkbox is checked or unchecked
 
   // Take action per step
@@ -136,8 +136,8 @@ function parseSteps(steps) {
 }
 
 function updateCompletionStatus() {
-  var totalSteps = findTotalStepQuantity();
-  var percentComplete = (stepsComplete / totalSteps) * 100;
+  var stepCount = findTotalStepQuantity();
+  var percentComplete = (stepsComplete / stepCount.substeps) * 100;
   if (stepsComplete == 0) { percentComplete = 5; } // Always keep at least 5% so the bar is visible.
   $("#completionStatus").css("width", percentComplete + '%');
 }
@@ -211,10 +211,8 @@ function getFlightplan() {
         }
       }
 
-      // These should be calculated on the fly, but we'll set them statically for now
-      var steps=2;
-      var substeps=3;
-      initiateSteps(steps, substeps);
+      stepQuantity = findTotalStepQuantity();
+      initiateStepFlow(stepQuantity.steps, stepQuantity.substeps);
 
       // Enable tooltips after all the steps are processed.
       $(document).ready(function(){
@@ -224,19 +222,24 @@ function getFlightplan() {
 
 }
 
+// findStepQuantity() finds it based on the DOM created by parseSteps(), and doesn't actually look at the API
 function findTotalStepQuantity() {
+  var result = {
+    steps: 0,
+    substeps: 0
+  }
   // Cycle through every step and substep and find how many there are total. Based off of the div row for the step and then the tr row for each substep.
-  var totalSteps = 0;
-  for(var i = 0; i < 50; i++) {
+  for(var i = 0; i < 100; i++) {
     if($("#row-" + i).length) {
-      for (var j = 0; j < 50; j++) {
+      result.steps++;
+      for (var j = 0; j < 100; j++) {
         if($("#row-substep-" + i + "-" + j).length) {
-          totalSteps++;
+          result.substeps++;
         }
       }
     }
   }
-  return totalSteps;
+  return result;
 }
 
 function urlParam(name, url) {
@@ -251,6 +254,12 @@ function urlParam(name, url) {
 }
 
 function init () {
+  // Logic flow:
+  //  getFlightPlan() pulls everything about the FlightPlan from the API, and populates everything about the FlightPlan except for the steps itself. Then ->
+  // parseSteps() parses the steps string which holds all the steps and substeps. It creates the divs for the steps an the tables for the substeps. Then ->
+  // initiateStepFlow() goes through all the DOM objects created by paresSteps() and activates the logic around the checkboxes around hooks, hiding, and disabling flows.
+  // updateCompletionStatus() is hooked into onClick for all the checkboxes by initiateStepFlow() to activate the logic on user activity.
+
   currentTimestamp();
   getFlightplan();
 

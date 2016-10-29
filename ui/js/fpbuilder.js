@@ -4,9 +4,16 @@ window.onload = init;
 var stepsComplete = 0;
 var invalidInput = 0;
 var staticFields = ["title", "description", "category", "author", "product", "revision"];
+
+// We use these variables to match characters that shouldn't exist in steps as they break out storing mechanism.
 var cleanOfSemicolons = new RegExp("^[^;]+$"); // Steps can't have semicolons
 var cleanOfPipes = new RegExp("^[^|]+$"); // Steps can't have pipes
 var cleanOfTildes = new RegExp("^[^~]+$"); // Steps can't have tildes
+
+// We use these arrays to store the step & substep order so if user removes and adds steps & substeps in random ways, we track that properly and keep them in expected order.
+var stepOrder = [];
+var substepOrder = [];
+
 
 function currentTimestamp() {
   var date = new Date();
@@ -19,68 +26,13 @@ function currentTimestamp() {
   $('#footer').append("<br /> Current Time: " + timestamp);
 }
 
-function initiateSteps(steps, substeps) {
-  // The following for section makes it so checkboxes are enabled or disabled if the previous checkbox is checked or unchecked
-
-  // Take action per step
-  for (var i = 1; i<steps+1; i++) {
-
-    // Take action per substep
-    for (var j = 1; j<substeps+1; j++) {
-
-      // Set checkbox names for current and next item
-      var checkboxA = "status-substep-" + i + "-" + j;
-      var checkboxB = "status-substep-" + i + "-" + (j*1 + 1);
-      var row = "row-substep-" + i + "-" + j;
-
-      // White out everything except the first row at page open.
-      if ((i == 1) && (j == 1)) { } else {
-        $("#" + row).css("color", "white");
-      }
-
-      // Setting checkboxA's onclick to modify checkboxB's enabled/disabled status
-      $("input#" + checkboxA).click(function(){
-        checkboxA = this.id;
-        checkboxB = this.id.split("-")[0] + "-" + this.id.split("-")[1] + "-" + this.id.split("-")[2] + "-" + (this.id.split("-")[3]*1 + 1);
-        nextRow = "row-substep-" + checkboxB.split("-")[2] + "-" + checkboxB.split("-")[3];
-
-        // If checkboxB's length is 0 then time to modify next step's substep instead of a non-existing substep in this current step
-
-        if (!($("#" + checkboxB).length)) {
-          checkboxB = this.id.split("-")[0] + "-" + this.id.split("-")[1] + "-" + (this.id.split("-")[2]*1 +1) + "-" + 1;
-          nextRow = "row-substep-" + checkboxB.split("-")[2] + "-1";
-        }
-
-        // If checkboxA is checked, then enable the next checkbox; if it isn't, then disable the next checkbox
-        if(this.checked) {
-          $("input#" + checkboxB).prop("disabled", false);
-          stepsComplete++;
-          updateCompletionStatus();
-          $("#" + nextRow).css("color", "black"); // Unhide next sub-step since this sub-step is complete.
-        } else {
-          // If trying to uncheck a checkbox way up the chain where others are checked, don't allow it
-          try { // Perform a try otherwise the last checkbox will break when trying to un-check it
-            nextItem = document.getElementById(checkboxB).checked;
-          } catch(err) {
-            nextItem = 0;
-          }
-          if (nextItem) {
-            $("input#" + checkboxA).prop("checked", true);
-          } else {
-            $("input#" + checkboxB).prop("disabled", true);
-            $("#" + nextRow).css("color", "white"); // Hide next sub-step until this sub-step is complete.
-            stepsComplete--;
-            updateCompletionStatus();
-          }
-        }
-
-      });
-    } // End action per substep
-
-  } // End action per step
-}
-
 function createStep(stepNumber) {
+
+  stepOrder.push(stepNumber);
+  //for (var o = 0; o < stepOrder.length; o++) {
+  //  console.log("Step Order: " + stepOrder[o]);
+  //}
+
   //  var newDivHTML = '<div class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step ' + stepNumber + '&nbsp;&nbsp;<i id="addButton-' + stepNumber + '" class="fa fa-plus leafLogo"></i>&nbsp;<i id="addButton-' + stepNumber + '" class="fa fa-minus minus"></i></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
   if(stepNumber == 1) {
     //var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step ' + stepNumber + '&nbsp;&nbsp;<a id="addButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-plus"></i></a></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
@@ -110,7 +62,8 @@ function createStep(stepNumber) {
 
 }
 
-function addStep() {
+function addStep(currentStep) {
+
   var stepNumber = 999;
 
   // Check for a place to put the step
@@ -121,10 +74,19 @@ function addStep() {
     }
   }
 
+  stepOrder.splice(stepOrder.indexOf(parseInt(currentStep))+1, 0, stepNumber);
+
+  console.log("-----");
+  for (var o = 0; o < stepOrder.length; o++) {
+    console.log("Step Order: " + stepOrder[o]);
+  }
+  console.log("-----");
+
   //  var newDivHTML = '<div class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step ' + stepNumber + '&nbsp;&nbsp;<i id="addButton-' + stepNumber + '" class="fa fa-plus leafLogo"></i>&nbsp;<i id="addButton-' + stepNumber + '" class="fa fa-minus minus"></i></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
   //var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step ' + stepNumber + '&nbsp;&nbsp;<a id="addButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-plus"></i></a><a id="delButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-minus minus"></i></a></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
   var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step #&nbsp;<a id="addButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-plus"></i></a><a id="delButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-minus minus"></i></a></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
-  $("#stepsSection").append(newDivHTML);
+  //$("#stepsSection").append(newDivHTML);
+  $("#row-" + currentStep).after(newDivHTML);
 
   // Add a table name so we can add to it
   var table = $('<table id="table-'+ stepNumber + '"></table>').addClass('table table-bordered table-striped sp-databox-table');
@@ -143,10 +105,14 @@ function addStep() {
   table.append(tableEnd);
 
   $("#" + stepNumber).append(table);
+  //$("#row-" + currentStep).append(table);
 
 }
 
 function createSubStep(stepNumber, substepNumber) {
+
+  substepOrder.push(stepNumber + "," + substepNumber);
+
   var substepName = "#";
   var substepCode = "substep-" + stepNumber + "-" + substepNumber; // Example: substep-2-1
   var tableLineItem = '<tr id="row-' + substepCode + '">';
@@ -162,7 +128,11 @@ function createSubStep(stepNumber, substepNumber) {
   return tableLineItem;
 }
 
-function addSubStep(stepNumber) {
+function addSubStep(stepNumber, substepNumber) {
+
+  var currentSubstepID = stepNumber + "," + substepNumber;
+  var currentSubstepNumber = substepNumber;
+
   //var subStepCode = "substep-" + stepNumber + "-";
   var substepNumber = 999;
 
@@ -173,6 +143,16 @@ function addSubStep(stepNumber) {
       break;
     }
   }
+
+  var newSubstepID = stepNumber + "," + substepNumber;
+
+  substepOrder.splice(substepOrder.indexOf(currentSubstepID)+1, 0, newSubstepID);
+
+  console.log("-----");
+  for (var o = 0; o < substepOrder.length; o++) {
+    console.log("Substep Order: " + substepOrder[o]);
+  }
+  console.log("-----");
 
   var substepName = "#";
   var substepCode = "substep-" + stepNumber + "-" + substepNumber; // Example: substep-2-1
@@ -188,7 +168,8 @@ function addSubStep(stepNumber) {
   }
   tableLineItem += '</tr>';
 
-  $('#table-' + stepNumber + ' tr:last').after(tableLineItem);
+  //$('#table-' + stepNumber + ' tr:last').after(tableLineItem);
+  $("#row-substep-" + stepNumber + "-" + currentSubstepNumber).after(tableLineItem);
 
 }
 
@@ -199,7 +180,7 @@ function hookUpAddDelButtons() {
       // Hook steps up.
       $("#addButton-" + i).unbind("click"); // Make sure it's clear, otherwise it appends
       $("#addButton-" + i).click(function() {
-        addStep();
+        addStep(this.id.split("-")[1]);
         hookUpAddDelButtons();
       }); // Hook add button
 
@@ -207,6 +188,22 @@ function hookUpAddDelButtons() {
       $("#delButton-" + i).click(function() {
         var trToDelete = "row-" + (this.id).split("-")[1];
         $("#" +trToDelete).remove();
+        stepOrder.splice(stepOrder.indexOf(parseInt((this.id).split("-")[1])), 1); // Delete from stepOrder
+        // Delete all substeps for substepOrder
+        for (var n = 0; n < 5; n++) { // Should change this to just stop when value doens't exist
+          var valToDel = (this.id.split("-")[1])+ "," + n;
+          //console.log("Deleting: " + valToDel);
+          //console.log("Does " + valToDel + " exist? " + substepOrder.indexOf((this.id.split("-")[1])+ "," + n));
+          if (substepOrder.indexOf((this.id.split("-")[1])+ "," + n) != -1) {
+            console.log("Deleting: " + valToDel);
+            substepOrder.splice(substepOrder.indexOf((this.id.split("-")[1])+ "," + n), 1);
+          }
+        }
+        console.log("-----");
+        for (var o = 0; o < substepOrder.length; o++) {
+          console.log("Substep Order: " + substepOrder[o]);
+        }
+        console.log("-----");
       }); // Hook del button
 
       // Hook substeps up.
@@ -214,7 +211,7 @@ function hookUpAddDelButtons() {
         if(!("#addButton-substep-" + i + "-1").length == 0) {
           $("#addButton-substep-" + i + "-" + j).unbind("click"); // Make sure it's clear, otherwise it appends
           $("#addButton-substep-" + i + "-" + j).click(function() {
-            addSubStep(this.id.split("-")[2]);
+            addSubStep(this.id.split("-")[2], this.id.split("-")[3]);
             hookUpAddDelButtons();
           }); // Hook add button
 
@@ -222,6 +219,8 @@ function hookUpAddDelButtons() {
           $("#delButton-substep-" + i + "-" + j).click(function() {
             var trToDelete = "row-" + (this.id).split("-")[1] + "-" + (this.id).split("-")[2] + "-" + (this.id).split("-")[3];
             $("#" +trToDelete).remove();
+            console.log("deleting: " + (this.id.split("-")[2])+ "," + (this.id).split("-")[3]);
+            substepOrder.splice(substepOrder.indexOf((this.id.split("-")[2])+ "," + (this.id).split("-")[3]), 1);
           }); // Hook del button
         }
       }
@@ -442,8 +441,6 @@ function exportFlightplan() {
 function init () {
   currentTimestamp();
 
-  var steps=2;
-  var substeps=3;
   createStep(1);
 
   // Enable tooltips after all the steps are processed.
