@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Eucalyptus</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap theme -->
+    <link href="/css/bootstrap-theme.min.css" rel="stylesheet">
+
+    <!-- FontAwesome -->
+    <link href="/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/css/eucalyptus_core.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+
+    <!-- jQuery -->
+    <!-- <script src="/js/jquery-3.1.1.slim.min.js"></script> -->
+    <script src="/js/jquery/jquery-2.1.4.min.js"></script>
+
+    <!-- Bootstrap -->
+    <script src="/js/bootstrap/bootstrap.min.js"></script>
+    <script src="/js/bootstrap/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- Customer JS -->
+    <script src="/js/ApiHelper.js"></script>
+    <script src="/js/fp-interactive.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+<body>
+  <nav class="navbar navbar-leaf navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/"><i class="fa fa-leaf leafLogo"></i>&nbsp;&nbsp;&nbsp;Eucalyptus</a>
+      </div>
+      <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="/index.html"><span class="fa fa-search fa-lg"></span></a></li>
+          <li><a href="/fpbuilder.html"><span class="fa fa-plus fa-lg"></span></a></li>
+          <!--<li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="fa fa-user fa-lg"></span>&nbsp;<span class="caret"></span></a>
+              <ul class="dropdown-menu inverse-dropdown">
+                <li><a href="#">User Info</a></li>
+                <li><a href="#">Logout</a></li>
+              </ul>
+          </li> -->
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="fa fa-question fa-lg"></span></a>
+              <ul class="dropdown-menu inverse-dropdown">
+                <li><a href="/docs/about.html">About Eucalyptus</a></li>
+                <li><a href="/docs/help.html">Help</a></li>
+              </ul>
+          </li>
+        </ul>
+      </div><!--/.nav-collapse -->
+    </div>
+  </nav>
+
+  <!-- Search Section -->
+  <div class="container-fluid">
+
+    <div class="tablecontainer">
+      <table>
+        <tr width="1600px">
+          <td width="1075px">
+            <div class="panel panel-inverse panel-viewer">
+              <div id="intro-panel-header" class="panel-heading">Viewer</div>
+              <div class="panel-body">
+                <iframe width="1024" height="900" src="https://vcsa01.eeg3.lab:9443/vsphere-client/webconsole.html?vmId=vm-1317&vmName=wem01&serverGuid=da13ce2d-f990-496c-80ff-feefbd52b7fe&locale=en_US&host=vcsa01.eeg3.lab:443&sessionTicket=cst-VCT-52111846-5c67-3af9-5929-303d0a1b30ac--tp-85-37-0D-31-36-77-C7-54-46-E8-D2-E7-C3-B0-FB-1A-6F-90-FC-49&thumbprint=85:37:0D:31:36:77:C7:54:46:E8:D2:E7:C3:B0:FB:1A:6F:90:FC:49"></iframe>
+              </div>
+            </div>
+          </td>
+          <td width="10px"></td>
+          <td width="500px">
+            <div id="stepsSection">
+
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <!--
+    <div class="row">
+      <div class="col-lg-10">
+        <div class="panel panel-inverse panel-viewer">
+          <div id="intro-panel-header" class="panel-heading">Viewer</div>
+          <div class="panel-body">
+            <iframe width="1024" height="768" src="https://vcsa01.eeg3.lab:9443/vsphere-client/webconsole.html?vmId=vm-1317&vmName=wem01&serverGuid=da13ce2d-f990-496c-80ff-feefbd52b7fe&locale=en_US&host=vcsa01.eeg3.lab:443&sessionTicket=cst-VCT-52111846-5c67-3af9-5929-303d0a1b30ac--tp-85-37-0D-31-36-77-C7-54-46-E8-D2-E7-C3-B0-FB-1A-6F-90-FC-49&thumbprint=85:37:0D:31:36:77:C7:54:46:E8:D2:E7:C3:B0:FB:1A:6F:90:FC:49"></iframe>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-2">
+        <div id="stepsSection">
+
+        </div>
+      </div>
+    </div>
+    -->
+
+  </div> <!-- End Container -->
+
+  <footer class="container-fluid">
+    <div class="alert alert-gray">
+      <p id="footer"><i class="fa fa-copyright"></i>&nbsp;2016 <a href="https://github.com/eeg3">https://github.com/eeg3</a>
+    </div>
+  </footer>
+
+</body>
+</html>

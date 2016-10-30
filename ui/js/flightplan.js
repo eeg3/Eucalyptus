@@ -85,8 +85,39 @@ function parseSteps(steps) {
   for (var i = 0;i < steps.length; i++) { // This for loop processes each step
     var stepNumber = i+1;
 
-    var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step ' + stepNumber + '</div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
+    var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step ' + stepNumber + ' <button id="launch-' + stepNumber + '" type="button" class="btn btn-success btn-xs launchButton">Launch</button></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
+
     $("#stepsSection").append(newDivHTML);
+
+    /* Add Launchers */
+    // What else could we launch?
+      // * Documentation
+      // * KB Articles
+      // * Management Consoles
+      // * VM Consoles
+      // * Remote Desktop
+      // * Virtual Desktops
+      // * Virtual Apps
+      // * Ticketing Sites
+
+    if(stepNumber == 1) {
+      $("#launch-" + stepNumber).click(function() {
+        //alert("yo from: " + this.id);
+        var strWindowFeatures = "location=no,height=800,width=1050,scrollbars=no,status=no,resizable=no";
+        //var strWindowFeatures = "";
+        var URL = "https://vcsa01.eeg3.lab:9443/vsphere-client/webconsole.html?vmId=vm-1317&vmName=wem01&serverGuid=da13ce2d-f990-496c-80ff-feefbd52b7fe&locale=en_US&host=vcsa01.eeg3.lab:443&sessionTicket=cst-VCT-52111846-5c67-3af9-5929-303d0a1b30ac--tp-85-37-0D-31-36-77-C7-54-46-E8-D2-E7-C3-B0-FB-1A-6F-90-FC-49&thumbprint=85:37:0D:31:36:77:C7:54:46:E8:D2:E7:C3:B0:FB:1A:6F:90:FC:49";
+        var win = window.open(URL, "_blank", strWindowFeatures);
+      });
+    } else {
+      $("#launch-" + stepNumber).click(function() {
+        //alert("yo from: " + this.id);
+        var strWindowFeatures = "location=no,height=800,width=1050,scrollbars=no,status=no,resizable=no";
+        //var strWindowFeatures = "";
+        var URL = "https://vcs01.eeg3.lab/admin";
+        var win = window.open(URL, "_blank", strWindowFeatures);
+      });
+    }
+
 
     var substeps = steps[i].split("|");
 

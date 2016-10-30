@@ -299,3 +299,14 @@ canvas {
 .panel-inverse>.panel-footer+.panel-collapse>.panel-body {
   border-bottom-color: #2D2D2D;
 }
+
+.launchButton {
+  float: right;
+}
+
+.panel-viewer {
+  width: 1050;
+  height: 1000;
+}
+
+.tablecontainer { width: 1600px; overflow; hidden;}
