@@ -310,3 +310,8 @@ canvas {
 }
 
 .tablecontainer { width: 1600px; overflow; hidden;}
+
+.notesTextArea {
+  width: 300px;
+  height: 22px;
+}

@@ -136,8 +136,8 @@ function parseSteps(steps) {
       tableLineItem += '<td id="' + substepCode + '" class="st-substep-col">' + substepName + '</td>';
       tableLineItem += '<td id="details-' + substepCode + '" class="st-details-col">' + substepDetails + '</td>';
       tableLineItem += '<td id="action-' + substepCode + '" class="st-action-col">' + substepAction + '</td>';
-      tableLineItem += '<td><input type="text" id="notes-' + substepCode + '" class="form-control input-sm" placeholder="Notes" /></td>';
-      //tableLineItem += '<td><textarea" id="notes-' + substepCode + '" class="form-control input-sm" placeholder="Notes" /></td>';
+      //tableLineItem += '<td><input type="text" id="notes-' + substepCode + '" class="form-control input-sm" placeholder="Notes" /></td>';
+      tableLineItem += '<td><textarea id="notes-' + substepCode + '" class="notesTextArea" rows="1" placeholder="Notes" /></td>';
       if (i == 0 && j == 1) {
         tableLineItem += '<td><input type="checkbox" id="status-' + substepCode + '"></td>';
       } else {
@@ -289,5 +289,8 @@ function init () {
   currentTimestamp();
   getFlightplan();
 
-  $("#generateReport").click(function(){ window.print(); }); // Hook clicking Generate Completion Report button into printing the page
+  $("#generateReport").click(function() {
+    //window.print();
+    console.log("Notes value: " + $("#notes-substep-1-1").val());
+  }); // Hook clicking Generate Completion Report button into printing the page
 }
