@@ -1,5 +1,8 @@
 window.onload = init;
 
+// TODO: Add logic to grab Step Title and Step Launcher
+
+
 // Global variables
 var stepsComplete = 0;
 var invalidInput = 0;
@@ -36,10 +39,10 @@ function createStep(stepNumber) {
   //  var newDivHTML = '<div class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step ' + stepNumber + '&nbsp;&nbsp;<i id="addButton-' + stepNumber + '" class="fa fa-plus leafLogo"></i>&nbsp;<i id="addButton-' + stepNumber + '" class="fa fa-minus minus"></i></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
   if(stepNumber == 1) {
     //var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step ' + stepNumber + '&nbsp;&nbsp;<a id="addButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-plus"></i></a></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
-    var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step #&nbsp;<a id="addButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-plus"></i></a></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
+    var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step #&nbsp;<input type="text" class="input-medium" id="stepTitle-' + stepNumber + '" placeholder="Step Title"></input><input type="text" class="input-medium" id="stepLauncher-' + stepNumber + '" placeholder="Step Launcher URL"></input><a id="addButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-plus"></i></a></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
   } else {
     //var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step ' + stepNumber + '&nbsp;&nbsp;<a id="addButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-plus"></i></a><a id="delButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-minus minus"></i></a></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
-    var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step #&nbsp;<a id="addButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-plus"></i></a><a id="delButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-minus minus"></i></a></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
+    var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step #&nbsp;<input type="text" class="input-medium" id="stepTitle-' + stepNumber + '" placeholder="Step Title"><input type="text" class="input-medium" id="stepLauncher-' + stepNumber + '" placeholder="Step Launcher URL"></input></input><a id="addButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-plus"></i></a><a id="delButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-minus minus"></i></a></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
   }
   $("#stepsSection").append(newDivHTML);
 
@@ -84,7 +87,7 @@ function addStep(currentStep) {
 
   //  var newDivHTML = '<div class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step ' + stepNumber + '&nbsp;&nbsp;<i id="addButton-' + stepNumber + '" class="fa fa-plus leafLogo"></i>&nbsp;<i id="addButton-' + stepNumber + '" class="fa fa-minus minus"></i></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
   //var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step ' + stepNumber + '&nbsp;&nbsp;<a id="addButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-plus"></i></a><a id="delButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-minus minus"></i></a></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
-  var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step #&nbsp;<a id="addButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-plus"></i></a><a id="delButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-minus minus"></i></a></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
+  var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step #&nbsp;<input type="text" class="input-medium" id="stepTitle-' + stepNumber + '" placeholder="Step Title"></input><input type="text" class="input-medium" id="stepLauncher-' + stepNumber + '" placeholder="Step Launcher URL"></input><a id="addButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-plus"></i></a><a id="delButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-minus minus"></i></a></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
   //$("#stepsSection").append(newDivHTML);
   $("#row-" + currentStep).after(newDivHTML);
 
@@ -330,6 +333,48 @@ function exportFlightplan() {
     if($("#row-" + i).length) { // If step exists
       stepNumber++;
       substepNumber = 1;
+
+      //console.log("Launcher: " + $("#stepLauncher-1").val());
+      // stepLauncher-# stepTitle-#
+
+      if ($("#stepTitle-" + i).length) {
+        if($("#stepTitle-" + i).val() == "") {
+          $("#errorMessage").html("ERROR: Cannot have empty step titles.");
+          $("#stepTitle-" + i).css("border", "1px solid red");
+          validated = 0;
+          return;
+        }
+        if (cleanOfSemicolons.test( $("#stepTitle-" + i).val() ) == false) {
+          $("#errorMessage").html("ERROR: Steps cannot contain the ';' character.");
+          validated = 0;
+        } else if (cleanOfPipes.test( $("#stepTitle-" + i).val() ) == false) {
+          $("#errorMessage").html("ERROR: Steps cannot contain the '|' character.");
+          validated = 0;
+        } else if (cleanOfTildes.test( $("#stepTitle-" + i).val() ) == false) {
+          $("#errorMessage").html("ERROR: Steps cannot contain the '~' character.");
+          validated = 0;
+        } else {
+          stepsString += $("#stepTitle-" + i).val() + ",";
+        }
+      }
+
+      if ($("#stepLauncher-" + i).length) {
+        if ($("#stepLauncher-" + i).val() == "") {
+          //$("#errorMessage").html("ERROR: Cannot have empty step launcher.");
+          stepsString += "noLauncher|";
+        } else if (cleanOfSemicolons.test( $("#stepLauncher-" + i).val() ) == false) {
+          $("#errorMessage").html("ERROR: Launcher cannot contain the ';' character.");
+          validated = 0;
+        } else if (cleanOfPipes.test( $("#stepLauncher-" + i).val() ) == false) {
+          $("#errorMessage").html("ERROR: Launcher cannot contain the '|' character.");
+          validated = 0;
+        } else if (cleanOfTildes.test( $("#stepLauncher-" + i).val() ) == false) {
+          $("#errorMessage").html("ERROR: Launcher cannot contain the '~' character.");
+          validated = 0;
+        } else {
+          stepsString += $("#stepLauncher-" + i).val() + "|";
+        }
+      }
 
       for (var o = 0; o < substepOrder.length; o++) {
         if (substepOrder[o].split(",")[0] == i) {

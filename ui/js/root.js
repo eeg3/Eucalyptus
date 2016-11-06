@@ -16,15 +16,17 @@ function currentTimestamp() {
 
 function parseFlightplans(id, title, category) {
 
-  // Create new row
-  if (numOfColumns % 2 == 0) { // If it's even, time to create a new row
-    $("#categorySection").append('<div class="row">');
-    numOfColumns++;
-  } else {
-    numOfColumns++;
-  }
-
   if ($("#" + category).length == 0) { // Create new section if category doesn't exist
+
+    // Create new row
+    if (numOfColumns % 2 == 0) { // If it's even, time to create a new row
+      $("#categorySection").append('<div class="row">');
+      numOfColumns++;
+    } else {
+      numOfColumns++;
+    }
+
+
     var newDivHTML = '<div class="col-sm-6"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">' + category + '</div><div id="' + category + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div>';
     $("#categorySection").append(newDivHTML);
 
@@ -55,6 +57,9 @@ function init () {
   helper.get("/api/flightplan/")
     .then(function(data){
       for (var i = 0; i < data.length; i++) {
+        //console.log("id: " + data[i]._id);
+        //console.log("title: " + data[i].title);
+        //console.log("category: " + data[i].category);
         parseFlightplans(data[i]._id, data[i].title, data[i].category);
       }
 

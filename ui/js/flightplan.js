@@ -2,6 +2,7 @@ window.onload = init;
 
 // Global variables
 var stepsComplete = 0;
+var launchers = []; // We use the launchers variable to work around the scope...
 
 function currentTimestamp() {
   var date = new Date();
@@ -80,12 +81,17 @@ function parseSteps(steps) {
   var steps = steps.split(";");
   var numberOfSteps = steps.length;
 
-
-  // Insert code to fill in the shell tables
   for (var i = 0;i < steps.length; i++) { // This for loop processes each step
+
+    // Example substep: launcherAddress|A,Sub-step item to do from object,RDP to ServerA|B,Sub-step item to do from object again,Open Citrix Studio|C,Sub-step item to do lastly,Open PVS Console;
     var stepNumber = i+1;
 
-    var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step ' + stepNumber + ' <button id="launch-' + stepNumber + '" type="button" class="btn btn-success btn-xs launchButton">Launch</button></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
+    var substeps = steps[i].split("|");
+
+    var stepTitle = substeps[0].split(",")[0];
+    launchers.push(substeps[0].split(",")[1]);
+
+    var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step: ' + stepTitle + ' <button id="launch-' + stepNumber + '" type="button" class="btn btn-success btn-xs launchButton">Launch</button></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
 
     $("#stepsSection").append(newDivHTML);
 
@@ -100,36 +106,27 @@ function parseSteps(steps) {
       // * Virtual Apps
       // * Ticketing Sites
 
-    if(stepNumber == 1) {
-      $("#launch-" + stepNumber).click(function() {
-        //alert("yo from: " + this.id);
-        var strWindowFeatures = "location=no,height=800,width=1050,scrollbars=no,status=no,resizable=no";
-        //var strWindowFeatures = "";
-        var URL = "https://vcsa01.eeg3.lab:9443/vsphere-client/webconsole.html?vmId=vm-1317&vmName=wem01&serverGuid=da13ce2d-f990-496c-80ff-feefbd52b7fe&locale=en_US&host=vcsa01.eeg3.lab:443&sessionTicket=cst-VCT-52111846-5c67-3af9-5929-303d0a1b30ac--tp-85-37-0D-31-36-77-C7-54-46-E8-D2-E7-C3-B0-FB-1A-6F-90-FC-49&thumbprint=85:37:0D:31:36:77:C7:54:46:E8:D2:E7:C3:B0:FB:1A:6F:90:FC:49";
-        var win = window.open(URL, "_blank", strWindowFeatures);
-      });
-    } else {
-      $("#launch-" + stepNumber).click(function() {
-        //alert("yo from: " + this.id);
-        var strWindowFeatures = "location=no,height=800,width=1050,scrollbars=no,status=no,resizable=no";
-        //var strWindowFeatures = "";
-        var URL = "https://vcs01.eeg3.lab/admin";
-        var win = window.open(URL, "_blank", strWindowFeatures);
-      });
-    }
-
-
-    var substeps = steps[i].split("|");
-
-
     var table = $('<table></table>').addClass('table table-bordered table-striped sp-databox-table');;
     var head = $('<thead><tr><td>Sub-Step</td><td>Details</td><td>Action</td><td>Notes&nbsp;<span data-toggle="tooltip" data-placement="top" title="Enter notes here to keep track of what you actually did."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></td><td>Status</td></tr></thead>');
     var body = $('<tbody>');
     table.append(head);
     table.append(body);
 
-    for (var j = 0; j < substeps.length; j++) { // This for loop processes each substep of each step
-      var substepNumber = j+1;
+    if ( substeps[0].split(",")[1] == "noLauncher") {
+      $("#launch-" + stepNumber).prop("disabled", true);
+    }
+
+    $("#launch-" + stepNumber).click(function() {
+      //alert("yo from: " + this.id);
+      var strWindowFeatures = "location=no,height=800,width=1050,scrollbars=no,status=no,resizable=no";
+      //var strWindowFeatures = "";
+      //var URL = "https://vcs01.eeg3.lab/admin";
+      var URL = launchers[this.id.split("-")[1]-1]; // We use the launchers variable to work around the scope...
+      var win = window.open(URL, "_blank", strWindowFeatures);
+    });
+
+    for (var j = 1; j < substeps.length; j++) { // This for loop processes each substep of each step
+      var substepNumber = j;
       var substepName = substeps[j].split(",")[0];
       var substepDetails = substeps[j].split(",")[1];
       var substepAction = substeps[j].split(",")[2];
@@ -141,7 +138,7 @@ function parseSteps(steps) {
       tableLineItem += '<td id="action-' + substepCode + '" class="st-action-col">' + substepAction + '</td>';
       tableLineItem += '<td><input type="text" id="notes-' + substepCode + '" class="form-control input-sm" placeholder="Notes" /></td>';
       //tableLineItem += '<td><textarea" id="notes-' + substepCode + '" class="form-control input-sm" placeholder="Notes" /></td>';
-      if (i == 0 && j == 0) {
+      if (i == 0 && j == 1) {
         tableLineItem += '<td><input type="checkbox" id="status-' + substepCode + '"></td>';
       } else {
         tableLineItem += '<td><input type="checkbox" id="status-' + substepCode + '" disabled></td>';
@@ -199,45 +196,43 @@ function getFlightplan() {
       console.log("passedId: " + passedId);
 
       for (var i = 0; i < data.length; i++) {
-        var nodesToDisplay = ["_id", "title", "author", "revision", "category", "product", "description", "outcome", "steps"];
+        var nodesToDisplay = ["_id", "title", "author", "revision", "category", "product", "description", "steps"];
 
         if (flightplan[i]["_id"] == passedId) { // Need to make this dynamic from last page call
           for (var j = 0; j < nodesToDisplay.length; j++) {
             flightplanEntry += flightplan[i][nodesToDisplay[j]] + "~";
           }
 
+          /*
           console.log("ID: " + flightplanEntry.split("~")[0]);
+          console.log("Title: " + flightplanTitle);
+          console.log("Description: " + flightplanDescription);
+          console.log("Category: " + flightplanCategory);
+          console.log("Author: " + flightplanAuthor);
+          console.log("Revision: " + flightplanRevision);
+          console.log("Product: " + flightplanProduct);
+          */
 
           var flightplanTitle = flightplanEntry.split("~")[1];
-          console.log("Title: " + flightplanTitle);
           $("#flightplanTitle").html(flightplanTitle);
 
           var flightplanAuthor = flightplanEntry.split("~")[2];
-          console.log("Author: " + flightplanAuthor);
           $("#flightplanAuthor").html(flightplanAuthor);
 
           var flightplanRevision = flightplanEntry.split("~")[3]
-          console.log("Revision: " + flightplanRevision);
           $("#flightplanRevision").html(flightplanRevision);
 
           var flightplanCategory = flightplanEntry.split("~")[4];
-          console.log("Category: " + flightplanCategory);
           $("#flightplanCategory").html(flightplanCategory);
 
           var flightplanProduct = flightplanEntry.split("~")[5]
-          console.log("Product: " + flightplanProduct);
           $("#flightplanProduct").html(flightplanProduct);
 
           var flightplanDescription = flightplanEntry.split("~")[6];
-          console.log("Description: " + flightplanDescription);
           $("#flightplanDescription").html(flightplanDescription);
 
-          var flightplanOutcome = flightplanEntry.split("~")[7];
-          console.log("Outcome: " + flightplanOutcome);
-          $("#flightplanOutcome").html(flightplanOutcome);
-
           // Example steps string: "A,Sub-step item to do from object,RDP to ServerA|B,Sub-step item to do from object again,Open Citrix Studio|C,Sub-step item to do lastly,Open PVS Console;A,Sub-step item to do in 2,RDP to ServerB|B,Sub-step item to do in 2,RDP to Server|C,Sub-step item to do in 2,RDP to ServerD"
-          var flightplanSteps = flightplanEntry.split("~")[8];
+          var flightplanSteps = flightplanEntry.split("~")[7];
           parseSteps(flightplanSteps);
         }
       }

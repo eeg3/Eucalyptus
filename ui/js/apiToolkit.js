@@ -12,7 +12,7 @@ function getFlightplansFromApi() {
       var flightplan = data;
 
       for (var i = 0; i < data.length; i++) {
-        var nodesToDisplay = ["_id", "title", "author", "revision", "category", "product", "description", "outcome", "steps"];
+        var nodesToDisplay = ["_id", "title", "author", "revision", "category", "product", "description", "steps"];
         var rowToAdd = "<tr>";
         for (var j = 0; j < nodesToDisplay.length; j++) {
           if (nodesToDisplay[j] === "lastCommunication" && flightplan[i][nodesToDisplay[j]] !== "Never") {
@@ -48,7 +48,6 @@ function init () {
     var category = $('input:text[name=patchCategory]').val();
     var product = $('input:text[name=patchProduct]').val();
     var description = $('input:text[name=patchDescription]').val();
-    var outcome = $('input:text[name=patchOutcome]').val();
     var steps = $('input:text[name=patchSteps]').val();
 
     var flightplanPatch = {};
@@ -74,9 +73,6 @@ function init () {
     }
     if (description !== "") {
       flightplanPatch["description"] = description;
-    }
-    if (outcome !== "") {
-      flightplanPatch["outcome"] = outcome;
     }
     if (steps !== "") {
       flightplanPatch["steps"] = steps;
