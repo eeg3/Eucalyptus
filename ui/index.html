@@ -30,6 +30,10 @@
     <script src="/js/bootstrap/bootstrap.min.js"></script>
     <script src="/js/bootstrap/ie10-viewport-bug-workaround.js"></script>
 
+    <!-- Chart.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.bundle.min.js" integrity="sha256-1uH5nQ+1cUZEU9YOfMzc9rapsWyuGtvKPpvKN9xDgug=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.min.js" integrity="sha256-w8BXa9KXx+nmhO9N4hupvlLy+cAtqEarnB40DVJx2xA=" crossorigin="anonymous"></script>
+
     <!-- Customer JS -->
     <script src="/js/ApiHelper.js"></script>
     <script src="/js/root.js"></script>
@@ -81,47 +85,30 @@
     </div>
   </nav>
 
-  <!-- Search Section -->
-  <div class="container-fluid">
-    <div id="searchBar">
-      <div class="row">
-        <div class="col-sm-12">
-          <div class="panel panel-inverse">
-            <div class="panel-heading">Search FlightPlans</div>
-            <div class="panel-body">
-              <div id="custom-search-input">
-                <div class="input-group col-md-12">
-                  <input type="text" class="form-control input-lg" placeholder="What would you like to do?" />
-                  <span class="input-group-btn">
-                    <button class="btn btn-info btn-lg" type="button">
-                      <i class="fa fa-search"></i>
-                    </button>
-                  </span>
+    <!-- Search Section -->
+    <div class="container-fluid">
+      <div id="searchBar">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="panel panel-inverse">
+              <div class="panel-heading">FlightPlan Breakdown</div>
+              <div class="panel-body">
+                <!-- <canvas id="myChart"></canvas> -->
+                <div class="row">
+                  <div class="col-sm-3"></div>
+                  <div class="col-sm-6">
+                    <canvas id="myChart"></canvas>
+                  </div>
+                  <div class="col-sm-3"></div>
                 </div>
+                </center>
+                <!--<canvas id="myChart" width="300" height="150" style="display: block; width: 300px; height: 150px;"></canvas> -->
               </div>
-              <br />
-              <!-- <div id="toggles">
-                <div class="checkbox-inline col-md-12">
-                  <label class="checkbox-inline">
-                    <input type="checkbox" name="installation-checkbox" checked> Installation
-                  </label>
-                  <label class="checkbox-inline">
-                    <input type="checkbox" name="configuration-checkbox" checked> Configuration
-                  </label>
-                  <label class="checkbox-inline">
-                    <input type="checkbox" name="manage-checkbox" checked> Manage
-                  </label>
-                  <label class="checkbox-inline">
-                    <input type="checkbox" name="monitor-checkbox" checked> Monitor
-                  </label>
-                </div>
-              </div> -->
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <!-- End Search Section -->
+      <!-- End Search Section -->
 
     <div id="categorySection">
 

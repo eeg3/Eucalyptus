@@ -3,7 +3,7 @@ body {
   margin-left: 7%;
   margin-right: 7%;
   padding: 7px 7px 7px 7px;
-  font-family: "Roboto", sans-serif;
+  font-family: 'ProximaNovaSoft',Helvetica Neue,Helvetica,Arial,sans-serif;
   line-height: 1.42857143;
   color: #333;
   background-color: #fff;
@@ -17,6 +17,7 @@ body {
   color: #999;
   background-color: #2D2D2D;
   border-color: #2D2D2D;
+  font-weight: 500;
 }
 .panel-inverse>.panel-heading+.panel-collapse>.panel-body {
   border-top-color: #2D2D2D;
@@ -36,6 +37,7 @@ body {
   border-color: rgba(134, 139, 133, 0.31);
   color: rgba(113, 114, 116, 0.79);
   letter-spacing: 1px;
+  font-weight: 500;
 }
 .sp-databox-panel-body {
   border-width: 1px;
@@ -314,4 +316,8 @@ canvas {
 .notesTextArea {
   width: 300px;
   height: 22px;
+}
+
+canvas {
+  border: 0px none black;
 }
