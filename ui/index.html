@@ -91,7 +91,24 @@
         <div class="row">
           <div class="col-sm-12">
             <div class="panel panel-inverse">
-              <div class="panel-heading">FlightPlan Breakdown</div>
+              <!--<div class="panel-heading">FlightPlan Breakdown<div class="launchButton"><input type="checkbox" id="my-checkbox" checked></div></div>-->
+              <div class="panel-heading">
+                <div class="row">
+                  <div class="col-sm-4"></div>
+                  <div class="col-sm-4">Flightplan Breakdown</div>
+                  <div class="col-sm-4">
+                    <form>
+                      <label class="radio-inline">Sort by:</label>
+                      <label class="radio-inline">
+                        <input id="categoryRadio" type="radio" name="optradio" checked>Category
+                      </label>
+                      <label class="radio-inline">
+                        <input id="productRadio" type="radio" name="optradio">Product
+                      </label>
+                    </form>
+                  </div>
+                </div>
+              </div>
               <div class="panel-body">
                 <!-- <canvas id="myChart"></canvas> -->
                 <div class="row">

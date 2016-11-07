@@ -321,3 +321,14 @@ canvas {
 canvas {
   border: 0px none black;
 }
+
+#editFP {
+  margin-right: 5px;
+}
+#toggleSequential {
+  margin-left: 7px;
+}
+
+.float-left {
+  float: left;
+}

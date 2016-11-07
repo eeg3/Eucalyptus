@@ -87,7 +87,19 @@
     <div class="row">
       <div class="col-sm-12">
         <div class="panel panel-inverse">
-          <div id="intro-panel-header" class="panel-heading">Summary</div>
+          <div id="intro-panel-header" class="panel-heading">
+            <div class="row">
+              <div class="col-sm-4">
+                <label class="radio-inline float-left">Show All: </label>
+                <input id="toggleSequential" class="float-left" type="checkbox" name="my-checkbox">
+              </div>
+              <div class="col-sm-4">Summary</div>
+              <div class="col-sm-4">
+                <button id="deleteFP" type="button" title="Delete FlightPlan" class="btn btn-success btn-xs launchButton"><i class="fa fa-trash"></i></button>
+                <button id="editFP" title="Edit FlightPlan" type="button" class="btn btn-success btn-xs launchButton"><i class="fa fa-edit"></i></button>
+              </div>
+            </div>
+          </div>
           <div class="panel-body">
             <div id="manJumbo" class="jumbotron">
               <h1><span id="flightplanTitle">Title</span></h1>

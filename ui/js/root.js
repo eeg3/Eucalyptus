@@ -2,6 +2,7 @@ window.onload = init;
 
 // Global variables
 var numOfColumns = 0;
+var displayOption = "category";
 
 function currentTimestamp() {
   var date = new Date();
@@ -34,7 +35,7 @@ function parseFlightplans(id, title, category) {
       $("#categorySection").append('</div>');
     }
 
-    var table = $('<table id="' + category + 'Table"></table>').addClass('table table-bordered table-striped sp-databox-table');
+    var table = $('<table id="' + category + '-table"></table>').addClass('table table-bordered table-striped sp-databox-table');
     var body = $('<tbody>');
     table.append(body);
     var tableLineItem = '<tr><td><a href="/flightplan.html?id=' + id + '">' + title + '</a></td></tr>';
@@ -45,15 +46,24 @@ function parseFlightplans(id, title, category) {
     $("#" + category).append(table);
   } else { // Add to section if it already exists
     var tableLineItem = '<tr><td><a href="/flightplan.html?id=' + id + '">' + title + '</a></td></tr>';
-    $('#' + category + 'Table tr:last').after(tableLineItem);
-    $('#' + category + 'Table tr:last').trigger("update");
+    $('#' + category + '-table tr:last').after(tableLineItem);
+    $('#' + category + '-table tr:last').trigger("update");
   }
 
 }
 
-function init () {
-  currentTimestamp();
-  var chartLabels = ["Installation", "Configuration", "Manage"];
+function populateChart() {
+  var newColumns = [];
+  var rowCount = [];
+
+  $("div[id^='section-']").each(function () {
+    var categoryName = this.id.split("-")[1];
+    newColumns.push(categoryName);
+    rowCount.push($('#' + categoryName + '-table tr').length);
+   });
+
+  //var chartLabels = ["Installation", "Configuration", "Manage"];
+  var chartLabels = newColumns;
   var ctx = $("#myChart");
 
   var myChart = new Chart(ctx, {
@@ -70,7 +80,8 @@ function init () {
           "#e74c3c",
           "#34495e"
         ],
-        data: [7, 2, 1]
+        //data: [7, 2, 1]
+        data: rowCount
       }]
     }
   });
@@ -82,19 +93,75 @@ function init () {
          window.location.hash = "section-" + chartLabels[index];
      }
    });
+}
+
+function populateFlightplans(sortOption) {
+
+  /* Add logic to clear flightplans div */
+  $("#categorySection").html("");
+  numOfColumns = 0;
 
   helper.get("/api/flightplan/")
     .then(function(data){
+      var categories = [];
+
       for (var i = 0; i < data.length; i++) {
         //console.log("id: " + data[i]._id);
         //console.log("title: " + data[i].title);
         //console.log("category: " + data[i].category);
-        parseFlightplans(data[i]._id, data[i].title, data[i].category);
+        //if(categories.indexOf(data[i].category) == -1) {
+        //    categories.push(data[i].category);
+        //}
+        if (sortOption == "category") {
+          parseFlightplans(data[i]._id, data[i].title, data[i].category);
+        } else {
+          parseFlightplans(data[i]._id, data[i].title, data[i].product);
+        }
       }
 
-      $(document).ready(function(){ // Enable tooltips after all the steps are processed.
-        $('[data-toggle="tooltip"]').tooltip();
+      populateChart();
+
+    });
+}
+
+function init () {
+  currentTimestamp();
+  /*
+  helper.get("/api/flightplan/")
+    .then(function(data){
+      var categories = [];
+
+      for (var i = 0; i < data.length; i++) {
+        //console.log("id: " + data[i]._id);
+        //console.log("title: " + data[i].title);
+        //console.log("category: " + data[i].category);
+        //if(categories.indexOf(data[i].category) == -1) {
+        //    categories.push(data[i].category);
+        //}
+        //parseFlightplans(data[i]._id, data[i].title, data[i].category);
+        parseFlightplans(data[i]._id, data[i].title, data[i].product);
+      }
+
+      populateChart();
+
+      $("#toggleDisplay").click(function() {
+        //Insert logic here
       });
     });
+    */
+    populateFlightplans(displayOption);
 
+
+    $(document).ready(function(){ // Enable tooltips after all the steps are processed.
+
+      $("#categoryRadio").click(function() {
+        populateFlightplans("category");
+      });
+
+      $("#productRadio").click(function() {
+        populateFlightplans("product");
+      });
+
+      $('[data-toggle="tooltip"]').tooltip();
+    });
 }

@@ -3,6 +3,7 @@ window.onload = init;
 // Global variables
 var stepsComplete = 0;
 var launchers = []; // We use the launchers variable to work around the scope...
+var mobile = false;
 
 function currentTimestamp() {
   var date = new Date();
@@ -106,8 +107,13 @@ function parseSteps(steps) {
       // * Virtual Apps
       // * Ticketing Sites
 
-    var table = $('<table></table>').addClass('table table-bordered table-striped sp-databox-table');;
-    var head = $('<thead><tr><td>Sub-Step</td><td>Details</td><td>Action</td><td>Notes&nbsp;<span data-toggle="tooltip" data-placement="top" title="Enter notes here to keep track of what you actually did."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></td><td>Status</td></tr></thead>');
+    var table = $('<table></table>').addClass('table table-bordered table-striped sp-databox-table');
+
+    if ($(window).width() >= 660) {
+      var head = $('<thead><tr><td>Sub-Step</td><td>Details</td><td>Action</td><td>Notes&nbsp;<span data-toggle="tooltip" data-placement="top" title="Enter notes here to keep track of what you actually did."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></td><td>Status</td></tr></thead>');
+    } else {
+      var head = $('<thead><tr><td>Sub-Step</td><td>Details</td><td>Action</td><td>Status</td></tr></thead>');
+    }
     var body = $('<tbody>');
     table.append(head);
     table.append(body);
@@ -137,7 +143,9 @@ function parseSteps(steps) {
       tableLineItem += '<td id="details-' + substepCode + '" class="st-details-col">' + substepDetails + '</td>';
       tableLineItem += '<td id="action-' + substepCode + '" class="st-action-col">' + substepAction + '</td>';
       //tableLineItem += '<td><input type="text" id="notes-' + substepCode + '" class="form-control input-sm" placeholder="Notes" /></td>';
-      tableLineItem += '<td><textarea id="notes-' + substepCode + '" class="notesTextArea" rows="1" placeholder="Notes" /></td>';
+      if ($(window).width() >= 660) {
+        tableLineItem += '<td><textarea id="notes-' + substepCode + '" class="notesTextArea" rows="1" placeholder="Notes" /></td>';
+      }
       if (i == 0 && j == 1) {
         tableLineItem += '<td><input type="checkbox" id="status-' + substepCode + '"></td>';
       } else {
@@ -285,6 +293,29 @@ function init () {
   // parseSteps() parses the steps string which holds all the steps and substeps. It creates the divs for the steps an the tables for the substeps. Then ->
   // initiateStepFlow() goes through all the DOM objects created by paresSteps() and activates the logic around the checkboxes around hooks, hiding, and disabling flows.
   // updateCompletionStatus() is hooked into onClick for all the checkboxes by initiateStepFlow() to activate the logic on user activity.
+
+  //row-substep-
+
+  $('#toggleSequential').change(function() {
+    var checkboxHit = 0; // This is done to prevent the next item in list to be done from being hidden.
+
+    if($(this).is(":checked")) { // If toggleSequential is checked
+      $("tr[id^='row-substep-']").each(function () {
+        $("#" + this.id).css("color", "black"); // Unhide next sub-step since this sub-step is complete.
+      });
+    } else { // if toggleSequential is not checked
+      $("tr[id^='row-substep-']").each(function () {
+        var checkboxCode = "#status-" + this.id.split("-")[1] + "-" + this.id.split("-")[2] + "-" + this.id.split("-")[3];
+
+        if(!$(checkboxCode).prop('checked') ) {
+          if (checkboxHit) { // This is done to prevent the next item in list to be done from being hidden.
+            $("#" + this.id).css("color", "white"); // Unhide next sub-step since this sub-step is complete.
+          }
+          checkboxHit++;
+        }
+      });
+    }
+  });
 
   currentTimestamp();
   getFlightplan();
