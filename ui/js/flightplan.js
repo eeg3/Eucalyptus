@@ -107,12 +107,12 @@ function parseSteps(steps) {
       // * Virtual Apps
       // * Ticketing Sites
 
-    var table = $('<table></table>').addClass('table table-bordered table-striped sp-databox-table');
+    var table = $('<table></table>').addClass('table table-bordered table-striped sp-databox-table-lg');
 
     if ($(window).width() >= 660) {
-      var head = $('<thead><tr><td>Sub-Step</td><td>Details</td><td>Action</td><td>Notes&nbsp;<span data-toggle="tooltip" data-placement="top" title="Enter notes here to keep track of what you actually did."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></td><td>Status</td></tr></thead>');
+      var head = $('<thead><tr><th width="95px">Sub-Step</th><th>Details</th><th>Action</th><th>Notes&nbsp;<span data-toggle="tooltip" data-placement="top" title="Enter notes here to keep track of what you actually did."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></th><th>Status</th></tr></thead>');
     } else {
-      var head = $('<thead><tr><td>Sub-Step</td><td>Details</td><td>Action</td><td>Status</td></tr></thead>');
+      var head = $('<thead><tr><th>Sub-Step</th><th>Details</th><th>Action</th><th>Status</th></tr></thead>');
     }
     var body = $('<tbody>');
     table.append(head);
@@ -128,6 +128,15 @@ function parseSteps(steps) {
       //var strWindowFeatures = "";
       //var URL = "https://vcs01.eeg3.lab/admin";
       var URL = launchers[this.id.split("-")[1]-1]; // We use the launchers variable to work around the scope...
+      var win = window.open(URL, "_blank", strWindowFeatures);
+    });
+
+    $("#popout-" + stepNumber).click(function() {
+      //alert("yo from: " + this.id);
+      var strWindowFeatures = "location=no,height=200,width=1000,scrollbars=no,status=no,resizable=no";
+      //var strWindowFeatures = "";
+      var URL = "http://localhost:8001/flightplan-popout.html";
+      //var URL = launchers[this.id.split("-")[1]-1]; // We use the launchers variable to work around the scope...
       var win = window.open(URL, "_blank", strWindowFeatures);
     });
 
@@ -206,20 +215,64 @@ function getFlightplan() {
       for (var i = 0; i < data.length; i++) {
         var nodesToDisplay = ["_id", "title", "author", "revision", "category", "product", "description", "steps"];
 
-        if (flightplan[i]["_id"] == passedId) { // Need to make this dynamic from last page call
+        if (flightplan[i]["_id"] == passedId) {
+          var flightplanSteps = flightplan[i]["steps"];
+          displaySummary();
+          parseSteps(flightplanSteps);
+        }
+      }
+
+      stepQuantity = findTotalStepQuantity();
+      initiateStepFlow(stepQuantity.steps, stepQuantity.substeps);
+
+      // Enable tooltips after all the steps are processed.
+      $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+      });
+    });
+
+}
+
+function displaySummary() {
+
+  $("#flightplanHeaderSection").html(""); // Clear it
+
+  helper.get("/api/flightplan/")
+    .then(function(data){
+      var flightplan = data;
+      var flightplanEntry = "";
+
+      var passedId = urlParam('id');
+
+      for (var i = 0; i < data.length; i++) {
+        var nodesToDisplay = ["_id", "title", "author", "revision", "category", "product", "description", "steps"];
+
+        if (flightplan[i]["_id"] == passedId) {
           for (var j = 0; j < nodesToDisplay.length; j++) {
             flightplanEntry += flightplan[i][nodesToDisplay[j]] + "~";
           }
 
-          /*
-          console.log("ID: " + flightplanEntry.split("~")[0]);
-          console.log("Title: " + flightplanTitle);
-          console.log("Description: " + flightplanDescription);
-          console.log("Category: " + flightplanCategory);
-          console.log("Author: " + flightplanAuthor);
-          console.log("Revision: " + flightplanRevision);
-          console.log("Product: " + flightplanProduct);
-          */
+          // Add table
+
+          var table = $('<table></table>').addClass('table table-bordered table-striped sp-databox-table-sm');
+          var body = $('<tbody>');
+          table.append(body);
+
+          var tableLineItem = "";
+          tableLineItem += '<tr><td>Category <span data-toggle="tooltip" data-placement="right" title="Categories are groupings of similar flightplans."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></td><td><span id="flightplanCategory" class="flightplanHeader"></span></td></tr>';
+          tableLineItem += '<tr><td>Product <span data-toggle="tooltip" data-placement="right" title="Flightplans are tied to products and versions so they stay relevant."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></td><td><span id="flightplanProduct" class="flightplanHeader"></span></td></tr>';
+          tableLineItem += '<tr><td>Description <span data-toggle="tooltip" data-placement="right" title="The purpose of the flightplan."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></td><td><span id="flightplanDescription" class="flightplanHeader"></span></td></tr>';
+          tableLineItem += '<tr><td>Revision <span data-toggle="tooltip" data-placement="right" title="As flightplans are updated, revisions are added."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></td><td><span id="flightplanRevision" class="flightplanHeader"></span></td></tr>';
+          tableLineItem += '<tr><td>Author <span data-toggle="tooltip" data-placement="right" title="The creator of the flightplan."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></td><td><span id="flightplanAuthor" class="flightplanHeader"></span></td></tr></tr>';
+
+          table.append(tableLineItem);
+
+          var tableEnd = $('</tbody>');
+          table.append(tableEnd);
+
+          $("#flightplanHeaderSection").append(table);
+
+          // End add table
 
           var flightplanTitle = flightplanEntry.split("~")[1];
           $("#flightplanTitle").html(flightplanTitle);
@@ -241,17 +294,8 @@ function getFlightplan() {
 
           // Example steps string: "A,Sub-step item to do from object,RDP to ServerA|B,Sub-step item to do from object again,Open Citrix Studio|C,Sub-step item to do lastly,Open PVS Console;A,Sub-step item to do in 2,RDP to ServerB|B,Sub-step item to do in 2,RDP to Server|C,Sub-step item to do in 2,RDP to ServerD"
           var flightplanSteps = flightplanEntry.split("~")[7];
-          parseSteps(flightplanSteps);
         }
       }
-
-      stepQuantity = findTotalStepQuantity();
-      initiateStepFlow(stepQuantity.steps, stepQuantity.substeps);
-
-      // Enable tooltips after all the steps are processed.
-      $(document).ready(function(){
-        $('[data-toggle="tooltip"]').tooltip();
-      });
     });
 
 }
@@ -319,6 +363,27 @@ function init () {
 
   currentTimestamp();
   getFlightplan();
+
+/*
+  $("#nextStep").click(function() {
+
+    $("#flightplanTitle").html("Download Application Media");
+
+    $("#flightplanHeaderSection").html(""); // Clear it
+    var table = $('<table></table>').addClass('table table-bordered table-striped');
+    var body = $('<tbody>');
+    table.append(body);
+
+    var tableLineItem = "";
+    tableLineItem += "<tr><td>Obtain the installation media for applications that will be installed into the App Stack.</td></tr>"
+    table.append(tableLineItem);
+
+    var tableEnd = $('</tbody>');
+    table.append(tableEnd);
+
+    $("#flightplanHeaderSection").append(table);
+  });
+*/
 
   $("#generateReport").click(function() {
     //window.print();

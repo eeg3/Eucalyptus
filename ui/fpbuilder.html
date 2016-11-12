@@ -81,8 +81,8 @@
     </div>
   </nav>
 
-  <!-- Search Section -->
-  <div class="container-fluid">
+  <!-- Create New Section -->
+  <div id="createNewDiv" class="container-fluid">
 
     <div class="row">
       <div class="col-sm-12">
@@ -123,7 +123,6 @@
         </div>
       </div>
     </div>
-    <!-- End Search Section -->
 
     <div id="stepsSection">
 
@@ -134,8 +133,81 @@
     </div>
     <div id="errorMessage"></div>
 
+  </div> <!-- End Container -->
+
+  <!-- Search Section -->
+  <div id="importExistingDiv" class="container-fluid">
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="panel panel-inverse">
+          <div id="intro-panel-header" class="panel-heading">FlightPlan Importer</div>
+          <div class="panel-body">
+              <div class="row">
+                <div class="col-sm-3"></div>
+                <div class="col-sm-6">
+                  <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Example.FLP">
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="button">Browse</button>
+                    </span>
+                  </div><!-- /input-group -->
+                  <br />
+                  <div id="submitFlightplan" class="btn-group">
+                    <button id="createFlightplan" type="button" class="btn btn-success">Import FlightPlan</button>
+                  </div>
+                </div>
+                <div class="col-sm-3"></div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
   </div> <!-- End Container -->
+
+  <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="gridSystemModalLabel">New FlightPlan</h4>
+        </div>
+        <div class="modal-body">
+          <div class="panel">
+            <div class="panel-body sp-databox-panel-body">
+              <div class="row">
+                <div class="col-sm-6 sp-databox-left">
+                  <div class="sp-databox">
+                    <button id="createNewFP" class="invisBtn">
+                      <div class="sp-databox-item">
+                        <p class="sp-databox-item-header">Create New</p>
+                        <p class="sp-databox-item-descr">Utilize the FlightPlan Builder</p>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+                <div class="col-sm-6 sp-databox-right">
+                  <div class="sp-databox">
+                    <button id="loadExistingFP" class="invisBtn">
+                      <div class="sp-databox-item">
+                        <p class="sp-databox-item-header">Import Existing</p>
+                        <p class="sp-databox-item-descr">Load an .FLP File</p>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--<div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>-->
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
 
   <footer class="container-fluid">
     <div class="alert alert-gray">

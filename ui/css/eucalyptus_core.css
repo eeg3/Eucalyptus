@@ -79,8 +79,11 @@ body {
   font-weight: bold;
   margin: 0;
 }
-.sp-databox-table {
+.sp-databox-table-sm {
   font-size:  .8em;
+}
+.sp-databox-table-lg {
+  font-size:  1.2em;
 }
 
 .inverse-dropdown {
@@ -128,9 +131,7 @@ body {
 #dataTable {
   padding-bottom: 10px;
 }
-canvas {
-  border: 1px solid black;
-}
+
 #systemStatusColor {
   box-shadow: 4px 4px 12px #777;
 }
@@ -304,6 +305,7 @@ canvas {
 
 .launchButton {
   float: right;
+  margin-left: 7px;
 }
 
 .panel-viewer {
@@ -314,21 +316,41 @@ canvas {
 .tablecontainer { width: 1600px; overflow; hidden;}
 
 .notesTextArea {
-  width: 300px;
-  height: 22px;
+  width: 200px;
+  height: 55px;
 }
 
 canvas {
   border: 0px none black;
 }
 
-#editFP {
-  margin-right: 5px;
-}
 #toggleSequential {
   margin-left: 7px;
 }
 
 .float-left {
   float: left;
+}
+
+.popout-header {
+    float: left;
+    padding: 15px;
+    text-align: center;
+    width: 100%;
+}
+.popout-brand {float:none;}
+
+th {
+  text-align: center;
+  font-weight: bold:
+}
+
+.invisBtn {
+    background: transparent;
+    border: none !important;
+}
+
+.modal-backdrop
+{
+    opacity:0.8 !important;
 }

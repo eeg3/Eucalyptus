@@ -538,14 +538,27 @@ function init () {
 
   createStep(1);
 
+  $('#importExistingDiv').hide();
+
   // Enable tooltips after all the steps are processed.
   $(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip();
+    $('#myModal').modal('show');
   });
 
   $("#createFlightplan").click(function() {
     exportFlightplan();
   }); // Hook clicking Create FlightPlan
+
+  $("#createNewFP").click(function() {
+    $('#myModal').modal('hide');
+  });
+
+  $("#loadExistingFP").click(function() {
+    $('#myModal').modal('hide');
+    $('#createNewDiv').hide();
+    $('#importExistingDiv').show();
+  });
 
   hookUpAddDelButtons(); // Cycle through every step and substep created and hook them up.
   hookUpInputValidation();
