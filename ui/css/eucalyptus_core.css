@@ -324,7 +324,7 @@ canvas {
   border: 0px none black;
 }
 
-#toggleSequential {
+#toggleSequential, .loadBtn, .deleteBtn {
   margin-left: 7px;
 }
 

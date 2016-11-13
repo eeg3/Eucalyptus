@@ -38,11 +38,17 @@ var db = mongoose.connect(dbConnection, function() {
 /***** Initialize express *****/
 var app = express();
 
-/***** Manfiest API *****/
+/***** Flightplan API *****/
 // Create a ORM Model based on the flightplanModel Schema
 var Flightplan = require('./models/Flightplan');
 // Load the desktop routes that handle POST/GET/PATCH/DELETE for the API; also holds the controller functionality
 flightplanRouter = require('./routes/flightplanRoutes')(Flightplan);
+
+/***** Inflight API *****/
+// Create a ORM Model based on the flightplanModel Schema
+var Inflight = require('./models/Inflight');
+// Load the desktop routes that handle POST/GET/PATCH/DELETE for the API; also holds the controller functionality
+inflightRouter = require('./routes/inflightRoutes')(Inflight);
 
 /* Screenshot API not needed yet
       /***** Screenshot API *****
@@ -61,9 +67,11 @@ app.use(bodyParser.urlencoded({extended:true}));
 /***** Attach the routers to the app *****/
 if (lockAPI) {
   app.use('/api/flightplan', auth, flightplanRouter);
+  app.use('/api/inflight', auth, inflightRouter);
   //app.use('/api/screenshot', auth, screenshotRouter);
 } else {
   app.use('/api/flightplan', flightplanRouter);
+  app.use('/api/inflight', inflightRouter);
   //app.use('/api/screenshot', screenshotRouter);
 }
 

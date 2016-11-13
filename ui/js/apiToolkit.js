@@ -39,6 +39,13 @@ function init () {
     location.reload();
   });
 
+  $('#deleteInflightButton').click(function() {
+    var inflightId = $('input:text[name=delInflight]').val();
+    console.log("text: " + $('input:text[name=delInflight]').val());
+    helper.del("/api/inflight/" + inflightId);
+    location.reload();
+  });
+
   $('#patchButton').click(function() {
 
     var flightplanId = $('input:text[name=patchId]').val();

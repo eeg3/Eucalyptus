@@ -95,8 +95,8 @@
               </div>
               <div class="col-sm-4">Summary</div>
               <div class="col-sm-4">
-                <button id="deleteFP" type="button" title="Delete FlightPlan" class="btn btn-success btn-xs launchButton"><i class="fa fa-trash"></i></button>
-                <button id="editFP" title="Edit FlightPlan" type="button" class="btn btn-success btn-xs launchButton"><i class="fa fa-edit"></i></button>
+                <button id="saveFP" type="button" title="Save Progress" class="btn btn-success btn-xs launchButton"><i class="fa fa-save"></i></button>
+                <button id="loadFP" title="Load Saved Progress" type="button" class="btn btn-success btn-xs launchButton"><i class="fa fa-folder-open-o"></i></button>
               </div>
             </div>
           </div>
@@ -133,6 +133,41 @@
     </div>
 
   </div> <!-- End Container -->
+
+  <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="gridSystemModalLabel">Load Inflight FlightPlan</h4>
+        </div>
+        <div class="modal-body">
+          <div class="panel">
+            <div class="panel-body sp-databox-panel-body">
+
+              <div class="row">
+                <div class="col-sm-12">
+                  <table id="inflightListTable" class="table table-bordered">
+                    <thead>
+                      <th>Title</th><th>User</th><th>Action</th>
+                    </thead>
+                    <tbody>
+                      <tr></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <!--<div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>-->
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
 
   <footer class="container-fluid">
     <div class="alert alert-gray">

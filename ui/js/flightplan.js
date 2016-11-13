@@ -4,6 +4,7 @@ window.onload = init;
 var stepsComplete = 0;
 var launchers = []; // We use the launchers variable to work around the scope...
 var mobile = false;
+var loadedNote = false;
 
 function currentTimestamp() {
   var date = new Date();
@@ -187,16 +188,6 @@ function updateCompletionStatus() {
   $("#completionStatus").css("width", percentComplete + '%');
 }
 
-/*
-// Sample of how we could export the flightplan for printing
-function exportFlightplan() {
-    console.log($("td#substep-1-1").html());
-    console.log($("td#details-1-1").html());
-    console.log($("td#action-1-1").html());
-    console.log($("input#notes-1-1").val());
-}
-*/
-
 function getFlightplan() {
   /*
   helper.get("api/flightplan/"):
@@ -331,6 +322,155 @@ function urlParam(name, url) {
     return results[1] || undefined;
 }
 
+function exportFlightplan() {
+    //details-substep-1-1
+    //action-substep-1-1
+    //notes-substep-1-1
+    var flightplanObject = {
+      flightplanId: "id",
+      title: "title",
+
+    }
+
+    for (var i = 1; i < 100; i++) {
+      if(!$("#details-substep-" + i + "-1").length == 0) {
+        for (var j = 1; j < 100; j++) {
+          if(!$("#details-substep-" + i + "-" + j).length == 0) {
+            console.log($("#details-substep-" + i + "-" + j).text());
+            console.log($("#action-substep-" + i + "-" + j).text());
+            console.log($("#notes-substep-" + i + "-" + j).val());
+            //console.log("notes-substep-" + i + "-" + j + ": " + $("#notes-substep-" + i + "-" + j).val());
+          } else {
+            console.log("details-substep-" + i + "-" + j + " does not exist. Breaking.");
+            break;
+          }
+        }
+      }
+    }
+}
+
+function saveFlightplan() {
+
+  var passedId = urlParam('id');
+  var saveTitle = "WinSCP";
+  var user = "Earl Gay";
+  var notes = "";
+  var saveAlreadyExists = false;
+
+  // Check to see if save already exists
+  helper.get("/api/inflight/")
+    .then(function(data){
+      var inflight = data;
+      var inflightEntry = "";
+
+      for (var i = 0; i < data.length; i++) {
+        var nodesToDisplay = ["_id", "referencedFlightplan", "user", "notes"];
+
+        if (inflight[i]["title"] == saveTitle) {
+          saveAlreadyExists = true;
+        }
+      }
+
+      console.log("saveAlreadyExists: " + saveAlreadyExists);
+    });
+
+  //details-substep-1-1
+  //action-substep-1-1
+  //notes-substep-1-1
+
+  for (var i = 1; i < 100; i++) {
+    if(!$("#details-substep-" + i + "-1").length == 0) {
+      for (var j = 1; j < 100; j++) {
+        if(!$("#details-substep-" + i + "-" + j).length == 0) {
+          //console.log($("#details-substep-" + i + "-" + j).text());
+          //console.log($("#action-substep-" + i + "-" + j).text());
+          //console.log($("#notes-substep-" + i + "-" + j).val());
+          //console.log("notes-substep-" + i + "-" + j + ": " + $("#notes-substep-" + i + "-" + j).val());
+          notes += "notes-substep-" + i + "-" + j + "|" + $("#notes-substep-" + i + "-" + j).val() + ";";
+        } else {
+          //console.log("details-substep-" + i + "-" + j + " does not exist. Breaking.");
+          break;
+        }
+      }
+    }
+  }
+  console.log("id: " + passedId);
+  console.log("flightplanObject.notes: " + notes);
+
+  /*****/
+  // Add code to find last unchecked checkbox, and then save that too
+  // Also add some code to make user+referencedFlightplan item as the unique key/value, so there can only be 1 per user to load/save
+  /*****/
+
+  var inflightPost = {};
+
+  if (saveTitle !== "") {
+    inflightPost["title"] = saveTitle;
+  }
+  if (passedId !== "") {
+    inflightPost["referencedFlightplan"] = passedId;
+  }
+  if (user !== "") {
+    inflightPost["user"] = user;
+  }
+  if (notes !== "") {
+    inflightPost["notes"] = notes;
+  }
+
+  var inflightId = "5827ee2b37d7cda705f1718a";
+
+  if (!loadedNote) {
+    if (!saveAlreadyExists) {
+      helper.post("/api/inflight/", inflightPost);
+    } else {
+      console.log("Save already exists. Not overwriting.");
+    }
+  } else {
+    // patch code
+    helper.patch("/api/inflight/" + inflightId, inflightPost);
+  }
+
+}
+
+function loadFlightplan(idToLoad) {
+
+  var inflightNotes = "";
+  loadedNote = true;
+
+  if (idToLoad.length) {
+    helper.get("/api/inflight/")
+      .then(function(data){
+        var inflight = data;
+        var inflightEntry = "";
+
+        for (var i = 0; i < data.length; i++) {
+          var nodesToDisplay = ["_id", "referencedFlightplan", "user", "notes"];
+
+          if (inflight[i]["_id"] == idToLoad) {
+            inflightNotes = inflight[i]["notes"];
+          }
+        }
+
+        console.log("inflightNotes: " + inflightNotes);
+
+        if (inflightNotes != "") {
+          (inflightNotes.split(';')).forEach(function(item) {
+            //console.log("note location: " + item.split("|")[0] + " | note value: " + item.split("|")[1]);
+            $("#" + item.split("|")[0]).val( item.split("|")[1] );
+          });
+        }
+      });
+  }
+
+    /*********/
+    // Add some code to check every checkbox until the last unsaved checkbox
+    // Also add code to jump to last unsaved checkbox
+    /*********/
+
+  //var stepsToLoad = "notes-substep-1-1|1;notes-substep-1-2|2;notes-substep-1-3|3;notes-substep-1-4|;notes-substep-1-5|;notes-substep-2-1|;notes-substep-2-2|;notes-substep-2-3|;notes-substep-3-1|;notes-substep-3-2|;notes-substep-3-3|;notes-substep-3-4|;notes-substep-3-5|;notes-substep-4-1|;notes-substep-4-2|;notes-substep-5-1|;notes-substep-5-2|;";
+  //console.log("stepsToLoad: " + stepsToLoad);
+}
+
 function init () {
   // Logic flow:
   //  getFlightPlan() pulls everything about the FlightPlan from the API, and populates everything about the FlightPlan except for the steps itself. Then ->
@@ -364,29 +504,55 @@ function init () {
   currentTimestamp();
   getFlightplan();
 
-/*
-  $("#nextStep").click(function() {
-
-    $("#flightplanTitle").html("Download Application Media");
-
-    $("#flightplanHeaderSection").html(""); // Clear it
-    var table = $('<table></table>').addClass('table table-bordered table-striped');
-    var body = $('<tbody>');
-    table.append(body);
-
-    var tableLineItem = "";
-    tableLineItem += "<tr><td>Obtain the installation media for applications that will be installed into the App Stack.</td></tr>"
-    table.append(tableLineItem);
-
-    var tableEnd = $('</tbody>');
-    table.append(tableEnd);
-
-    $("#flightplanHeaderSection").append(table);
+  $("#saveFP").click(function() {
+    $('#myModal').modal('hide');
+    saveFlightplan();
   });
-*/
 
-  $("#generateReport").click(function() {
+  $("#loadFP").click(function() {
     //window.print();
-    console.log("Notes value: " + $("#notes-substep-1-1").val());
+    //saveFlightplan();
+    helper.get("/api/inflight/")
+      .then(function(data){
+        var inflight = data;
+
+        for (var i = 0; i < data.length; i++) {
+          var nodesToDisplay = ["title", "user"];
+          var rowToAdd = "<tr>";
+          for (var j = 0; j < nodesToDisplay.length; j++) {
+            if (nodesToDisplay[j] === "lastCommunication" && inflight[i][nodesToDisplay[j]] !== "Never") {
+              //rowToAdd += '<td><a href="/api/screenshot/' + flightplans[i][nodesToDisplay[j]] + '">' + flightplans[i][nodesToDisplay[j]] + '</a></td>';
+            } else {
+              rowToAdd += "<td>" + inflight[i][nodesToDisplay[j]] + "</td>";
+            }
+          }
+          rowToAdd += '<td>';
+          rowToAdd += '<button id="open-' + inflight[i]["_id"] + '" title="Load Saved Progress" type="button" class="btn btn-success btn-xs loadBtn"><i class="fa fa-folder-open-o"></i></button>';
+          rowToAdd += '<button id="del-' + inflight[i]["_id"] + '" title="Delete Saved Progress" type="button" class="btn btn-success btn-xs deleteBtn"><i class="fa fa-trash-o"></i></button>';
+          rowToAdd += '</td>';
+          rowToAdd += "</tr>";
+          $('#inflightListTable tr:last').after(rowToAdd);
+        }
+        $('#inflightListTable').trigger("update");
+
+        $(".loadBtn").click(function() {
+          console.log(this.id);
+          console.log( (this.id).split("-")[1] );
+
+          loadFlightplan((this.id).split("-")[1]);
+          $('#myModal').modal('hide');
+        });
+
+        $(".deleteBtn").click(function() {
+          console.log(this.id);
+          console.log( (this.id).split("-")[1] );
+
+          helper.del("/api/inflight/" + (this.id).split("-")[1]);
+          location.reload();
+        });
+
+        $('#myModal').modal('show');
+      });
+
   }); // Hook clicking Generate Completion Report button into printing the page
 }
