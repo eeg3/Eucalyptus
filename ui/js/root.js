@@ -16,39 +16,71 @@ function currentTimestamp() {
 }
 
 function parseFlightplans(id, title, category) {
+  console.log("id: " + id);
+  var savedFlightplans = 0;
 
-  if ($("#" + category).length == 0) { // Create new section if category doesn't exist
+  // Find out how many saved flightplans per ID exist
+  helper.get("/api/inflight/")
+    .then(function(data){
+      var inflight = data;
+      var inflightEntry = "";
+      var savedInflight = "";
 
-    // Create new row
-    if (numOfColumns % 2 == 0) { // If it's even, time to create a new row
-      $("#categorySection").append('<div class="row">');
-      numOfColumns++;
-    } else {
-      numOfColumns++;
-    }
+      for (var i = 0; i < data.length; i++) {
+        var nodesToDisplay = ["_id", "referencedFlightplan", "user", "notes"];
+        console.log("referencedFP: " + inflight[i]["referencedFlightplan"]);
+        if (inflight[i]["referencedFlightplan"] == id) {
+          savedFlightplans++;
+        }
+      }
+
+      if ($("#" + category).length == 0) { // Create new section if category doesn't exist
+
+        // Create new row
+        if (numOfColumns % 2 == 0) { // If it's even, time to create a new row
+          $("#categorySection").append('<div class="row">');
+          numOfColumns++;
+        } else {
+          numOfColumns++;
+        }
 
 
-    var newDivHTML = '<div id="section-' + category + '" class="col-sm-6"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">' + category + '</div><div id="' + category + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div>';
-    $("#categorySection").append(newDivHTML);
+        var newDivHTML = '<div id="section-' + category + '" class="col-sm-6"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">' + category + '</div><div id="' + category + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div>';
+        $("#categorySection").append(newDivHTML);
 
-    if (numOfColumns % 2 == 0) {
-      $("#categorySection").append('</div>');
-    }
+        if (numOfColumns % 2 == 0) {
+          $("#categorySection").append('</div>');
+        }
 
-    var table = $('<table id="' + category + '-table"></table>').addClass('table table-bordered table-striped sp-databox-table');
-    var body = $('<tbody>');
-    table.append(body);
-    var tableLineItem = '<tr><td><a href="/flightplan.html?id=' + id + '">' + title + '</a></td></tr>';
-    table.append(tableLineItem);
-    var tableEnd = $('</tbody>');
-    table.append(tableEnd);
+        var table = $('<table id="' + category + '-table"></table>').addClass('table table-bordered table-striped sp-databox-table');
+        var body = $('<tbody>');
+        table.append(body);
+        if (savedFlightplans == 0) {
+          var tableLineItem = '<tr><td><a href="/flightplan.html?id=' + id + '">' + title + '</a></td></tr>';
 
-    $("#" + category).append(table);
-  } else { // Add to section if it already exists
-    var tableLineItem = '<tr><td><a href="/flightplan.html?id=' + id + '">' + title + '</a></td></tr>';
-    $('#' + category + '-table tr:last').after(tableLineItem);
-    $('#' + category + '-table tr:last').trigger("update");
-  }
+        } else {
+          var tableLineItem = '<tr><td><a href="/flightplan.html?id=' + id + '">' + title + '</a> <span class="badge badge-success">' + savedFlightplans + '</span></td></tr>';
+        }
+        //var tableLineItem = '<tr><td><a href="/flightplan.html?id=' + id + '">' + title + '</a></td></tr>';
+        table.append(tableLineItem);
+        var tableEnd = $('</tbody>');
+        table.append(tableEnd);
+
+        $("#" + category).append(table);
+      } else { // Add to section if it already exists
+        //var tableLineItem = '<tr><td><a href="/flightplan.html?id=' + id + '">' + title + '</a></td></tr>';
+        if (savedFlightplans == 0) {
+          var tableLineItem = '<tr><td><a href="/flightplan.html?id=' + id + '">' + title + '</a></td></tr>';
+
+        } else {
+          var tableLineItem = '<tr><td><a href="/flightplan.html?id=' + id + '">' + title + '</a> <span class="badge badge-success">' + savedFlightplans + '</span></td></tr>';
+        }
+        $('#' + category + '-table tr:last').after(tableLineItem);
+        $('#' + category + '-table tr:last').trigger("update");
+      }
+
+      populateChart();
+    });
 
 }
 
@@ -119,7 +151,7 @@ function populateFlightplans(sortOption) {
         }
       }
 
-      populateChart();
+      //populateChart();
 
     });
 }

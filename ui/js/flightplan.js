@@ -349,86 +349,98 @@ function exportFlightplan() {
     }
 }
 
-function saveFlightplan() {
+function saveFlightplan(status) {
 
-  var passedId = urlParam('id');
-  var saveTitle = "WinSCP";
-  var user = "Earl Gay";
+  var saveTitle = "";
+  var user = "";
   var notes = "";
   var saveAlreadyExists = false;
+  var passedId = urlParam('id');
+  var lastChecked = "";
+
+  // Save instead of Save As if already loaded
+  if (status == "new") {
+    saveTitle = $('input:text[name=saveTitle]').val();
+    user = $('input:text[name=saveUser]').val();
+  } else {
+    saveTitle = $("#currentInflight").text();
+  }
+
+  // Find last checked item so we can save progress
+  $("input[id^='status-substep-']").each(function () {
+    console.log(this.id + ": " + $("#" + this.id).prop('checked'));
+    if($("#" + this.id).prop('checked')) {
+      lastChecked = this.id;
+    }
+  });
 
   // Check to see if save already exists
   helper.get("/api/inflight/")
     .then(function(data){
       var inflight = data;
       var inflightEntry = "";
+      var savedInflight = "";
 
       for (var i = 0; i < data.length; i++) {
         var nodesToDisplay = ["_id", "referencedFlightplan", "user", "notes"];
 
         if (inflight[i]["title"] == saveTitle) {
           saveAlreadyExists = true;
+          savedInflight = inflight[i]["_id"];
+          console.log("savedInflight: " + savedInflight);
         }
       }
 
-      console.log("saveAlreadyExists: " + saveAlreadyExists);
-    });
+      for (var i = 1; i < 100; i++) {
+        if(!$("#details-substep-" + i + "-1").length == 0) {
+          for (var j = 1; j < 100; j++) {
+            if(!$("#details-substep-" + i + "-" + j).length == 0) {
+              //console.log($("#details-substep-" + i + "-" + j).text());
+              //console.log($("#action-substep-" + i + "-" + j).text());
+              //console.log($("#notes-substep-" + i + "-" + j).val());
+              //console.log("notes-substep-" + i + "-" + j + ": " + $("#notes-substep-" + i + "-" + j).val());
+              notes += "notes-substep-" + i + "-" + j + "|" + $("#notes-substep-" + i + "-" + j).val() + ";";
+            } else {
+              //console.log("details-substep-" + i + "-" + j + " does not exist. Breaking.");
+              break;
+            }
+          }
+        }
+      }
 
-  //details-substep-1-1
-  //action-substep-1-1
-  //notes-substep-1-1
+      var inflightPost = {};
 
-  for (var i = 1; i < 100; i++) {
-    if(!$("#details-substep-" + i + "-1").length == 0) {
-      for (var j = 1; j < 100; j++) {
-        if(!$("#details-substep-" + i + "-" + j).length == 0) {
-          //console.log($("#details-substep-" + i + "-" + j).text());
-          //console.log($("#action-substep-" + i + "-" + j).text());
-          //console.log($("#notes-substep-" + i + "-" + j).val());
-          //console.log("notes-substep-" + i + "-" + j + ": " + $("#notes-substep-" + i + "-" + j).val());
-          notes += "notes-substep-" + i + "-" + j + "|" + $("#notes-substep-" + i + "-" + j).val() + ";";
+      if (saveTitle !== "") {
+        inflightPost["title"] = saveTitle;
+      }
+      if (passedId !== "") {
+        inflightPost["referencedFlightplan"] = passedId;
+      }
+      if (user !== "") {
+        inflightPost["user"] = user;
+      }
+      if (notes !== "") {
+        inflightPost["notes"] = notes;
+      }
+      if (lastChecked !== "") {
+        inflightPost["lastChecked"] = lastChecked;
+      }
+
+      if (!loadedNote) {
+        if (!saveAlreadyExists) {
+          helper.post("/api/inflight/", inflightPost);
+          $("#currentInflight").html(saveTitle);
         } else {
-          //console.log("details-substep-" + i + "-" + j + " does not exist. Breaking.");
-          break;
+          $("modalError").html("Error: Save name already exists. Not overwriting.")
+          console.log("Save already exists. Not overwriting.");
         }
+      } else {
+        // patch code
+        helper.patch("/api/inflight/" + savedInflight, inflightPost);
+        $("#currentInflight").html(saveTitle);
       }
-    }
-  }
-  console.log("id: " + passedId);
-  console.log("flightplanObject.notes: " + notes);
 
-  /*****/
-  // Add code to find last unchecked checkbox, and then save that too
-  // Also add some code to make user+referencedFlightplan item as the unique key/value, so there can only be 1 per user to load/save
-  /*****/
-
-  var inflightPost = {};
-
-  if (saveTitle !== "") {
-    inflightPost["title"] = saveTitle;
-  }
-  if (passedId !== "") {
-    inflightPost["referencedFlightplan"] = passedId;
-  }
-  if (user !== "") {
-    inflightPost["user"] = user;
-  }
-  if (notes !== "") {
-    inflightPost["notes"] = notes;
-  }
-
-  var inflightId = "5827ee2b37d7cda705f1718a";
-
-  if (!loadedNote) {
-    if (!saveAlreadyExists) {
-      helper.post("/api/inflight/", inflightPost);
-    } else {
-      console.log("Save already exists. Not overwriting.");
-    }
-  } else {
-    // patch code
-    helper.patch("/api/inflight/" + inflightId, inflightPost);
-  }
+    });
 
 }
 
@@ -444,21 +456,62 @@ function loadFlightplan(idToLoad) {
         var inflightEntry = "";
 
         for (var i = 0; i < data.length; i++) {
-          var nodesToDisplay = ["_id", "referencedFlightplan", "user", "notes"];
+          var nodesToDisplay = ["_id", "title", "referencedFlightplan", "user", "notes"];
 
           if (inflight[i]["_id"] == idToLoad) {
+            inflightTitle = inflight[i]["title"];
             inflightNotes = inflight[i]["notes"];
+            lastChecked = inflight[i]["lastChecked"];
           }
         }
 
-        console.log("inflightNotes: " + inflightNotes);
-
+        // Process Notes
+        //console.log("inflightNotes: " + inflightNotes);
         if (inflightNotes != "") {
           (inflightNotes.split(';')).forEach(function(item) {
             //console.log("note location: " + item.split("|")[0] + " | note value: " + item.split("|")[1]);
             $("#" + item.split("|")[0]).val( item.split("|")[1] );
           });
         }
+
+
+        lastCheckedStep = lastChecked.split("-")[2];
+        lastCheckedSubstep = lastChecked.split("-")[3];
+
+        // Set active flight
+        $("#currentInflight").html(inflightTitle);
+
+        // Check boxes based on last checked
+        $("input[id^='status-substep-']").each(function () {
+          var currentStep = (this.id).split("-")[2];
+          var currentSubstep = (this.id).split("-")[3];
+
+          if (parseInt(currentStep) <= parseInt(lastCheckedStep)) {
+            if (parseInt(currentSubstep) <= parseInt(lastCheckedSubstep)) {
+              //console.log(this.id + " <= " + lastChecked);
+              $("#" + this.id).prop('checked', true);
+              $("#" + this.id).prop('disabled', false);
+            } else if (parseInt(currentSubstep) == parseInt(lastCheckedSubstep)+1) {
+              $("#" + this.id).prop('disabled', false);
+            }
+
+          }
+
+          // Unhide substeps based on last checked
+          $("tr[id^='row-substep-']").each(function () {
+            var currentStep = (this.id).split("-")[2];
+            var currentSubstep = (this.id).split("-")[3];
+
+            if (parseInt(currentStep) <= parseInt(lastCheckedStep)) {
+              if (parseInt(currentSubstep) <= parseInt(lastCheckedSubstep)) {
+                $("#" + this.id).css("color", "black"); // Unhide next sub-step since this sub-step is complete.
+              } else if (parseInt(currentSubstep) == parseInt(lastCheckedSubstep)+1) {
+                $("#" + this.id).css("color", "black"); // Unhide next sub-step since this sub-step is complete.
+              }
+            }
+          });
+        });
+
       });
   }
 
@@ -505,33 +558,54 @@ function init () {
   getFlightplan();
 
   $("#saveFP").click(function() {
-    $('#myModal').modal('hide');
-    saveFlightplan();
+    if (loadedNote) {
+      saveFlightplan('existing');
+    } else {
+      $('#saveModal').modal('show');
+    }
+  });
+
+  $("#delRows").click(function() {
+    //$('#inflightListTable tr').remove();
+    $('#inflightListTable tr').not(function(){ return !!$(this).has('th').length; }).remove();
+  });
+
+  $("#saveSubmit").click(function() {
+    //$('#saveModal').modal('show');
+    saveFlightplan('new');
+    $('#saveModal').modal('hide');
   });
 
   $("#loadFP").click(function() {
     //window.print();
     //saveFlightplan();
+
     helper.get("/api/inflight/")
       .then(function(data){
         var inflight = data;
+        var passedId = urlParam('id');
+        
+        // Clear old loads
+        $('#inflightListTable tr').not(function(){ return !!$(this).has('th').length; }).remove();
 
         for (var i = 0; i < data.length; i++) {
-          var nodesToDisplay = ["title", "user"];
-          var rowToAdd = "<tr>";
-          for (var j = 0; j < nodesToDisplay.length; j++) {
-            if (nodesToDisplay[j] === "lastCommunication" && inflight[i][nodesToDisplay[j]] !== "Never") {
-              //rowToAdd += '<td><a href="/api/screenshot/' + flightplans[i][nodesToDisplay[j]] + '">' + flightplans[i][nodesToDisplay[j]] + '</a></td>';
-            } else {
-              rowToAdd += "<td>" + inflight[i][nodesToDisplay[j]] + "</td>";
+          if(inflight[i]["referencedFlightplan"] == passedId) {
+            var nodesToDisplay = ["title", "user"];
+            var rowToAdd = "<tr>";
+            for (var j = 0; j < nodesToDisplay.length; j++) {
+              if (nodesToDisplay[j] === "lastCommunication" && inflight[i][nodesToDisplay[j]] !== "Never") {
+                //rowToAdd += '<td><a href="/api/screenshot/' + flightplans[i][nodesToDisplay[j]] + '">' + flightplans[i][nodesToDisplay[j]] + '</a></td>';
+              } else {
+                rowToAdd += "<td>" + inflight[i][nodesToDisplay[j]] + "</td>";
+              }
             }
+            rowToAdd += '<td>';
+            rowToAdd += '<button id="open-' + inflight[i]["_id"] + '" title="Load Saved Progress" type="button" class="btn btn-success btn-xs loadBtn"><i class="fa fa-folder-open-o"></i></button>';
+            rowToAdd += '<button id="del-' + inflight[i]["_id"] + '" title="Delete Saved Progress" type="button" class="btn btn-success btn-xs deleteBtn"><i class="fa fa-trash-o"></i></button>';
+            rowToAdd += '</td>';
+            rowToAdd += "</tr>";
+            $('#inflightListTable tr:last').after(rowToAdd);
           }
-          rowToAdd += '<td>';
-          rowToAdd += '<button id="open-' + inflight[i]["_id"] + '" title="Load Saved Progress" type="button" class="btn btn-success btn-xs loadBtn"><i class="fa fa-folder-open-o"></i></button>';
-          rowToAdd += '<button id="del-' + inflight[i]["_id"] + '" title="Delete Saved Progress" type="button" class="btn btn-success btn-xs deleteBtn"><i class="fa fa-trash-o"></i></button>';
-          rowToAdd += '</td>';
-          rowToAdd += "</tr>";
-          $('#inflightListTable tr:last').after(rowToAdd);
         }
         $('#inflightListTable').trigger("update");
 
@@ -540,7 +614,7 @@ function init () {
           console.log( (this.id).split("-")[1] );
 
           loadFlightplan((this.id).split("-")[1]);
-          $('#myModal').modal('hide');
+          $('#loadModal').modal('hide');
         });
 
         $(".deleteBtn").click(function() {
@@ -551,8 +625,8 @@ function init () {
           location.reload();
         });
 
-        $('#myModal').modal('show');
+        $('#loadModal').modal('show');
       });
 
-  }); // Hook clicking Generate Completion Report button into printing the page
+  });
 }

@@ -81,9 +81,11 @@ var routes = function(Inflight){
 
         })
         .put(function(req,res){
+            req.inflight.title = req.body.title;
             req.inflight.referencedFlightplan = req.body.referencedFlightplan;
             req.inflight.user = req.body.user;
             req.inflight.notes = req.body.notes;
+            req.inflight.lastChecked = req.body.lastChecked;
             req.inflight.save(function(err){
                 if(err)
                     res.status(500).send(err);

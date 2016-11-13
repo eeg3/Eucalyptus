@@ -354,3 +354,11 @@ th {
 {
     opacity:0.8 !important;
 }
+
+#currentInflight {
+  font-style: italic;
+}
+
+.badge-success {
+  background-color: #50af60;
+}
