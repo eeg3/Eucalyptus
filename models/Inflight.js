@@ -16,6 +16,9 @@ var inflightModel = new Schema({
   },
   lastChecked: {
     type: String
+  },
+  completed: {
+    type: Boolean
   }
 });
 

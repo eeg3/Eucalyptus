@@ -86,6 +86,7 @@ var routes = function(Inflight){
             req.inflight.user = req.body.user;
             req.inflight.notes = req.body.notes;
             req.inflight.lastChecked = req.body.lastChecked;
+            req.inflight.completed = req.body.completed;
             req.inflight.save(function(err){
                 if(err)
                     res.status(500).send(err);

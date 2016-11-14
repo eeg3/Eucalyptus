@@ -5,6 +5,7 @@ var stepsComplete = 0;
 var launchers = []; // We use the launchers variable to work around the scope...
 var mobile = false;
 var loadedNote = false;
+var completed = false;
 
 function currentTimestamp() {
   var date = new Date();
@@ -76,6 +77,15 @@ function initiateStepFlow(steps, substeps) {
     } // End action per substep
 
   } // End action per step
+
+  // Hard-code Show All for testing
+  /*
+  $("tr[id^='row-substep-']").each(function () {
+    $("#" + this.id).css("color", "black"); // Unhide next sub-step since this sub-step is complete.
+  });
+
+  $('#toggleSequential').prop('checked', true);
+  */
 }
 
 function parseSteps(steps) {
@@ -357,14 +367,18 @@ function saveFlightplan(status) {
   var saveAlreadyExists = false;
   var passedId = urlParam('id');
   var lastChecked = "";
+  //var completed = false;
 
   // Save instead of Save As if already loaded
   if (status == "new") {
     saveTitle = $('input:text[name=saveTitle]').val();
     user = $('input:text[name=saveUser]').val();
-  } else {
+  } else if (status == "existing") {
+    saveTitle = $("#currentInflight").text();
+  } else if (status == "completed") {
     saveTitle = $("#currentInflight").text();
   }
+
 
   // Find last checked item so we can save progress
   $("input[id^='status-substep-']").each(function () {
@@ -424,6 +438,9 @@ function saveFlightplan(status) {
       }
       if (lastChecked !== "") {
         inflightPost["lastChecked"] = lastChecked;
+      }
+      if (completed !== "") {
+        inflightPost["completed"] = completed;
       }
 
       if (!loadedNote) {
@@ -485,31 +502,77 @@ function loadFlightplan(idToLoad) {
         $("input[id^='status-substep-']").each(function () {
           var currentStep = (this.id).split("-")[2];
           var currentSubstep = (this.id).split("-")[3];
+          //console.log("----");
+          //console.log("currentStep / current Substep: " + currentStep + " / " + currentSubstep);
+          //console.log("lastCheckedStep / lastCheckedSubstep: " + lastCheckedStep + " / " + lastCheckedSubstep);
+          //console.log("#status-substep-" + lastCheckedStep + "-" + (parseInt(lastCheckedSubstep)+1));
 
-          if (parseInt(currentStep) <= parseInt(lastCheckedStep)) {
+          if (parseInt(currentStep) < parseInt(lastCheckedStep)) {
+              //console.log("checking");
+              //console.log("we should be checking: " + this.id);
+              $("#" + this.id).prop('checked', true);
+              $("#" + this.id).prop('disabled', false);
+          } else if (parseInt(currentStep) == parseInt(lastCheckedStep)) {
             if (parseInt(currentSubstep) <= parseInt(lastCheckedSubstep)) {
-              //console.log(this.id + " <= " + lastChecked);
+              //console.log("checking2");
+              //console.log("we should be checking: " + this.id);
               $("#" + this.id).prop('checked', true);
               $("#" + this.id).prop('disabled', false);
             } else if (parseInt(currentSubstep) == parseInt(lastCheckedSubstep)+1) {
+              //console.log("enabling");
+              $("#" + this.id).prop('checked', false);
               $("#" + this.id).prop('disabled', false);
+            } else {
+              //console.log("we should be unchecking: " + this.id);
+              $("#" + this.id).prop('checked', false);
+              $("#" + this.id).prop('disabled', true);
+              //console.log("shouldnt be checked");
             }
-
+          } else {
+            //console.log("we should be unchecking: " + this.id);
+            $("#" + this.id).prop('checked', false);
+            $("#" + this.id).prop('disabled', true);
+            //console.log("shouldnt be checked");
           }
+          //console.log("----");
 
           // Unhide substeps based on last checked
           $("tr[id^='row-substep-']").each(function () {
             var currentStep = (this.id).split("-")[2];
             var currentSubstep = (this.id).split("-")[3];
 
-            if (parseInt(currentStep) <= parseInt(lastCheckedStep)) {
+            /*if (parseInt(currentStep) <= parseInt(lastCheckedStep)) {
               if (parseInt(currentSubstep) <= parseInt(lastCheckedSubstep)) {
                 $("#" + this.id).css("color", "black"); // Unhide next sub-step since this sub-step is complete.
               } else if (parseInt(currentSubstep) == parseInt(lastCheckedSubstep)+1) {
                 $("#" + this.id).css("color", "black"); // Unhide next sub-step since this sub-step is complete.
               }
+            } */
+
+            if (parseInt(currentStep) < parseInt(lastCheckedStep)) {
+              //console.log("this.id: " + this.id);
+              $("#" + this.id).css("color", "black"); // Unhide next sub-step since this sub-step is complete.
+            } else if (parseInt(currentStep) == parseInt(lastCheckedStep)) {
+              if (parseInt(currentSubstep) <= parseInt(lastCheckedSubstep)) {
+                $("#" + this.id).css("color", "black"); // Unhide next sub-step since this sub-step is complete.
+              } else if (parseInt(currentSubstep) == parseInt(lastCheckedSubstep)+1) {
+                $("#" + this.id).css("color", "black"); // Unhide next sub-step since this sub-step is complete.
+              }
+            } else {
+              $("#" + this.id).css("color", "white"); // Unhide next sub-step since this sub-step is complete.
             }
+
           });
+
+          // One-off code to check if lastChecked is the end of a step, because if it is then we need to handle next step's first Substep
+          if($("#status-substep-" + lastCheckedStep + "-" + (parseInt(lastCheckedSubstep)+1)).length == 0) {
+            //console.log("lastChecked is the end of a step");
+            //console.log("this is: " + "#status-substep-" + (parseInt(lastCheckedStep)+1) + "-1");
+            $("#status-substep-" + (parseInt(lastCheckedStep)+1) + "-1").prop('checked', false);
+            $("#status-substep-" + (parseInt(lastCheckedStep)+1) + "-1").prop('disabled', false);
+            $("#row-substep-" + (parseInt(lastCheckedStep)+1) + "-1").css("color", "black");
+
+          }
         });
 
       });
@@ -557,14 +620,6 @@ function init () {
   currentTimestamp();
   getFlightplan();
 
-  $("#saveFP").click(function() {
-    if (loadedNote) {
-      saveFlightplan('existing');
-    } else {
-      $('#saveModal').modal('show');
-    }
-  });
-
   $("#delRows").click(function() {
     //$('#inflightListTable tr').remove();
     $('#inflightListTable tr').not(function(){ return !!$(this).has('th').length; }).remove();
@@ -572,8 +627,88 @@ function init () {
 
   $("#saveSubmit").click(function() {
     //$('#saveModal').modal('show');
+
     saveFlightplan('new');
+
     $('#saveModal').modal('hide');
+  });
+
+  $("#completeSubmit").click(function() {
+    //$('#saveModal').modal('show');
+    completed = true;
+    $("#saveModal-title").html("Complete Flight");
+    if (loadedNote) {
+      saveFlightplan('completed');
+    } else {
+      $('#saveModal').modal('show');
+    }
+    //location.reload();
+    //$('#saveModal').modal('hide');
+  });
+
+  $("#showCompleted").click(function() {
+    //window.print();
+    //saveFlightplan();
+
+    helper.get("/api/inflight/")
+      .then(function(data){
+        var inflight = data;
+        var passedId = urlParam('id');
+
+        // Clear old loads
+        $('#completedListTable tr').not(function(){ return !!$(this).has('th').length; }).remove();
+
+        for (var i = 0; i < data.length; i++) {
+          if(inflight[i]["referencedFlightplan"] == passedId) {
+            if (inflight[i]["completed"] == true) {
+              var nodesToDisplay = ["title", "user"];
+              var rowToAdd = "<tr>";
+              for (var j = 0; j < nodesToDisplay.length; j++) {
+                if (nodesToDisplay[j] === "lastCommunication" && inflight[i][nodesToDisplay[j]] !== "Never") {
+                  //rowToAdd += '<td><a href="/api/screenshot/' + flightplans[i][nodesToDisplay[j]] + '">' + flightplans[i][nodesToDisplay[j]] + '</a></td>';
+                } else {
+                  rowToAdd += "<td>" + inflight[i][nodesToDisplay[j]] + "</td>";
+                }
+              }
+              rowToAdd += '<td>';
+              rowToAdd += '<button id="open-' + inflight[i]["_id"] + '" title="Load Saved Progress" type="button" class="btn btn-success btn-xs loadBtn"><i class="fa fa-folder-open-o"></i></button>';
+              rowToAdd += '<button id="del-' + inflight[i]["_id"] + '" title="Delete Saved Progress" type="button" class="btn btn-success btn-xs deleteBtn"><i class="fa fa-trash-o"></i></button>';
+              rowToAdd += '</td>';
+              rowToAdd += "</tr>";
+              $('#completedListTable tr:last').after(rowToAdd);
+            }
+          }
+        }
+        $('#completedListTable').trigger("update");
+
+        $(".loadBtn").click(function() {
+          console.log(this.id);
+          console.log( (this.id).split("-")[1] );
+
+          loadFlightplan((this.id).split("-")[1]);
+          $('#viewCompletedModal').modal('hide');
+        });
+
+        $(".deleteBtn").click(function() {
+          console.log(this.id);
+          console.log( (this.id).split("-")[1] );
+
+          helper.del("/api/inflight/" + (this.id).split("-")[1]);
+          location.reload();
+        });
+
+        $('#viewCompletedModal').modal('show');
+      });
+
+  });
+
+  $("#saveFP").click(function() {
+    if (loadedNote) {
+      saveFlightplan('existing');
+    } else {
+      $("#saveModal-title").html("Save Flight");
+      $('#saveModal').modal('show');
+    }
   });
 
   $("#loadFP").click(function() {
@@ -590,21 +725,23 @@ function init () {
 
         for (var i = 0; i < data.length; i++) {
           if(inflight[i]["referencedFlightplan"] == passedId) {
-            var nodesToDisplay = ["title", "user"];
-            var rowToAdd = "<tr>";
-            for (var j = 0; j < nodesToDisplay.length; j++) {
-              if (nodesToDisplay[j] === "lastCommunication" && inflight[i][nodesToDisplay[j]] !== "Never") {
-                //rowToAdd += '<td><a href="/api/screenshot/' + flightplans[i][nodesToDisplay[j]] + '">' + flightplans[i][nodesToDisplay[j]] + '</a></td>';
-              } else {
-                rowToAdd += "<td>" + inflight[i][nodesToDisplay[j]] + "</td>";
+            if (inflight[i]["completed"] == false) {
+              var nodesToDisplay = ["title", "user"];
+              var rowToAdd = "<tr>";
+              for (var j = 0; j < nodesToDisplay.length; j++) {
+                if (nodesToDisplay[j] === "lastCommunication" && inflight[i][nodesToDisplay[j]] !== "Never") {
+                  //rowToAdd += '<td><a href="/api/screenshot/' + flightplans[i][nodesToDisplay[j]] + '">' + flightplans[i][nodesToDisplay[j]] + '</a></td>';
+                } else {
+                  rowToAdd += "<td>" + inflight[i][nodesToDisplay[j]] + "</td>";
+                }
               }
+              rowToAdd += '<td>';
+              rowToAdd += '<button id="open-' + inflight[i]["_id"] + '" title="Load Saved Progress" type="button" class="btn btn-success btn-xs loadBtn"><i class="fa fa-folder-open-o"></i></button>';
+              rowToAdd += '<button id="del-' + inflight[i]["_id"] + '" title="Delete Saved Progress" type="button" class="btn btn-success btn-xs deleteBtn"><i class="fa fa-trash-o"></i></button>';
+              rowToAdd += '</td>';
+              rowToAdd += "</tr>";
+              $('#inflightListTable tr:last').after(rowToAdd);
             }
-            rowToAdd += '<td>';
-            rowToAdd += '<button id="open-' + inflight[i]["_id"] + '" title="Load Saved Progress" type="button" class="btn btn-success btn-xs loadBtn"><i class="fa fa-folder-open-o"></i></button>';
-            rowToAdd += '<button id="del-' + inflight[i]["_id"] + '" title="Delete Saved Progress" type="button" class="btn btn-success btn-xs deleteBtn"><i class="fa fa-trash-o"></i></button>';
-            rowToAdd += '</td>';
-            rowToAdd += "</tr>";
-            $('#inflightListTable tr:last').after(rowToAdd);
           }
         }
         $('#inflightListTable').trigger("update");
@@ -630,10 +767,12 @@ function init () {
 
   });
 
-  $(document).ready(function(){ // Enable tooltips after all the steps are processed.
-    var loadInflight = urlParam('loadInflight');
-    if(loadInflight == "true") {
-      $("#loadFP").trigger("click");
+  $(document).ready(function() { // Enable tooltips after all the steps are processed.
+    var load = urlParam('load');
+    if(load == "inflight") {
+      //$("#loadFP").trigger("click");
+    } else if (load == "completed") {
+      $("#showCompleted").trigger("click");
     }
   });
 }
