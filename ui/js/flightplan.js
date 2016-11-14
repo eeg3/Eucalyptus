@@ -584,7 +584,7 @@ function init () {
       .then(function(data){
         var inflight = data;
         var passedId = urlParam('id');
-        
+
         // Clear old loads
         $('#inflightListTable tr').not(function(){ return !!$(this).has('th').length; }).remove();
 
@@ -628,5 +628,12 @@ function init () {
         $('#loadModal').modal('show');
       });
 
+  });
+
+  $(document).ready(function(){ // Enable tooltips after all the steps are processed.
+    var loadInflight = urlParam('loadInflight');
+    if(loadInflight == "true") {
+      $("#loadFP").trigger("click");
+    }
   });
 }
