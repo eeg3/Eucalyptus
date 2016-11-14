@@ -368,7 +368,7 @@ th {
 }
 
 #loginBody {
-background: url(/img/converged-par.jpg) no-repeat center center fixed;
+background: linear-gradient(rgba(64,64,64,.75),rgba(64,64,64,.75)), url(/img/preso-3.png);
 -webkit-background-size: cover;
 -moz-background-size: cover;
 -o-background-size: cover;
@@ -376,8 +376,10 @@ background-size: cover;
 }
 
 #indexBody {
-/* background: url(/img/background-min.png) no-repeat center center fixed; */
-background: url(/img/converged-par.jpg) no-repeat center center fixed;
+  /* background: url(/img/background-min.png) no-repeat center center fixed; */
+  /*background: url(/img/converged-par.jpg) no-repeat center center fixed;*/
+  /*background: url(/img/preso-3.png) no-repeat center center fixed;*/
+background: linear-gradient(rgba(64,64,64,.75),rgba(64,64,64,.75)), url(/img/preso-3.png);
 -webkit-background-size: cover;
 -moz-background-size: cover;
 -o-background-size: cover;
@@ -385,8 +387,7 @@ background-size: cover;
 }
 
 #buildBody {
-/* background: url(/img/background-min.png) no-repeat center center fixed; */
-background: url(/img/converged-par.jpg) no-repeat center center fixed;
+background: linear-gradient(rgba(64,64,64,.75),rgba(64,64,64,.75)), url(/img/preso-3.png);
 -webkit-background-size: cover;
 -moz-background-size: cover;
 -o-background-size: cover;
@@ -394,8 +395,7 @@ background-size: cover;
 }
 
 #flightBody {
-/* background: url(/img/background-min.png) no-repeat center center fixed; */
-background: url(/img/converged-par.jpg) no-repeat center center fixed;
+background: linear-gradient(rgba(64,64,64,.75),rgba(64,64,64,.75)), url(/img/preso-3.png);
 -webkit-background-size: cover;
 -moz-background-size: cover;
 -o-background-size: cover;

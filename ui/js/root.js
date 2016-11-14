@@ -73,7 +73,7 @@ function parseFlightplans(id, title, category) {
           var tableLineItem = '<tr><td><a href="/flightplan.html?id=' + id + '">' + title + '</a></td></tr>';
 
         } else {
-          var tableLineItem = '<tr><td><a href="/flightplan.html?id=' + id + '">' + title + '</a> <span class="badge badge-success">' + savedFlightplans + '</span></td></tr>';
+          var tableLineItem = '<tr><td><a href="/flightplan.html?id=' + id + '">' + title + '</a> <span class="badge">' + savedFlightplans + '</span>&nbsp;<span class="badge badge-success">1</span></td></tr>';
         }
         $('#' + category + '-table tr:last').after(tableLineItem);
         $('#' + category + '-table tr:last').trigger("update");
