@@ -16,7 +16,7 @@ var auth = require ('./libs/auth.js');
 /******* Configurable Parameters *******/
 
   // Database Name
-  var databaseName = "eucalyptusDB3";
+  var databaseName = "eucalyptusDB4";
   // SSL parameters: disabled by default, define key & cert files to use if enable
   var ssl = false;
   var sslKeyLoc = "ssl/key.pem";

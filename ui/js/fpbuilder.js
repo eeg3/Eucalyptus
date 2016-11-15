@@ -263,15 +263,15 @@ function hookUpInputValidation() {
         } else {
 
           //$("#errorMessage").html("");
-          if (cleanOfSemicolons.test( $("#" + this.id).val() ) == false) {
+          if ($("#" + this.id).val().indexOf(";;;") != -1) {
             //$("#errorMessage").html("ERROR: Steps cannot contain the ';' character.");
             $("#" + this.id).css("border", "1px solid red");
             return;
-          } else if (cleanOfPipes.test( $("#" + this.id).val() ) == false) {
+          } else if ($("#" + this.id).val().indexOf("|||") != -1) {
             //$("#errorMessage").html("ERROR: Steps cannot contain the '|' character.");
             $("#" + this.id).css("border", "1px solid red");
             return;
-          } else if (cleanOfTildes.test( $("#" + this.id).val() ) == false) {
+          } else if ($("#" + this.id).val().indexOf("~") != -1) {
             //$("#errorMessage").html("ERROR: Steps cannot contain the '~' character.");
             $("#" + this.id).css("border", "1px solid red");
             return;
@@ -287,16 +287,16 @@ function hookUpInputValidation() {
           //$("#errorMessage").html("");
         } else {
 
-          $("#errorMessage").html("");
-          if (cleanOfSemicolons.test( $("#" + this.id).val() ) == false) {
+          //$("#errorMessage").html("");
+          if ($("#" + this.id).val().indexOf(";;;") != -1) {
             //$("#errorMessage").html("ERROR: Steps cannot contain the ';' character.");
             $("#" + this.id).css("border", "1px solid red");
             return;
-          } else if (cleanOfPipes.test( $("#" + this.id).val() ) == false) {
+          } else if ($("#" + this.id).val().indexOf("|||") != -1) {
             //$("#errorMessage").html("ERROR: Steps cannot contain the '|' character.");
             $("#" + this.id).css("border", "1px solid red");
             return;
-          } else if (cleanOfTildes.test( $("#" + this.id).val() ) == false) {
+          } else if ($("#" + this.id).val().indexOf("~") != -1) {
             //$("#errorMessage").html("ERROR: Steps cannot contain the '~' character.");
             $("#" + this.id).css("border", "1px solid red");
             return;
@@ -344,17 +344,19 @@ function exportFlightplan() {
           validated = 0;
           return;
         }
-        if (cleanOfSemicolons.test( $("#stepTitle-" + i).val() ) == false) {
-          $("#errorMessage").html("ERROR: Steps cannot contain the ';' character.");
+        //($("#" + this.id).val().indexOf(";;;") != -1)
+        //if (cleanOfSemicolons.test( $("#stepTitle-" + i).val() ) == false) {
+        if ($("#stepTitle-" + i).val().indexOf(";;;") != -1) {
+          $("#errorMessage").html("ERROR: Steps cannot contain the string ';;;'.");
           validated = 0;
-        } else if (cleanOfPipes.test( $("#stepTitle-" + i).val() ) == false) {
-          $("#errorMessage").html("ERROR: Steps cannot contain the '|' character.");
+        } else if ($("#stepTitle-" + i).val().indexOf("|||") != -1) {
+          $("#errorMessage").html("ERROR: Steps cannot contain the string '|||'.");
           validated = 0;
-        } else if (cleanOfTildes.test( $("#stepTitle-" + i).val() ) == false) {
+        } else if ($("#stepTitle-" + i).val().indexOf("~") != -1) {
           $("#errorMessage").html("ERROR: Steps cannot contain the '~' character.");
           validated = 0;
         } else {
-          stepsString += $("#stepTitle-" + i).val() + ",";
+          stepsString += $("#stepTitle-" + i).val() + ',,,';
         }
       }
 
@@ -362,17 +364,18 @@ function exportFlightplan() {
         if ($("#stepLauncher-" + i).val() == "") {
           //$("#errorMessage").html("ERROR: Cannot have empty step launcher.");
           stepsString += "noLauncher|";
-        } else if (cleanOfSemicolons.test( $("#stepLauncher-" + i).val() ) == false) {
-          $("#errorMessage").html("ERROR: Launcher cannot contain the ';' character.");
+        //} else if (cleanOfSemicolons.test( $("#stepLauncher-" + i).val() ) == false) {
+        } else if ($("#stepLauncher-" + i).val().indexOf(";;;") != -1) {
+          $("#errorMessage").html("ERROR: Launcher cannot contain the string ';;;'.");
           validated = 0;
-        } else if (cleanOfPipes.test( $("#stepLauncher-" + i).val() ) == false) {
-          $("#errorMessage").html("ERROR: Launcher cannot contain the '|' character.");
+        } else if ($("#stepLauncher-" + i).val().indexOf("|||") != -1) {
+          $("#errorMessage").html("ERROR: Launcher cannot contain the string '|||'.");
           validated = 0;
-        } else if (cleanOfTildes.test( $("#stepLauncher-" + i).val() ) == false) {
+        } else if ($("#stepLauncher-" + i).val().indexOf("~") != -1) {
           $("#errorMessage").html("ERROR: Launcher cannot contain the '~' character.");
           validated = 0;
         } else {
-          stepsString += $("#stepLauncher-" + i).val() + "|";
+          stepsString += $("#stepLauncher-" + i).val() + '|||';
         }
       }
 
@@ -394,28 +397,28 @@ function exportFlightplan() {
               validated = 0;
               return;
             }
-            if (cleanOfSemicolons.test( $("#details-substep-" + i + "-" + j).val() ) == false) {
-              $("#errorMessage").html("ERROR: Steps cannot contain the ';' character.");
+            if ($("#details-substep-" + i + "-" + j).val().indexOf(";;;") != -1) {
+              $("#errorMessage").html("ERROR: Steps cannot contain the string ';;;'.");
               validated = 0;
-            } else if (cleanOfPipes.test( $("#details-substep-" + i + "-" + j).val() ) == false) {
-              $("#errorMessage").html("ERROR: Steps cannot contain the '|' character.");
+            } else if ($("#details-substep-" + i + "-" + j).val().indexOf("|||") != -1) {
+              $("#errorMessage").html("ERROR: Steps cannot contain the string '|||'.");
               validated = 0;
-            } else if (cleanOfTildes.test( $("#details-substep-" + i + "-" + j).val() ) == false) {
+            } else if ($("#details-substep-" + i + "-" + j).val().indexOf("~") != -1) {
               $("#errorMessage").html("ERROR: Steps cannot contain the '~' character.");
               validated = 0;
             }
 
-            if (cleanOfSemicolons.test( $("#action-substep-" + i + "-" + j).val() ) == false) {
-              $("#errorMessage").html("ERROR: Steps cannot contain the ';' character.");
+            if ($("#action-substep-" + i + "-" + j).val().indexOf(";;;") != -1) {
+              $("#errorMessage").html("ERROR: Steps cannot contain the string ';;;'.");
               validated = 0;
-            } else if (cleanOfPipes.test( $("#action-substep-" + i + "-" + j).val() ) == false) {
-              $("#errorMessage").html("ERROR: Steps cannot contain the '|' character.");
+            } else if ($("#action-substep-" + i + "-" + j).val().indexOf("|||") != -1) {
+              $("#errorMessage").html("ERROR: Steps cannot contain the string '|||'.");
               validated = 0;
-            } else if (cleanOfTildes.test( $("#action-substep-" + i + "-" + j).val() ) == false) {
+            } else if ($("#action-substep-" + i + "-" + j).val().indexOf("~") != -1) {
               $("#errorMessage").html("ERROR: Steps cannot contain the '~' character.");
               validated = 0;
             }
-            stepsString += substepNumber + "," + $("#details-substep-" + i + "-" + j).val() + "," + $("#action-substep-" + i + "-" + j).val() + "|";
+            stepsString += substepNumber + ",,," + $("#details-substep-" + i + "-" + j).val() + ",,," + $("#action-substep-" + i + "-" + j).val() + "|||";
             //console.log(substepNumber + " Details: " + $("#details-substep-" + i + "-" + j).val() );
             //console.log(substepNumber + " Action:" + $("#action-substep-" + i + "-" + j).val() );
             substepNumber++;
@@ -423,54 +426,12 @@ function exportFlightplan() {
 
         }
       }
-      /*for (var j = 1; j < 50; j++) {
-        /*
-        if ($("#row-substep-" + i + "-" + j).length) {
-          if($("#details-substep-" + i + "-" + j).val() == "") {
-            $("#errorMessage").html("ERROR: Cannot have empty steps.");
-            $("#details-substep-" + i + "-" + j).css("border", "1px solid red");
-            validated = 0;
-            return;
-          }
-          if($("#action-substep-" + i + "-" + j).val() == "") {
-            $("#errorMessage").html("ERROR: Cannot have empty steps.");
-            $("#action-substep-" + i + "-" + j).css("border", "1px solid red");
-            validated = 0;
-            return;
-          }
-          if (cleanOfSemicolons.test( $("#details-substep-" + i + "-" + j).val() ) == false) {
-            $("#errorMessage").html("ERROR: Steps cannot contain the ';' character.");
-            validated = 0;
-          } else if (cleanOfPipes.test( $("#details-substep-" + i + "-" + j).val() ) == false) {
-            $("#errorMessage").html("ERROR: Steps cannot contain the '|' character.");
-            validated = 0;
-          } else if (cleanOfTildes.test( $("#details-substep-" + i + "-" + j).val() ) == false) {
-            $("#errorMessage").html("ERROR: Steps cannot contain the '~' character.");
-            validated = 0;
-          }
-
-          if (cleanOfSemicolons.test( $("#action-substep-" + i + "-" + j).val() ) == false) {
-            $("#errorMessage").html("ERROR: Steps cannot contain the ';' character.");
-            validated = 0;
-          } else if (cleanOfPipes.test( $("#action-substep-" + i + "-" + j).val() ) == false) {
-            $("#errorMessage").html("ERROR: Steps cannot contain the '|' character.");
-            validated = 0;
-          } else if (cleanOfTildes.test( $("#action-substep-" + i + "-" + j).val() ) == false) {
-            $("#errorMessage").html("ERROR: Steps cannot contain the '~' character.");
-            validated = 0;
-          }
-          stepsString += substepNumber + "," + $("#details-substep-" + i + "-" + j).val() + "," + $("#action-substep-" + i + "-" + j).val() + "|";
-          //console.log(substepNumber + " Details: " + $("#details-substep-" + i + "-" + j).val() );
-          //console.log(substepNumber + " Action:" + $("#action-substep-" + i + "-" + j).val() );
-          substepNumber++;
-        }
-      }*/
-      stepsString = stepsString.slice(0, -1); // Slice off the last |
-      stepsString += ";";
+      stepsString = stepsString.slice(0, -3); // Slice off the last |
+      stepsString += ";;;";
     }
   });
 
-  stepsString = stepsString.slice(0, -1); // Slice off the last ;
+  stepsString = stepsString.slice(0, -3); // Slice off the last ;
 
 
 

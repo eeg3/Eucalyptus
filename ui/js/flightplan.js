@@ -89,8 +89,7 @@ function initiateStepFlow(steps, substeps) {
 }
 
 function parseSteps(steps) {
-  //Example steps object: "A,Sub-step item to do from object,RDP to ServerA|B,Sub-step item to do from object again,Open Citrix Studio|C,Sub-step item to do lastly,Open PVS Console;A,Sub-step item to do in 2,RDP to ServerB|B,Sub-step item to do in 2,RDP to Server|C,Sub-step item to do in 2,RDP to ServerD";
-  var steps = steps.split(";");
+  var steps = steps.split(";;;");
   var numberOfSteps = steps.length;
 
   for (var i = 0;i < steps.length; i++) { // This for loop processes each step
@@ -98,10 +97,10 @@ function parseSteps(steps) {
     // Example substep: launcherAddress|A,Sub-step item to do from object,RDP to ServerA|B,Sub-step item to do from object again,Open Citrix Studio|C,Sub-step item to do lastly,Open PVS Console;
     var stepNumber = i+1;
 
-    var substeps = steps[i].split("|");
+    var substeps = steps[i].split("|||");
 
-    var stepTitle = substeps[0].split(",")[0];
-    launchers.push(substeps[0].split(",")[1]);
+    var stepTitle = substeps[0].split(",,,")[0];
+    launchers.push(substeps[0].split(",,,")[1]);
 
     var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step: ' + stepTitle + ' <button id="launch-' + stepNumber + '" type="button" class="btn btn-success btn-xs launchButton">Launch</button></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
 
@@ -129,7 +128,7 @@ function parseSteps(steps) {
     table.append(head);
     table.append(body);
 
-    if ( substeps[0].split(",")[1] == "noLauncher") {
+    if ( substeps[0].split(",,,")[1] == "noLauncher") {
       $("#launch-" + stepNumber).prop("disabled", true);
     }
 
@@ -153,9 +152,9 @@ function parseSteps(steps) {
 
     for (var j = 1; j < substeps.length; j++) { // This for loop processes each substep of each step
       var substepNumber = j;
-      var substepName = substeps[j].split(",")[0];
-      var substepDetails = substeps[j].split(",")[1];
-      var substepAction = substeps[j].split(",")[2];
+      var substepName = substeps[j].split(",,,")[0];
+      var substepDetails = substeps[j].split(",,,")[1];
+      var substepAction = substeps[j].split(",,,")[2];
       var substepCode = "substep-" + stepNumber + "-" + substepNumber; // Example: substep-2-1
 
       var tableLineItem = '<tr id="row-' + substepCode + '">';
@@ -413,7 +412,7 @@ function saveFlightplan(status) {
               //console.log($("#action-substep-" + i + "-" + j).text());
               //console.log($("#notes-substep-" + i + "-" + j).val());
               //console.log("notes-substep-" + i + "-" + j + ": " + $("#notes-substep-" + i + "-" + j).val());
-              notes += "notes-substep-" + i + "-" + j + "|" + $("#notes-substep-" + i + "-" + j).val() + ";";
+              notes += "notes-substep-" + i + "-" + j + "|||" + $("#notes-substep-" + i + "-" + j).val() + ";;;";
             } else {
               //console.log("details-substep-" + i + "-" + j + " does not exist. Breaking.");
               break;
@@ -470,6 +469,8 @@ function loadFlightplan(idToLoad) {
     helper.get("/api/inflight/")
       .then(function(data){
         var inflight = data;
+        var lastChecked = "";
+
         var inflightEntry = "";
 
         for (var i = 0; i < data.length; i++) {
@@ -485,15 +486,19 @@ function loadFlightplan(idToLoad) {
         // Process Notes
         //console.log("inflightNotes: " + inflightNotes);
         if (inflightNotes != "") {
-          (inflightNotes.split(';')).forEach(function(item) {
+          (inflightNotes.split(';;;')).forEach(function(item) {
             //console.log("note location: " + item.split("|")[0] + " | note value: " + item.split("|")[1]);
-            $("#" + item.split("|")[0]).val( item.split("|")[1] );
+            $("#" + item.split("|||")[0]).val( item.split("|||")[1] );
           });
         }
 
-
-        lastCheckedStep = lastChecked.split("-")[2];
-        lastCheckedSubstep = lastChecked.split("-")[3];
+        if (lastChecked != undefined) {
+          lastCheckedStep = lastChecked.split("-")[2];
+          lastCheckedSubstep = lastChecked.split("-")[3];
+        } else {
+          lastCheckedStep = 0;
+          lastCheckedSubstep = 0;
+        }
 
         // Set active flight
         $("#currentInflight").html(inflightTitle);
@@ -578,13 +583,6 @@ function loadFlightplan(idToLoad) {
       });
   }
 
-    /*********/
-    // Add some code to check every checkbox until the last unsaved checkbox
-    // Also add code to jump to last unsaved checkbox
-    /*********/
-
-  //var stepsToLoad = "notes-substep-1-1|1;notes-substep-1-2|2;notes-substep-1-3|3;notes-substep-1-4|;notes-substep-1-5|;notes-substep-2-1|;notes-substep-2-2|;notes-substep-2-3|;notes-substep-3-1|;notes-substep-3-2|;notes-substep-3-3|;notes-substep-3-4|;notes-substep-3-5|;notes-substep-4-1|;notes-substep-4-2|;notes-substep-5-1|;notes-substep-5-2|;";
-  //console.log("stepsToLoad: " + stepsToLoad);
 }
 
 function init () {
