@@ -1,17 +1,9 @@
 window.onload = init;
 
-// TODO: Add logic to grab Step Title and Step Launcher
-
-
 // Global variables
 var stepsComplete = 0;
 var invalidInput = 0;
 var staticFields = ["title", "description", "category", "author", "product", "revision"];
-
-// We use these variables to match characters that shouldn't exist in steps as they break out storing mechanism.
-var cleanOfSemicolons = new RegExp("^[^;]+$"); // Steps can't have semicolons
-var cleanOfPipes = new RegExp("^[^|]+$"); // Steps can't have pipes
-var cleanOfTildes = new RegExp("^[^~]+$"); // Steps can't have tildes
 
 // We use these arrays to store the step & substep order so if user removes and adds steps & substeps in random ways, we track that properly and keep them in expected order.
 var stepOrder = [];
@@ -271,8 +263,8 @@ function hookUpInputValidation() {
             //$("#errorMessage").html("ERROR: Steps cannot contain the '|' character.");
             $("#" + this.id).css("border", "1px solid red");
             return;
-          } else if ($("#" + this.id).val().indexOf("~") != -1) {
-            //$("#errorMessage").html("ERROR: Steps cannot contain the '~' character.");
+          } else if ($("#" + this.id).val().indexOf(",,,") != -1) {
+            //$("#errorMessage").html("ERROR: Steps cannot contain the '|' character.");
             $("#" + this.id).css("border", "1px solid red");
             return;
           } else {
@@ -296,8 +288,8 @@ function hookUpInputValidation() {
             //$("#errorMessage").html("ERROR: Steps cannot contain the '|' character.");
             $("#" + this.id).css("border", "1px solid red");
             return;
-          } else if ($("#" + this.id).val().indexOf("~") != -1) {
-            //$("#errorMessage").html("ERROR: Steps cannot contain the '~' character.");
+          } else if ($("#" + this.id).val().indexOf(",,,") != -1) {
+            //$("#errorMessage").html("ERROR: Steps cannot contain the '|' character.");
             $("#" + this.id).css("border", "1px solid red");
             return;
           } else {
@@ -352,8 +344,17 @@ function exportFlightplan() {
         } else if ($("#stepTitle-" + i).val().indexOf("|||") != -1) {
           $("#errorMessage").html("ERROR: Steps cannot contain the string '|||'.");
           validated = 0;
-        } else if ($("#stepTitle-" + i).val().indexOf("~") != -1) {
-          $("#errorMessage").html("ERROR: Steps cannot contain the '~' character.");
+        } else if ($("#stepTitle-" + i).val().indexOf(",,,") != -1) {
+          $("#errorMessage").html("ERROR: Steps cannot contain the string ',,,'.");
+          validated = 0;
+        } else if (beginsWith($("#stepTitle-" + i).val(), ";") || endsWith($("#stepTitle-" + i).val(), ";"))  {
+          $("#errorMessage").html("ERROR: Steps cannot begin or end with the ';' character.");
+          validated = 0;
+        } else if (beginsWith($("#stepTitle-" + i).val(), "|") || endsWith($("#stepTitle-" + i).val(), "|"))  {
+          $("#errorMessage").html("ERROR: Steps cannot begin or end with the '|' character.");
+          validated = 0;
+        } else if (beginsWith($("#stepTitle-" + i).val(), ",") || endsWith($("#stepTitle-" + i).val(), ","))  {
+          $("#errorMessage").html("ERROR: Steps cannot begin or end with the ',' character.");
           validated = 0;
         } else {
           stepsString += $("#stepTitle-" + i).val() + ',,,';
@@ -371,8 +372,17 @@ function exportFlightplan() {
         } else if ($("#stepLauncher-" + i).val().indexOf("|||") != -1) {
           $("#errorMessage").html("ERROR: Launcher cannot contain the string '|||'.");
           validated = 0;
-        } else if ($("#stepLauncher-" + i).val().indexOf("~") != -1) {
-          $("#errorMessage").html("ERROR: Launcher cannot contain the '~' character.");
+        } else if ($("#stepLauncher-" + i).val().indexOf(",,,") != -1) {
+          $("#errorMessage").html("ERROR: Launcher cannot contain the string ',,,'.");
+          validated = 0;
+        } else if (beginsWith($("#stepLauncher-" + i).val(), ";") || endsWith($("#stepLauncher-" + i).val(), ";"))  {
+          $("#errorMessage").html("ERROR: Launcher cannot begin or end with the ';' character.");
+          validated = 0;
+        } else if (beginsWith($("#stepLauncher-" + i).val(), "|") || endsWith($("#stepLauncher-" + i).val(), "|"))  {
+          $("#errorMessage").html("ERROR: Launcher cannot begin or end with the '|' character.");
+          validated = 0;
+        } else if (beginsWith($("#stepLauncher-" + i).val(), ",") || endsWith($("#stepLauncher-" + i).val(), ","))  {
+          $("#errorMessage").html("ERROR: Launcher cannot begin or end with the ',' character.");
           validated = 0;
         } else {
           stepsString += $("#stepLauncher-" + i).val() + '|||';
@@ -403,8 +413,17 @@ function exportFlightplan() {
             } else if ($("#details-substep-" + i + "-" + j).val().indexOf("|||") != -1) {
               $("#errorMessage").html("ERROR: Steps cannot contain the string '|||'.");
               validated = 0;
-            } else if ($("#details-substep-" + i + "-" + j).val().indexOf("~") != -1) {
-              $("#errorMessage").html("ERROR: Steps cannot contain the '~' character.");
+            } else if ($("#details-substep-" + i + "-" + j).val().indexOf(",,,") != -1) {
+              $("#errorMessage").html("ERROR: Steps cannot contain the string ',,,'.");
+              validated = 0;
+            } else if (beginsWith($("#details-substep-" + i + "-" + j).val(), ";") || endsWith($("#details-substep-" + i + "-" + j).val(), ";"))  {
+              $("#errorMessage").html("ERROR: Steps cannot begin or end with the ';' character.");
+              validated = 0;
+            } else if (beginsWith($("#details-substep-" + i + "-" + j).val(), "|") || endsWith($("#details-substep-" + i + "-" + j).val(), "|"))  {
+              $("#errorMessage").html("ERROR: Steps cannot begin or end with the '|' character.");
+              validated = 0;
+            } else if (beginsWith($("#details-substep-" + i + "-" + j).val(), ",") || endsWith($("#details-substep-" + i + "-" + j).val(), ","))  {
+              $("#errorMessage").html("ERROR: Steps cannot begin or end with the ',' character.");
               validated = 0;
             }
 
@@ -414,10 +433,20 @@ function exportFlightplan() {
             } else if ($("#action-substep-" + i + "-" + j).val().indexOf("|||") != -1) {
               $("#errorMessage").html("ERROR: Steps cannot contain the string '|||'.");
               validated = 0;
-            } else if ($("#action-substep-" + i + "-" + j).val().indexOf("~") != -1) {
-              $("#errorMessage").html("ERROR: Steps cannot contain the '~' character.");
+            } else if ($("#action-substep-" + i + "-" + j).val().indexOf(",,,") != -1) {
+              $("#errorMessage").html("ERROR: Steps cannot contain the string ',,,'.");
+              validated = 0;
+            } else if (beginsWith($("#action-substep-" + i + "-" + j).val(), ";") || endsWith($("#action-substep-" + i + "-" + j).val(), ";"))  {
+              $("#errorMessage").html("ERROR: Steps cannot begin or end with the ';' character.");
+              validated = 0;
+            } else if (beginsWith($("#action-substep-" + i + "-" + j).val(), "|") || endsWith($("#action-substep-" + i + "-" + j).val(), "|"))  {
+              $("#errorMessage").html("ERROR: Steps cannot begin or end with the '|' character.");
+              validated = 0;
+            } else if (beginsWith($("#action-substep-" + i + "-" + j).val(), ",") || endsWith($("#action-substep-" + i + "-" + j).val(), ","))  {
+              $("#errorMessage").html("ERROR: Steps cannot begin or end with the ',' character.");
               validated = 0;
             }
+
             stepsString += substepNumber + ",,," + $("#details-substep-" + i + "-" + j).val() + ",,," + $("#action-substep-" + i + "-" + j).val() + "|||";
             //console.log(substepNumber + " Details: " + $("#details-substep-" + i + "-" + j).val() );
             //console.log(substepNumber + " Action:" + $("#action-substep-" + i + "-" + j).val() );
@@ -492,6 +521,14 @@ function exportFlightplan() {
     console.log("Form invald.");
   }
 
+}
+
+function endsWith(str, suffix) {
+    return str.indexOf(suffix, str.length - suffix.length) !== -1;
+}
+
+function beginsWith(str, suffix) {
+    return (str.substr(0, suffix.length) == suffix);
 }
 
 function init () {

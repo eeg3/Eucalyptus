@@ -248,9 +248,9 @@ function displaySummary() {
         var nodesToDisplay = ["_id", "title", "author", "revision", "category", "product", "description", "steps"];
 
         if (flightplan[i]["_id"] == passedId) {
-          for (var j = 0; j < nodesToDisplay.length; j++) {
-            flightplanEntry += flightplan[i][nodesToDisplay[j]] + "~";
-          }
+
+          // Example steps string: "A,Sub-step item to do from object,RDP to ServerA|B,Sub-step item to do from object again,Open Citrix Studio|C,Sub-step item to do lastly,Open PVS Console;A,Sub-step item to do in 2,RDP to ServerB|B,Sub-step item to do in 2,RDP to Server|C,Sub-step item to do in 2,RDP to ServerD"
+          var flightplanSteps = flightplan[i]["steps"];
 
           // Add table
 
@@ -272,28 +272,23 @@ function displaySummary() {
 
           $("#flightplanHeaderSection").append(table);
 
-          // End add table
-
-          var flightplanTitle = flightplanEntry.split("~")[1];
+          var flightplanTitle = flightplan[i]["title"];
           $("#flightplanTitle").html(flightplanTitle);
 
-          var flightplanAuthor = flightplanEntry.split("~")[2];
+          var flightplanAuthor = flightplan[i]["author"];
           $("#flightplanAuthor").html(flightplanAuthor);
 
-          var flightplanRevision = flightplanEntry.split("~")[3]
+          var flightplanRevision = flightplan[i]["revision"];
           $("#flightplanRevision").html(flightplanRevision);
 
-          var flightplanCategory = flightplanEntry.split("~")[4];
+          var flightplanCategory = flightplan[i]["category"];
           $("#flightplanCategory").html(flightplanCategory);
 
-          var flightplanProduct = flightplanEntry.split("~")[5]
+          var flightplanProduct = flightplan[i]["product"];
           $("#flightplanProduct").html(flightplanProduct);
 
-          var flightplanDescription = flightplanEntry.split("~")[6];
+          var flightplanDescription = flightplan[i]["description"];
           $("#flightplanDescription").html(flightplanDescription);
-
-          // Example steps string: "A,Sub-step item to do from object,RDP to ServerA|B,Sub-step item to do from object again,Open Citrix Studio|C,Sub-step item to do lastly,Open PVS Console;A,Sub-step item to do in 2,RDP to ServerB|B,Sub-step item to do in 2,RDP to Server|C,Sub-step item to do in 2,RDP to ServerD"
-          var flightplanSteps = flightplanEntry.split("~")[7];
         }
       }
     });
@@ -393,6 +388,7 @@ function saveFlightplan(status) {
       var inflight = data;
       var inflightEntry = "";
       var savedInflight = "";
+      var validated = 1;
 
       for (var i = 0; i < data.length; i++) {
         var nodesToDisplay = ["_id", "referencedFlightplan", "user", "notes"];
@@ -412,7 +408,30 @@ function saveFlightplan(status) {
               //console.log($("#action-substep-" + i + "-" + j).text());
               //console.log($("#notes-substep-" + i + "-" + j).val());
               //console.log("notes-substep-" + i + "-" + j + ": " + $("#notes-substep-" + i + "-" + j).val());
-              notes += "notes-substep-" + i + "-" + j + "|||" + $("#notes-substep-" + i + "-" + j).val() + ";;;";
+              if (($("#notes-substep-" + i + "-" + j).val().indexOf("|||") != -1)) {
+                alert("ERROR: Notes cannot contain the string '|||'. Please remove and re-save.");
+                //$("#errorMessage").html("ERROR: Launcher cannot contain the string ';;;'.");
+                validated = 0;
+              } else if (($("#notes-substep-" + i + "-" + j).val().indexOf(";;;") != -1)) {
+                alert("ERROR: Notes cannot contain the string ';;;'. Please remove and re-save.");
+                //$("#errorMessage").html("ERROR: Launcher cannot contain the string ';;;'.");
+                validated = 0;
+              } else if (($("#notes-substep-" + i + "-" + j).val().indexOf(",,,") != -1)) {
+                alert("ERROR: Notes cannot contain the string ',,,'. Please remove and re-save.");
+                //$("#errorMessage").html("ERROR: Launcher cannot contain the string ';;;'.");
+                validated = 0;
+              } else if (beginsWith($("#notes-substep-" + i + "-" + j).val(), ";") || endsWith($("#notes-substep-" + i + "-" + j).val(), ";")) {
+                alert("ERROR: Notes cannot begin or end with the character ';'. Please remove and re-save.");
+                validated = 0;
+              } else if (beginsWith($("#notes-substep-" + i + "-" + j).val(), "|") || endsWith($("#notes-substep-" + i + "-" + j).val(), "|")) {
+                alert("ERROR: Notes cannot begin or end with the character '|'. Please remove and re-save.");
+                validated = 0;
+              } else if (beginsWith($("#notes-substep-" + i + "-" + j).val(), ",") || endsWith($("#notes-substep-" + i + "-" + j).val(), ",")) {
+                alert("ERROR: Notes cannot begin or end with the character ','. Please remove and re-save.");
+                validated = 0;
+              } else {
+                notes += "notes-substep-" + i + "-" + j + "|||" + $("#notes-substep-" + i + "-" + j).val() + ";;;";
+              }
             } else {
               //console.log("details-substep-" + i + "-" + j + " does not exist. Breaking.");
               break;
@@ -442,18 +461,20 @@ function saveFlightplan(status) {
         inflightPost["completed"] = completed;
       }
 
-      if (!loadedNote) {
-        if (!saveAlreadyExists) {
-          helper.post("/api/inflight/", inflightPost);
-          $("#currentInflight").html(saveTitle);
+      if (validated) {
+        if (!loadedNote) {
+          if (!saveAlreadyExists) {
+            helper.post("/api/inflight/", inflightPost);
+            $("#currentInflight").html(saveTitle);
+          } else {
+            $("modalError").html("Error: Save name already exists. Not overwriting.")
+            console.log("Save already exists. Not overwriting.");
+          }
         } else {
-          $("modalError").html("Error: Save name already exists. Not overwriting.")
-          console.log("Save already exists. Not overwriting.");
+          // patch code
+          helper.patch("/api/inflight/" + savedInflight, inflightPost);
+          $("#currentInflight").html(saveTitle);
         }
-      } else {
-        // patch code
-        helper.patch("/api/inflight/" + savedInflight, inflightPost);
-        $("#currentInflight").html(saveTitle);
       }
 
     });
@@ -585,6 +606,14 @@ function loadFlightplan(idToLoad) {
 
 }
 
+function endsWith(str, suffix) {
+    return str.indexOf(suffix, str.length - suffix.length) !== -1;
+}
+
+function beginsWith(str, suffix) {
+    return (str.substr(0, suffix.length) == suffix);
+}
+
 function init () {
   // Logic flow:
   //  getFlightPlan() pulls everything about the FlightPlan from the API, and populates everything about the FlightPlan except for the steps itself. Then ->
@@ -593,6 +622,8 @@ function init () {
   // updateCompletionStatus() is hooked into onClick for all the checkboxes by initiateStepFlow() to activate the logic on user activity.
 
   //row-substep-
+  //var result = beginsWith("abc", "|");
+  //console.log("beginsWith: " + result);
 
   $('#toggleSequential').change(function() {
     var checkboxHit = 0; // This is done to prevent the next item in list to be done from being hidden.
