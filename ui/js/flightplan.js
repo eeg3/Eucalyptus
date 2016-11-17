@@ -102,7 +102,7 @@ function parseSteps(steps) {
     var stepTitle = substeps[0].split(",,,")[0];
     launchers.push(substeps[0].split(",,,")[1]);
 
-    var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step: ' + stepTitle + ' <button id="launch-' + stepNumber + '" type="button" class="btn btn-success btn-xs launchButton">Launch</button></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
+    var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step: ' + stepTitle + ' <button id="launch-' + stepNumber + '" type="button" class="btn btn-success btn-xs launchButton"><i class="fa fa-rocket"></i> Launch</button><button id="automate-' + stepNumber + '" type="button" class="btn btn-success btn-xs launchButton" disabled><i class="fa fa-cogs"></i> Automate</button></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
 
     $("#stepsSection").append(newDivHTML);
 
@@ -117,7 +117,8 @@ function parseSteps(steps) {
       // * Virtual Apps
       // * Ticketing Sites
 
-    var table = $('<table></table>').addClass('table table-bordered table-striped sp-databox-table-lg');
+    //var table = $('<table></table>').addClass('table table-bordered table-striped sp-databox-table-lg');
+    var table = $('<table></table>').addClass('table table-bordered table-striped sp-databox-table-md');
 
     if ($(window).width() >= 660) {
       var head = $('<thead><tr><th width="95px">Sub-Step</th><th>Details</th><th>Action</th><th>Notes&nbsp;<span data-toggle="tooltip" data-placement="top" title="Enter notes here to keep track of what you actually did."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></th><th>Status</th></tr></thead>');
@@ -675,7 +676,7 @@ function init () {
     //$('#saveModal').modal('hide');
   });
 
-  $("#showCompleted").click(function() {
+  $(".showCompleted").click(function() {
     //window.print();
     //saveFlightplan();
 
@@ -731,7 +732,7 @@ function init () {
 
   });
 
-  $("#saveFP").click(function() {
+  $(".saveFP").click(function() {
     if (loadedNote) {
       saveFlightplan('existing');
     } else {
@@ -740,7 +741,7 @@ function init () {
     }
   });
 
-  $("#loadFP").click(function() {
+  $(".loadFP").click(function() {
     //window.print();
     //saveFlightplan();
 
@@ -799,9 +800,9 @@ function init () {
   $(document).ready(function() { // Enable tooltips after all the steps are processed.
     var load = urlParam('load');
     if(load == "inflight") {
-      //$("#loadFP").trigger("click");
+      $(".loadFP").trigger("click");
     } else if (load == "completed") {
-      $("#showCompleted").trigger("click");
+      $(".showCompleted").trigger("click");
     }
   });
 }

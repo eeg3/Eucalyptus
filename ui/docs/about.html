@@ -32,7 +32,7 @@
 
     <!-- Customer JS -->
     <script src="/js/ApiHelper.js"></script>
-    <script src="/js/fpbuilder.js"></script>
+    <script src="/js/flightplan.js"></script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -46,7 +46,7 @@
     <p class="lead loginColor">A better way to manage operational tasks.</p>
   </header>
 
-<body id="buildBody">
+<body id="flightBody">
   <nav class="navbar navbar-leaf navbar-fixed-top">
     <div class="container-fluid">
       <div class="navbar-header">
@@ -62,7 +62,6 @@
         <ul class="nav navbar-nav navbar-right">
           <li><a href="/index.html"><span class="fa fa-search fa-lg"></span></a></li>
           <li><a href="/fpbuilder.html"><span class="fa fa-plus fa-lg"></span></a></li>
-          <li><a href="/docs/help.html"><span class="fa fa-question fa-lg"></span></a></li>
           <!--<li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="fa fa-user fa-lg"></span>&nbsp;<span class="caret"></span></a>
               <ul class="dropdown-menu inverse-dropdown">
@@ -70,126 +69,60 @@
                 <li><a href="#">Logout</a></li>
               </ul>
           </li> -->
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="fa fa-question fa-lg"></span></a>
+              <ul class="dropdown-menu inverse-dropdown">
+                <li><a href="/docs/about.html">About Eucalyptus</a></li>
+                <li><a href="/docs/help.html">Help</a></li>
+              </ul>
+          </li>
         </ul>
       </div><!--/.nav-collapse -->
     </div>
   </nav>
 
-  <!-- Create New Section -->
-  <div id="createNewDiv" class="container-fluid">
-
-    <div class="row">
-      <div class="col-sm-12">
-        <div class="panel panel-inverse">
-          <div id="intro-panel-header" class="panel-heading">FlightPlan Builder</div>
-          <div class="panel-body">
-              <div class="row">
-                <div class="col-sm-6">
-                  <div class="form-group">
-                    <label for="title">Title</label>
-                    <input type="text" class="form-control" id="title" placeholder="Install View Composer"></input>
-                  </div>
-                  <div class="form-group">
-                    <label for="description">Description</label>
-                    <input type="text" class="form-control" id="description" placeholder="Deploy the Composer Service responsible for desktop deployment."></input>
-                  </div>
-                  <div class="form-group">
-                    <label for="category">Category</label>
-                    <input type="text" class="form-control" id="category" placeholder="Installation"></input>
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="form-group">
-                    <label for="author">Author</label>
-                    <input type="text" class="form-control" id="author" placeholder="Earl Gay"></input>
-                  </div>
-                  <div class="form-group">
-                    <label for="product">Product</label>
-                    <input type="text" class="form-control" id="product" placeholder="View-7"></input>
-                  </div>
-                  <div class="form-group">
-                    <label for="revision">Revision</label>
-                    <input type="text" class="form-control" id="revision" placeholder="1.0"></input>
-                  </div>
-                </div>
-              </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div id="stepsSection">
-
-    </div>
-
-    <div id="submitFlightplan" class="btn-group">
-      <button id="createFlightplan" type="button" class="btn btn-success">Create FlightPlan</button>
-    </div>
-    <div id="errorMessage"></div>
-
-  </div> <!-- End Container -->
-
   <!-- Search Section -->
-  <div id="importExistingDiv" class="container-fluid">
+  <div class="container-fluid">
 
     <div class="row">
       <div class="col-sm-12">
         <div class="panel panel-inverse">
-          <div id="intro-panel-header" class="panel-heading">FlightPlan Importer</div>
+          <div id="intro-panel-header" class="panel-heading">
+            <div class="row">
+              <div class="col-sm-3"></div>
+              <div class="col-sm-6">Help</div>
+              <div class="col-sm-3"></div>
+            </div>
+          </div>
           <div class="panel-body">
-              <div class="row">
-                <div class="col-sm-3"></div>
-                <div class="col-sm-6">
-                  <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Example.FLP">
-                    <span class="input-group-btn">
-                      <button class="btn btn-default" type="button">Browse</button>
-                    </span>
-                  </div><!-- /input-group -->
-                  <br />
-                  <div id="submitFlightplan" class="btn-group">
-                    <button id="createFlightplan" type="button" class="btn btn-success">Import FlightPlan</button>
-                  </div>
-                </div>
-                <div class="col-sm-3"></div>
-              </div>
+            Test.
           </div>
         </div>
       </div>
     </div>
+    <!-- End Search Section -->
 
   </div> <!-- End Container -->
 
-  <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+  <div id="loadModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="gridSystemModalLabel">New FlightPlan</h4>
+          <h4 class="modal-title" id="gridSystemModalLabel">Load Inflight FlightPlan</h4>
         </div>
         <div class="modal-body">
           <div class="panel">
             <div class="panel-body sp-databox-panel-body">
+
               <div class="row">
-                <div class="col-sm-6 sp-databox-left">
-                  <div class="sp-databox">
-                    <button id="createNewFP" class="invisBtn">
-                      <div class="sp-databox-item">
-                        <p class="sp-databox-item-header">Create New</p>
-                        <p class="sp-databox-item-descr">Utilize the FlightPlan Builder</p>
-                      </div>
-                    </button>
-                  </div>
-                </div>
-                <div class="col-sm-6 sp-databox-right">
-                  <div class="sp-databox">
-                    <button id="loadExistingFP" class="invisBtn">
-                      <div class="sp-databox-item">
-                        <p class="sp-databox-item-header">Import Existing</p>
-                        <p class="sp-databox-item-descr">Load an .FLP File</p>
-                      </div>
-                    </button>
-                  </div>
+                <div class="col-sm-12">
+                  <table id="inflightListTable" class="table table-bordered">
+                    <thead>
+                      <th>Title</th><th>User</th><th>Action</th>
+                    </thead>
+                    <tbody><tr></tr></tbody>
+                  </table>
                 </div>
               </div>
             </div>
@@ -199,6 +132,73 @@
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           <button type="button" class="btn btn-primary">Save changes</button>
         </div>-->
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+  <div id="viewCompletedModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="gridSystemModalLabel">View Completed FlightPlan</h4>
+        </div>
+        <div class="modal-body">
+          <div class="panel">
+            <div class="panel-body sp-databox-panel-body">
+
+              <div class="row">
+                <div class="col-sm-12">
+                  <table id="completedListTable" class="table table-bordered">
+                    <thead>
+                      <th>Title</th><th>User</th><th>Action</th>
+                    </thead>
+                    <tbody><tr></tr></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--<div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>-->
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+  <div id="saveModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="saveModal-title">Save / Complete Flight</h4>
+        </div>
+        <div class="modal-body">
+          <div class="panel">
+            <div class="panel-body sp-databox-panel-body">
+
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="form-group">
+                    <label for="saveTitle">Flight Name: </label>
+                    <input type="text" class="form-control" name="saveTitle"></input>
+                  </div>
+                  <div class="form-group">
+                    <label for="saveUser">User: </label>
+                    <input type="text" class="form-control" name="saveUser"></input>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button id="saveSubmit" type="button" class="btn btn-success">Submit</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->

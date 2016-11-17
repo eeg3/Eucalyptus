@@ -3,6 +3,7 @@ window.onload = init;
 // Global variables
 var numOfColumns = 0;
 var displayOption = "category";
+var myChart = null;
 
 function currentTimestamp() {
   var date = new Date();
@@ -18,6 +19,7 @@ function currentTimestamp() {
 function parseFlightplans(id, title, category) {
   var savedFlightplans = 0;
   var completedFlightplans = 0;
+
 
   // Find out how many saved flightplans per ID exist
   helper.get("/api/inflight/")
@@ -111,7 +113,12 @@ function populateChart() {
   var chartLabels = newColumns;
   var ctx = $("#myChart");
 
-  var myChart = new Chart(ctx, {
+  // Destroy the chart if it already exists. If we dont destroy it first, it breaks when adding over.
+  if(myChart != null) {
+    myChart.destroy();
+  }
+
+  myChart = new Chart(ctx, {
     type: 'pie',
     data: {
       labels: chartLabels,

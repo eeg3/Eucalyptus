@@ -85,6 +85,9 @@ body {
 .sp-databox-table-lg {
   font-size:  1.2em;
 }
+.sp-databox-table-md {
+  font-size:  1.0em;
+}
 
 .inverse-dropdown {
   background-color: #2D2D2D;
@@ -454,4 +457,15 @@ background-size: cover;
 
 #intro {
   margin-top: 10px;
+}
+
+.headerButtonText {
+  font-size: 12px;
+}
+.headerButton {
+    width: 150px !important;
+}
+
+.helpIntro {
+  text-align: justify;
 }
