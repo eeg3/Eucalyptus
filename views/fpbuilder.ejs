@@ -10,33 +10,7 @@
 </header>
 
 <body id="buildBody">
-  <nav class="navbar navbar-leaf navbar-fixed-top">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="/"><i class="fa fa-leaf leafLogo"></i>&nbsp;&nbsp;&nbsp;Eucalyptus</a>
-      </div>
-      <div id="navbar" class="collapse navbar-collapse">
-        <ul class="nav navbar-nav navbar-right">
-          <li><a href="/"><span class="fa fa-search fa-lg"></span></a></li>
-          <li><a href="/fpbuilder"><span class="fa fa-plus fa-lg"></span></a></li>
-          <li><a href="/help"><span class="fa fa-question fa-lg"></span></a></li>
-          <!--<li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="fa fa-user fa-lg"></span>&nbsp;<span class="caret"></span></a>
-              <ul class="dropdown-menu inverse-dropdown">
-                <li><a href="#">User Info</a></li>
-                <li><a href="#">Logout</a></li>
-              </ul>
-          </li> -->
-        </ul>
-      </div><!--/.nav-collapse -->
-    </div>
-  </nav>
+  <% include partials/navbar %>
 
   <!-- Create New Section -->
   <div id="createNewDiv" class="container-fluid">

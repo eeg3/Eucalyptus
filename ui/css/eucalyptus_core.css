@@ -371,7 +371,7 @@ th {
 }
 
 #loginBody {
-background: linear-gradient(rgba(64,64,64,.75),rgba(64,64,64,.75)), url(/img/preso-3.png);
+background: linear-gradient(rgba(64,64,64,.75),rgba(64,64,64,.75)), url(/img/preso-3.png) no-repeat center center fixed;
 -webkit-background-size: cover;
 -moz-background-size: cover;
 -o-background-size: cover;

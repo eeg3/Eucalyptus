@@ -88,4 +88,13 @@ function init () {
     helper.patch("/api/flightplan/" + flightplanId, flightplanPatch)
     location.reload();
   });
+
+  $(document).ready(function(){ // Enable tooltips after all the steps are processed.
+
+    helper.get("/api/getUserInfo")
+      .then(function(data) {
+        $("#username").text(data[0]["username"]);
+      });
+
+  });
 }

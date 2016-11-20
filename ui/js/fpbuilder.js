@@ -542,6 +542,12 @@ function init () {
   $(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip();
     $('#myModal').modal('show');
+
+    helper.get("/api/getUserInfo")
+      .then(function(data) {
+        $("#username").text(data[0]["username"]);
+      });
+
   });
 
   $("#createFlightplan").click(function() {

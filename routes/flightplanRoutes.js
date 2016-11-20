@@ -1,4 +1,5 @@
 var express = require('express');
+var passport = require('passport');
 
 // We need the "Flightplan" parameter to get the ORM model
 var routes = function(Flightplan){
@@ -7,7 +8,7 @@ var routes = function(Flightplan){
 
 // Handle POST to add a new Flightplan
     flightplanRouter.route('/')
-      .post(function(req, res){ // Handle POST
+      .post(isLoggedIn, function(req, res){ // Handle POST
           // We're creating, so let's create a new Flightplan object based on what was posted
           var flightplan = new Flightplan(req.body);
 
@@ -25,7 +26,7 @@ var routes = function(Flightplan){
               res.send(flightplan);
           }
       }) // End .post
-      .get(function(req,res){ // Handle GET
+      .get(isLoggedIn, function(req,res){ // Handle GET
           // Lets handle a /?user= if applicable
           var query = {};
           if(req.query.category) { query.category = req.query.category; }
@@ -52,7 +53,7 @@ var routes = function(Flightplan){
       });
 
 // We always want this to be executed when accessing by ID
-    flightplanRouter.use('/:flightplanId', function(req,res,next){
+    flightplanRouter.use('/:flightplanId', isLoggedIn, function(req,res,next){
         Flightplan.findById(req.params.flightplanId, function(err,flightplan){
             if(err)
                 res.status(500).send(err);
@@ -128,3 +129,9 @@ var routes = function(Flightplan){
 };
 
 module.exports = routes;
+
+function isLoggedIn(req, res, next) {
+  if (req.isAuthenticated())
+      return next();
+  res.redirect('/login');
+}

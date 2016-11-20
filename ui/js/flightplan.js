@@ -804,5 +804,11 @@ function init () {
     } else if (load == "completed") {
       $(".showCompleted").trigger("click");
     }
+
+    helper.get("/api/getUserInfo")
+      .then(function(data) {
+        $("#username").text(data[0]["username"]);
+      });
+
   });
 }

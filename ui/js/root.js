@@ -215,5 +215,11 @@ function init () {
       });
 
       $('[data-toggle="tooltip"]').tooltip();
+
+      helper.get("/api/getUserInfo")
+        .then(function(data) {
+          $("#username").text(data[0]["username"]);
+        });
+
     });
 }

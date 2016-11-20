@@ -3,7 +3,7 @@ var passport = require('passport');
 var router = express.Router();
 
 router.get('/', isLoggedIn, function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index', { user: req.user });
   //res.sendfile("index.html", {root: './ui'});
 });
 
@@ -38,12 +38,12 @@ router.post('/login', passport.authenticate('local-login', {
 
 
 router.get('/fpbuilder', isLoggedIn, function(req, res, next) {
-  res.render('fpbuilder', { title: 'Express' });
+  res.render('fpbuilder', { user: req.user });
   //res.sendfile("index.html", {root: './ui'});
 });
 
 router.get('/flightplan', isLoggedIn, function(req, res, next) {
-  res.render('flightplan', { title: 'Express' });
+  res.render('flightplan', { user: req.user });
 });
 
 router.get('/apitoolkit', isLoggedIn, function(req, res, next) {
@@ -52,6 +52,13 @@ router.get('/apitoolkit', isLoggedIn, function(req, res, next) {
 
 router.get('/help', isLoggedIn, function(req, res, next) {
   res.render('help', { title: 'Express' });
+});
+
+router.get('/api/getUserInfo', isLoggedIn, function(req, res, next) {
+  var userInfo = [
+    { username : req.user.local.email}
+  ];
+  res.json(userInfo);
 });
 
 router.all('/js/*', isLoggedIn);
