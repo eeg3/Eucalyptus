@@ -61,15 +61,15 @@ function parseFlightplans(id, title, category) {
         var body = $('<tbody>');
         table.append(body);
         if (savedFlightplans == 0 && completedFlightplans == 0) {
-          var tableLineItem = '<tr><td><a href="/flightplan.html?id=' + id + '">' + title + '</a></td></tr>';
+          var tableLineItem = '<tr><td><a href="/flightplan?id=' + id + '">' + title + '</a></td></tr>';
 
         } else if (savedFlightplans >= 1 && completedFlightplans == 0) {
-          var tableLineItem = '<tr><td><a href="/flightplan.html?id=' + id + '">' + title + '</a> <a href="/flightplan.html?id=' + id + '&load=inflight"><span class="badge">' + savedFlightplans + '</span></a></td></tr>';
+          var tableLineItem = '<tr><td><a href="/flightplan?id=' + id + '">' + title + '</a> <a href="/flightplan?id=' + id + '&load=inflight"><span class="badge">' + savedFlightplans + '</span></a></td></tr>';
         }
         else if (savedFlightplans == 0 && completedFlightplans >= 1) {
-          var tableLineItem = '<tr><td><a href="/flightplan.html?id=' + id + '">' + title + '</a> <a href="/flightplan.html?id=' + id + '&load=completed"><span class="badge badge-success">' + completedFlightplans + '</span></a></td></tr>';
+          var tableLineItem = '<tr><td><a href="/flightplan?id=' + id + '">' + title + '</a> <a href="/flightplan?id=' + id + '&load=completed"><span class="badge badge-success">' + completedFlightplans + '</span></a></td></tr>';
         } else if (savedFlightplans >= 1 && completedFlightplans >= 1) {
-          var tableLineItem = '<tr><td><a href="/flightplan.html?id=' + id + '">' + title + '</a> <a href="/flightplan.html?id=' + id + '&load=inflight"><span class="badge">' + savedFlightplans + '</span></a>&nbsp;<a href="/flightplan.html?id=' + id + '&load=completed"><span class="badge badge-success">' + completedFlightplans + '</span></a></td></tr>';
+          var tableLineItem = '<tr><td><a href="/flightplan?id=' + id + '">' + title + '</a> <a href="/flightplan?id=' + id + '&load=inflight"><span class="badge">' + savedFlightplans + '</span></a>&nbsp;<a href="/flightplan?id=' + id + '&load=completed"><span class="badge badge-success">' + completedFlightplans + '</span></a></td></tr>';
         }
         //var tableLineItem = '<tr><td><a href="/flightplan.html?id=' + id + '">' + title + '</a></td></tr>';
         table.append(tableLineItem);
@@ -80,15 +80,15 @@ function parseFlightplans(id, title, category) {
       } else { // Add to section if it already exists
         //var tableLineItem = '<tr><td><a href="/flightplan.html?id=' + id + '">' + title + '</a></td></tr>';
         if (savedFlightplans == 0 && completedFlightplans == 0) {
-          var tableLineItem = '<tr><td><a href="/flightplan.html?id=' + id + '">' + title + '</a></td></tr>';
+          var tableLineItem = '<tr><td><a href="/flightplan?id=' + id + '">' + title + '</a></td></tr>';
 
         } else if (savedFlightplans >= 1 && completedFlightplans == 0) {
-          var tableLineItem = '<tr><td><a href="/flightplan.html?id=' + id + '">' + title + '</a> <a href="/flightplan.html?id=' + id + '&load=inflight"><span class="badge">' + savedFlightplans + '</span></a></td></tr>';
+          var tableLineItem = '<tr><td><a href="/flightplan?id=' + id + '">' + title + '</a> <a href="/flightplan?id=' + id + '&load=inflight"><span class="badge">' + savedFlightplans + '</span></a></td></tr>';
         }
         else if (savedFlightplans == 0 && completedFlightplans >= 1) {
-          var tableLineItem = '<tr><td><a href="/flightplan.html?id=' + id + '">' + title + '</a> <a href="/flightplan.html?id=' + id + '&load=completed"><span class="badge badge-success">' + completedFlightplans + '</span></a></td></tr>';
+          var tableLineItem = '<tr><td><a href="/flightplan?id=' + id + '">' + title + '</a> <a href="/flightplan?id=' + id + '&load=completed"><span class="badge badge-success">' + completedFlightplans + '</span></a></td></tr>';
         } else if (savedFlightplans >= 1 && completedFlightplans >= 1) {
-          var tableLineItem = '<tr><td><a href="/flightplan.html?id=' + id + '">' + title + '</a> <a href="/flightplan.html?id=' + id + '&load=inflight"><span class="badge">' + savedFlightplans + '</span></a>&nbsp;<a href="/flightplan.html?id=' + id + '&load=completed"><span class="badge badge-success">' + completedFlightplans + '</span></a></td></tr>';
+          var tableLineItem = '<tr><td><a href="/flightplan?id=' + id + '">' + title + '</a> <a href="/flightplan?id=' + id + '&load=inflight"><span class="badge">' + savedFlightplans + '</span></a>&nbsp;<a href="/flightplan?id=' + id + '&load=completed"><span class="badge badge-success">' + completedFlightplans + '</span></a></td></tr>';
         }
         $('#' + category + '-table tr:last').after(tableLineItem);
         $('#' + category + '-table tr:last').trigger("update");
