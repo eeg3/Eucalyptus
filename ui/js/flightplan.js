@@ -122,9 +122,9 @@ function parseSteps(steps) {
     var table = $('<table></table>').addClass('table table-bordered table-striped sp-databox-table-md');
 
     if ($(window).width() >= 660) {
-      var head = $('<thead><tr><th width="95px">Sub-Step</th><th>Details</th><th>Action</th><th>Notes&nbsp;<span data-toggle="tooltip" data-placement="top" title="Enter notes here to keep track of what you actually did."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></th><th>Status</th></tr></thead>');
+      var head = $('<thead><tr class="success"><th width="95px">Sub-Step</th><th>Details</th><th>Action</th><th>Notes&nbsp;<span data-toggle="tooltip" data-placement="top" title="Enter notes here to keep track of what you actually did."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></th><th>Status</th></tr></thead>');
     } else {
-      var head = $('<thead><tr><th>Sub-Step</th><th>Details</th><th>Action</th><th>Status</th></tr></thead>');
+      var head = $('<thead><tr class="success"><th>Sub-Step</th><th>Details</th><th>Action</th><th>Status</th></tr></thead>');
     }
     var body = $('<tbody>');
     table.append(head);
@@ -159,7 +159,7 @@ function parseSteps(steps) {
       var substepAction = substeps[j].split(",,,")[2];
       var substepCode = "substep-" + stepNumber + "-" + substepNumber; // Example: substep-2-1
 
-      var tableLineItem = '<tr id="row-' + substepCode + '">';
+      var tableLineItem = '<tr id="row-' + substepCode + '" class="">';
       tableLineItem += '<td id="' + substepCode + '" class="st-substep-col">' + substepName + '</td>';
       tableLineItem += '<td id="details-' + substepCode + '" class="st-details-col">' + substepDetails + '</td>';
       tableLineItem += '<td id="action-' + substepCode + '" class="st-action-col">' + substepAction + '</td>';
@@ -168,9 +168,9 @@ function parseSteps(steps) {
         tableLineItem += '<td><textarea id="notes-' + substepCode + '" class="notesTextArea" rows="1" placeholder="Notes" /></td>';
       }
       if (i == 0 && j == 1) {
-        tableLineItem += '<td><input type="checkbox" id="status-' + substepCode + '"></td>';
+        tableLineItem += '<td><input type="checkbox" id="status-' + substepCode + '" class=""><label for="status-' + substepCode + '" class="euc-green"></label></td>';
       } else {
-        tableLineItem += '<td><input type="checkbox" id="status-' + substepCode + '" disabled></td>';
+        tableLineItem += '<td><input type="checkbox" id="status-' + substepCode + '" class="" disabled><label for="status-' + substepCode + '" class="euc-green"></label></td>';
       }
       tableLineItem += '</tr>';
 
@@ -254,6 +254,7 @@ function displaySummary() {
           // Example steps string: "A,Sub-step item to do from object,RDP to ServerA|B,Sub-step item to do from object again,Open Citrix Studio|C,Sub-step item to do lastly,Open PVS Console;A,Sub-step item to do in 2,RDP to ServerB|B,Sub-step item to do in 2,RDP to Server|C,Sub-step item to do in 2,RDP to ServerD"
           var flightplanSteps = flightplan[i]["steps"];
 
+          /*
           // Add table
 
           var table = $('<table></table>').addClass('table table-bordered table-striped sp-databox-table-sm');
@@ -273,6 +274,7 @@ function displaySummary() {
           table.append(tableEnd);
 
           $("#flightplanHeaderSection").append(table);
+          */
 
           var flightplanTitle = flightplan[i]["title"];
           $("#flightplanTitle").html(flightplanTitle);
@@ -280,14 +282,14 @@ function displaySummary() {
           var flightplanAuthor = flightplan[i]["author"];
           $("#flightplanAuthor").html(flightplanAuthor);
 
-          var flightplanRevision = flightplan[i]["revision"];
-          $("#flightplanRevision").html(flightplanRevision);
+          //var flightplanRevision = flightplan[i]["revision"];
+          //$("#flightplanRevision").html(flightplanRevision);
 
-          var flightplanCategory = flightplan[i]["category"];
-          $("#flightplanCategory").html(flightplanCategory);
+          //var flightplanCategory = flightplan[i]["category"];
+          //$("#flightplanCategory").html(flightplanCategory);
 
-          var flightplanProduct = flightplan[i]["product"];
-          $("#flightplanProduct").html(flightplanProduct);
+          //var flightplanProduct = flightplan[i]["product"];
+          //$("#flightplanProduct").html(flightplanProduct);
 
           var flightplanDescription = flightplan[i]["description"];
           $("#flightplanDescription").html(flightplanDescription);
@@ -812,6 +814,5 @@ function init () {
         currentUser = data[0]["username"];
         $("#username").text(data[0]["username"]);
       });
-
   });
 }

@@ -477,3 +477,28 @@ background-size: cover;
 #loadExistingFP {
   color: #d9d9d9;
 }
+
+input[type="checkbox"] {
+  display: none;
+}
+
+.euc-green:before {
+  content: "";
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  border-radius: 2px;
+  background-color: rgba(29, 190, 96, 0.1);
+  border: 1px solid #1DBE60;
+  overflow:hidden;
+}
+
+input[type="checkbox"]:checked + .euc-green:before {
+  color: #FFF;
+  background-color: #5cb85c;
+  content: "\2713";
+  font-size: 20px;
+  text-align: center;
+  display:inline-block;
+  overflow:hidden;
+}
