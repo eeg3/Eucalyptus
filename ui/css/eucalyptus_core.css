@@ -488,7 +488,7 @@ input[type="checkbox"] {
   width: 30px;
   height: 30px;
   border-radius: 2px;
-  background-color: rgba(29, 190, 96, 0.1);
+  background-color: #dff0d8;
   border: 1px solid #1DBE60;
   overflow:hidden;
 }
