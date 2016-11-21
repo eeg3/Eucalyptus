@@ -1,5 +1,6 @@
 var LocalStrategy = require('passport-local').Strategy;
 var User = require('../models/user');
+var config = require('../config/base.js');
 
 module.exports = function(passport) {
 
@@ -26,9 +27,17 @@ module.exports = function(passport) {
         if (user) {
           return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
         } else {
+          console.log("Enabled: " + config.requireApproval);
           var newUser = new User();
           newUser.local.email = email;
           newUser.local.password = newUser.generateHash(password);
+
+          if (config.requireApproval) {
+            newUser.local.enabled = false;
+          } else {
+            newUser.local.enabled = true;
+          }
+
           newUser.save(function(err) {
             if (err)
               throw err;

@@ -7,6 +7,12 @@
 
 <body id="loginBody">
 
+  <div class="col-sm-8 col-sm-offset-2 alert alert-gray">
+    This page will create your account within the system; however, before you will be able to login, an Administrator must enable your account.<br />
+    <br />
+    Please contact <a href="mailto:<%= adminEmail %>"><%= adminEmail %></a> to have your account enabled after signing up.
+  </div>
+
     <div class="col-sm-8 col-sm-offset-2">
 
       <form class="form-signin" action="/signup" method="post">

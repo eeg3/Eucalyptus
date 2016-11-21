@@ -129,7 +129,10 @@ var routes = function(Inflight){
 module.exports = routes;
 
 function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated())
+  if (req.isAuthenticated()) {
+    if (req.user.local.enabled == true) {
       return next();
+    }
+  }
   res.redirect('/login');
 }

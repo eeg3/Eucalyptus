@@ -1,5 +1,6 @@
 var express = require('express');
 var passport = require('passport');
+var config = require('../config/base.js');
 var router = express.Router();
 
 router.get('/', isLoggedIn, function(req, res, next) {
@@ -12,7 +13,10 @@ router.get('/login', function(req, res, next) {
 });
 
 router.get('/signup', function(req, res) {
-  res.render('signup.ejs', { message: req.flash('loginMessage') });
+  res.render('signup.ejs', {
+    message: req.flash('loginMessage'),
+    adminEmail: config.adminEmail
+   });
 });
 
 router.get('/profile', isLoggedIn, function(req, res) {
@@ -50,13 +54,20 @@ router.get('/apitoolkit', isLoggedIn, function(req, res, next) {
   res.render('apitoolkit', { title: 'Express' });
 });
 
+router.get('/admin', isLoggedIn, function(req, res, next) {
+  res.render('useradmin', { title: 'Express' });
+});
+
 router.get('/help', isLoggedIn, function(req, res, next) {
   res.render('help', { title: 'Express' });
 });
 
 router.get('/api/getUserInfo', isLoggedIn, function(req, res, next) {
   var userInfo = [
-    { username : req.user.local.email}
+    {
+      id: req.user._id,
+      username : req.user.local.email
+    }
   ];
   res.json(userInfo);
 });
@@ -66,7 +77,10 @@ router.all('/js/*', isLoggedIn);
 module.exports = router;
 
 function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated())
+  if (req.isAuthenticated()) {
+    if (req.user.local.enabled == true) {
       return next();
+    }
+  }
   res.redirect('/login');
 }

@@ -49,7 +49,7 @@ var app = express();
 
 // Load main site routes
 var routes = require('./routes/index');
-var users = require('./routes/users');
+//var users = require('./routes/users');
 
 // Configure Views
 app.set('views', path.join(__dirname, 'views'));
@@ -69,7 +69,10 @@ app.use(flash());
 require('./libs/passport')(passport);
 
 app.use('/', routes);
-app.use('/users', users);
+
+var User = require('./models/user');
+userRouter = require('./routes/userRoutes')(User);
+app.use('/users', userRouter);
 
 /***** Flightplan API *****/
 // Create a ORM Model based on the flightplanModel Schema
