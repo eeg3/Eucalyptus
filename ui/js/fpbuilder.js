@@ -4,6 +4,7 @@ window.onload = init;
 var stepsComplete = 0;
 var invalidInput = 0;
 var staticFields = ["title", "description", "category", "author", "product", "revision"];
+var formModified = false;
 
 // We use these arrays to store the step & substep order so if user removes and adds steps & substeps in random ways, we track that properly and keep them in expected order.
 var stepOrder = [];
@@ -548,6 +549,18 @@ function init () {
         $("#username").text(data[0]["username"]);
       });
 
+    // Leave Warning
+    window.onbeforeunload = function() {
+      if (formModified) {
+        return "New information not saved. Do you wish to leave the page?";
+      }
+    }
+    // End Leave Warning
+  });
+
+  // We want to track if anything changes so that we can warn the user if they try to exit before saving.
+  $('input').on('change keyup paste', function() {
+    formModified = true;
   });
 
   $("#createFlightplan").click(function() {

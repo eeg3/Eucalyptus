@@ -29,16 +29,15 @@ router.get('/logout', function(req, res) {
 });
 
 router.post('/signup', passport.authenticate('local-signup', {
-  successRedirect: '/profile',
+  successRedirect: '/',
   failureRedirect: '/signup',
   failureFlash: true,
 }));
 
-router.post('/login', passport.authenticate('local-login', {
-  successRedirect: '/',
-  failureRedirect: '/login',
-  failureFlash: true,
-}));
+router.post('/login', passport.authenticate('local-login'), function(req, res) {
+  res.redirect(req.session.returnTo || '/');
+  delete req.session.returnTo;
+});
 
 
 router.get('/fpbuilder', isLoggedIn, function(req, res, next) {
@@ -82,5 +81,6 @@ function isLoggedIn(req, res, next) {
       return next();
     }
   }
+  req.session.returnTo = req.originalUrl;
   res.redirect('/login');
 }

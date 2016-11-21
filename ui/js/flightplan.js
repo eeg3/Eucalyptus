@@ -7,6 +7,8 @@ var mobile = false;
 var loadedNote = false;
 var completed = false;
 var currentUser = "";
+var sequential = false;
+var formModified = false;
 
 function currentTimestamp() {
   var date = new Date();
@@ -68,7 +70,9 @@ function initiateStepFlow(steps, substeps) {
             $("input#" + checkboxA).prop("checked", true);
           } else {
             $("input#" + checkboxB).prop("disabled", true);
-            $("#" + nextRow).css("color", "white"); // Hide next sub-step until this sub-step is complete.
+            if (sequential) {
+              $("#" + nextRow).css("color", "white"); // Hide next sub-step until this sub-step is complete.
+            }
             stepsComplete--;
             updateCompletionStatus();
           }
@@ -103,7 +107,14 @@ function parseSteps(steps) {
     var stepTitle = substeps[0].split(",,,")[0];
     launchers.push(substeps[0].split(",,,")[1]);
 
-    var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step: ' + stepTitle + ' <button id="launch-' + stepNumber + '" type="button" class="btn btn-success btn-xs launchButton"><i class="fa fa-rocket"></i> Launch</button><button id="automate-' + stepNumber + '" type="button" class="btn btn-success btn-xs launchButton" disabled><i class="fa fa-cogs"></i> Automate</button></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
+    if ($(window).width() >= 660) {
+      var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step: ' + stepTitle + ' <button id="launch-' + stepNumber + '" type="button" class="btn btn-success btn-xs launchButton"><i class="fa fa-rocket"></i> Launch</button><button id="automate-' + stepNumber + '" type="button" class="btn btn-success btn-xs launchButton" disabled><i class="fa fa-cogs"></i> Automate</button></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div><';
+    } else {
+      var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step: ' + stepTitle + '<br><center><button id="launch-' + stepNumber + '" type="button" class="btn btn-success btn-xs "><i class="fa fa-rocket"></i> Launch</button><button id="automate-' + stepNumber + '" type="button" class="btn btn-success btn-xs " disabled><i class="fa fa-cogs"></i> Automate</button></center></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div><';
+
+    }
+
+
 
     $("#stepsSection").append(newDivHTML);
 
@@ -190,6 +201,11 @@ function parseSteps(steps) {
 
   }
 
+  // We want to track if anything changes so that we can warn the user if they try to exit before saving.
+  $('textarea').on('change keyup paste', function() {
+    formModified = true;
+  });
+
 }
 
 function updateCompletionStatus() {
@@ -230,6 +246,8 @@ function getFlightplan() {
       // Enable tooltips after all the steps are processed.
       $(document).ready(function(){
         $('[data-toggle="tooltip"]').tooltip();
+        $("#toggleSequential").prop("checked", true);
+        toggleSeq("initialize");
       });
     });
 
@@ -568,32 +586,39 @@ function loadFlightplan(idToLoad) {
           //console.log("----");
 
           // Unhide substeps based on last checked
-          $("tr[id^='row-substep-']").each(function () {
-            var currentStep = (this.id).split("-")[2];
-            var currentSubstep = (this.id).split("-")[3];
+          if (sequential) {
+            $("tr[id^='row-substep-']").each(function () {
+              var currentStep = (this.id).split("-")[2];
+              var currentSubstep = (this.id).split("-")[3];
 
-            /*if (parseInt(currentStep) <= parseInt(lastCheckedStep)) {
-              if (parseInt(currentSubstep) <= parseInt(lastCheckedSubstep)) {
+              /*if (parseInt(currentStep) <= parseInt(lastCheckedStep)) {
+                if (parseInt(currentSubstep) <= parseInt(lastCheckedSubstep)) {
+                  $("#" + this.id).css("color", "black"); // Unhide next sub-step since this sub-step is complete.
+                } else if (parseInt(currentSubstep) == parseInt(lastCheckedSubstep)+1) {
+                  $("#" + this.id).css("color", "black"); // Unhide next sub-step since this sub-step is complete.
+                }
+              } */
+
+              if (parseInt(currentStep) < parseInt(lastCheckedStep)) {
+                //console.log("this.id: " + this.id);
                 $("#" + this.id).css("color", "black"); // Unhide next sub-step since this sub-step is complete.
-              } else if (parseInt(currentSubstep) == parseInt(lastCheckedSubstep)+1) {
-                $("#" + this.id).css("color", "black"); // Unhide next sub-step since this sub-step is complete.
+              } else if (parseInt(currentStep) == parseInt(lastCheckedStep)) {
+                if (parseInt(currentSubstep) <= parseInt(lastCheckedSubstep)) {
+                  $("#" + this.id).css("color", "black"); // Unhide next sub-step since this sub-step is complete.
+                } else if (parseInt(currentSubstep) == parseInt(lastCheckedSubstep)+1) {
+                  $("#" + this.id).css("color", "black"); // Unhide next sub-step since this sub-step is complete.
+                }
+              } else {
+                $("#" + this.id).css("color", "white"); // Unhide next sub-step since this sub-step is complete.
               }
-            } */
 
-            if (parseInt(currentStep) < parseInt(lastCheckedStep)) {
-              //console.log("this.id: " + this.id);
-              $("#" + this.id).css("color", "black"); // Unhide next sub-step since this sub-step is complete.
-            } else if (parseInt(currentStep) == parseInt(lastCheckedStep)) {
-              if (parseInt(currentSubstep) <= parseInt(lastCheckedSubstep)) {
-                $("#" + this.id).css("color", "black"); // Unhide next sub-step since this sub-step is complete.
-              } else if (parseInt(currentSubstep) == parseInt(lastCheckedSubstep)+1) {
-                $("#" + this.id).css("color", "black"); // Unhide next sub-step since this sub-step is complete.
-              }
-            } else {
-              $("#" + this.id).css("color", "white"); // Unhide next sub-step since this sub-step is complete.
-            }
+            });
+          } else {
+            $("#toggleSequential").prop("checked", true);
+            toggleSeq("initialize");
+          }
 
-          });
+
 
           // One-off code to check if lastChecked is the end of a step, because if it is then we need to handle next step's first Substep
           if($("#status-substep-" + lastCheckedStep + "-" + (parseInt(lastCheckedSubstep)+1)).length == 0) {
@@ -619,6 +644,30 @@ function beginsWith(str, suffix) {
     return (str.substr(0, suffix.length) == suffix);
 }
 
+function toggleSeq(state) {
+  var checkboxHit = 0; // This is done to prevent the next item in list to be done from being hidden.
+
+  if($(this).is(":checked") || state == "initialize") { // If toggleSequential is checked
+  //if(1 == 1) { // If toggleSequential is checked
+    sequential = false;
+    $("tr[id^='row-substep-']").each(function () {
+      $("#" + this.id).css("color", "black"); // Unhide next sub-step since this sub-step is complete.
+    });
+  } else { // if toggleSequential is not checked
+    sequential = true;
+    $("tr[id^='row-substep-']").each(function () {
+      var checkboxCode = "#status-" + this.id.split("-")[1] + "-" + this.id.split("-")[2] + "-" + this.id.split("-")[3];
+
+      if(!$(checkboxCode).prop('checked') ) {
+        if (checkboxHit) { // This is done to prevent the next item in list to be done from being hidden.
+          $("#" + this.id).css("color", "white"); // Unhide next sub-step since this sub-step is complete.
+        }
+        checkboxHit++;
+      }
+    });
+  }
+}
+
 function init () {
   // Logic flow:
   //  getFlightPlan() pulls everything about the FlightPlan from the API, and populates everything about the FlightPlan except for the steps itself. Then ->
@@ -630,25 +679,10 @@ function init () {
   //var result = beginsWith("abc", "|");
   //console.log("beginsWith: " + result);
 
-  $('#toggleSequential').change(function() {
-    var checkboxHit = 0; // This is done to prevent the next item in list to be done from being hidden.
+  $('#toggleSequential').change(toggleSeq);
 
-    if($(this).is(":checked")) { // If toggleSequential is checked
-      $("tr[id^='row-substep-']").each(function () {
-        $("#" + this.id).css("color", "black"); // Unhide next sub-step since this sub-step is complete.
-      });
-    } else { // if toggleSequential is not checked
-      $("tr[id^='row-substep-']").each(function () {
-        var checkboxCode = "#status-" + this.id.split("-")[1] + "-" + this.id.split("-")[2] + "-" + this.id.split("-")[3];
-
-        if(!$(checkboxCode).prop('checked') ) {
-          if (checkboxHit) { // This is done to prevent the next item in list to be done from being hidden.
-            $("#" + this.id).css("color", "white"); // Unhide next sub-step since this sub-step is complete.
-          }
-          checkboxHit++;
-        }
-      });
-    }
+  $('#test').click(function() {
+    toggleSeq("initialize");
   });
 
   currentTimestamp();
@@ -663,7 +697,7 @@ function init () {
     //$('#saveModal').modal('show');
 
     saveFlightplan('new');
-
+    formModified = false;
     $('#saveModal').modal('hide');
   });
 
@@ -809,10 +843,25 @@ function init () {
       $(".showCompleted").trigger("click");
     }
 
+    // Make mobile more friendly
+    if ($(window).width() < 660) {
+      $("#leftSideTitle").hide();
+      $("#rightSideTitle").hide();
+    }
+
     helper.get("/api/getUserInfo")
       .then(function(data) {
         currentUser = data[0]["username"];
         $("#username").text(data[0]["username"]);
       });
+
+    // Leave Warning
+    window.onbeforeunload = function() {
+      if (formModified) {
+        return "New information not saved. Do you wish to leave the page?";
+      }
+    }
+    // End Leave Warning
+
   });
 }
