@@ -6,6 +6,7 @@ var launchers = []; // We use the launchers variable to work around the scope...
 var mobile = false;
 var loadedNote = false;
 var completed = false;
+var currentUser = "";
 
 function currentTimestamp() {
   var date = new Date();
@@ -367,7 +368,8 @@ function saveFlightplan(status) {
   // Save instead of Save As if already loaded
   if (status == "new") {
     saveTitle = $('input:text[name=saveTitle]').val();
-    user = $('input:text[name=saveUser]').val();
+    //user = $('input:text[name=saveUser]').val();
+    user = currentUser;
   } else if (status == "existing") {
     saveTitle = $("#currentInflight").text();
   } else if (status == "completed") {
@@ -807,6 +809,7 @@ function init () {
 
     helper.get("/api/getUserInfo")
       .then(function(data) {
+        currentUser = data[0]["username"];
         $("#username").text(data[0]["username"]);
       });
 

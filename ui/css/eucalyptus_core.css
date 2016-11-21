@@ -470,6 +470,10 @@ background-size: cover;
   text-align: justify;
 }
 
-#userDetailsTable {
+#userDetailsTable, #flightplanDetailsTable {
   background-color: white;
+}
+
+#loadExistingFP {
+  color: #d9d9d9;
 }

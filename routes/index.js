@@ -55,7 +55,7 @@ router.get('/apitoolkit', isLoggedIn, function(req, res, next) {
 });
 
 router.get('/admin', isLoggedIn, function(req, res, next) {
-  res.render('useradmin', { title: 'Express' });
+  res.render('admin', { title: 'Express' });
 });
 
 router.get('/help', isLoggedIn, function(req, res, next) {
