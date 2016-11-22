@@ -362,10 +362,6 @@ th {
     opacity:0.8 !important;
 }
 
-#currentInflight {
-  font-style: italic;
-}
-
 .badge-success {
   background-color: #50af60;
 }
@@ -472,10 +468,6 @@ background-size: cover;
 
 #userDetailsTable, #flightplanDetailsTable {
   background-color: white;
-}
-
-#loadExistingFP {
-  color: #d9d9d9;
 }
 
 input[type="checkbox"] {

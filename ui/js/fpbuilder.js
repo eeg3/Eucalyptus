@@ -5,6 +5,8 @@ var stepsComplete = 0;
 var invalidInput = 0;
 var staticFields = ["title", "description", "category", "author", "product", "revision"];
 var formModified = false;
+var loadedFlightplan = false;
+var loadedFpId = undefined;
 
 // We use these arrays to store the step & substep order so if user removes and adds steps & substeps in random ways, we track that properly and keep them in expected order.
 var stepOrder = [];
@@ -65,6 +67,7 @@ function addStep(currentStep) {
   // Check for a place to put the step
   for(var i = 1; i < 50; i++) {
     if(!($("#row-" + i).length)) {
+      console.log("step number found is still: " + i);
       stepNumber = i;
       break;
     }
@@ -124,7 +127,7 @@ function createSubStep(stepNumber, substepNumber) {
   return tableLineItem;
 }
 
-function addSubStep(stepNumber, substepNumber) {
+function addSubStep(stepNumber, substepNumber, details, action) {
 
   var currentSubstepID = stepNumber + "," + substepNumber;
   var currentSubstepNumber = substepNumber;
@@ -166,6 +169,20 @@ function addSubStep(stepNumber, substepNumber) {
 
   //$('#table-' + stepNumber + ' tr:last').after(tableLineItem);
   $("#row-substep-" + stepNumber + "-" + currentSubstepNumber).after(tableLineItem);
+
+
+
+
+  if (details != undefined) {
+    $("#details-" + substepCode).val(details);
+    console.log("setting #details-" + substepCode + " to: " + details);
+  }
+  if (action != undefined) {
+    console.log("action: " + action);
+    $("#action-" + substepCode).val(action);
+    console.log("setting #action-" + substepCode + " to: " + action);
+  }
+
 
 }
 
@@ -515,8 +532,12 @@ function exportFlightplan() {
     if (stepsPost !== "") {
       flightplanPost["steps"] = stepsPost;
     }
+    if (loadedFlightplan) {
+      helper.patch("/api/flightplan/" + loadedFpId, flightplanPost);
 
-    helper.post("/api/flightplan/", flightplanPost)
+    } else {
+      helper.post("/api/flightplan/", flightplanPost);
+    }
     location.reload();
   } else {
     console.log("Form invald.");
@@ -532,17 +553,127 @@ function beginsWith(str, suffix) {
     return (str.substr(0, suffix.length) == suffix);
 }
 
+function urlParam(name, url) {
+    if (!url) {
+     url = window.location.href;
+    }
+    var results = new RegExp('[\\?&]' + name + '=([^&#]*)').exec(url);
+    if (!results) {
+        return undefined;
+    }
+    return results[1] || undefined;
+}
+
+function getFlightplan(id) {
+  /*
+  helper.get("api/flightplan/"):
+    Will return an array of flightplan objects.
+    Those objects can then be sorted through with a for() loop based on .length.
+    Inside that for() object[i].parameter can be used.
+  */
+  helper.get("/api/flightplan/")
+    .then(function(data){
+      var flightplan = data;
+      var flightplanEntry = "";
+
+      for (var i = 0; i < data.length; i++) {
+        if (flightplan[i]["_id"] == id) {
+          displaySummary(id)
+          createBoard(flightplan[i]["steps"]);
+          hookUpAddDelButtons();
+          hookUpInputValidation();
+          //parseSteps(flightplan[i]["steps"]);
+        }
+      }
+
+      //stepQuantity = findTotalStepQuantity();
+      //initiateStepFlow(stepQuantity.steps, stepQuantity.substeps);
+
+      // Enable tooltips after all the steps are processed.
+      $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+      });
+    });
+
+}
+
+function displaySummary(id) {
+
+  helper.get("/api/flightplan/")
+    .then(function(data){
+      var flightplan = data;
+
+      for (var i = 0; i < data.length; i++) {
+        if (flightplan[i]["_id"] == id) {
+          $("#loadedText").text("Editing: " + flightplan[i]["title"]);
+          $("#title").val(flightplan[i]["title"]);
+          $("#author").val(flightplan[i]["author"]);
+          $("#description").val(flightplan[i]["description"]);
+          $("#product").val(flightplan[i]["product"]);
+          $("#category").val(flightplan[i]["category"]);
+          $("#revision").val(flightplan[i]["revision"]);
+        }
+      }
+    });
+
+}
+
+function createBoard(steps) {
+  var steps = steps.split(";;;");
+  var numberOfSteps = steps.length;
+
+  for(var i = 1; i <= steps.length; i++) { // i = currentStep
+    var substeps = steps[i-1].split("|||");
+
+    if(!(i == steps.length)) {
+      addStep(i);
+    }
+
+    $("#stepTitle-" + i).val(substeps[0].split(',,,')[0]);
+    $("#stepLauncher-" + i).val(substeps[0].split(',,,')[1]);
+
+    for (var j = 1; j < (substeps.length); j++) {
+      console.log("substep [" + i + "," + j + "]: " + substeps[j]);
+      var details = substeps[j].split(',,,')[1];
+      var action = substeps[j].split(',,,')[2];
+      if (j == 1) {
+        $("#details-substep-" + i + "-1").val(details);
+        $("#action-substep-" + i + "-1").val(action);
+      } else {
+        addSubStep(i, j-1, details, action);
+      }
+    }
+  }
+
+
+}
+
 function init () {
   currentTimestamp();
+  console.log("urlparam: " + urlParam('id'));
 
   createStep(1);
 
   $('#importExistingDiv').hide();
 
   // Enable tooltips after all the steps are processed.
-  $(document).ready(function(){
+  $(document).ready(function() {
     $('[data-toggle="tooltip"]').tooltip();
-    $('#myModal').modal('show');
+
+
+    if (!(urlParam('id') == undefined)) {
+      loadedFlightplan = true;
+      loadedFpId = urlParam('id');
+      getFlightplan(loadedFpId);
+      $("#createFlightplan").html("Update FlightPlan");
+    } else {
+      $('#myModal').modal('show');
+    }
+
+    // We want to track if anything changes so that we can warn the user if they try to exit before saving.
+    $('textarea').on('change keyup paste', function() {
+      formModified = true;
+    });
 
     helper.get("/api/getUserInfo")
       .then(function(data) {
@@ -572,9 +703,56 @@ function init () {
   });
 
   $("#loadExistingFP").click(function() {
+    //window.print();
+    //saveFlightplan();
     $('#myModal').modal('hide');
-    $('#createNewDiv').hide();
-    $('#importExistingDiv').show();
+
+    helper.get("/api/flightplan/")
+      .then(function(data){
+        var flightplan = data;
+
+        // Clear old loads
+        $('#flightplanListTable tr').not(function(){ return !!$(this).has('th').length; }).remove();
+
+        for (var i = 0; i < data.length; i++) {
+
+          var nodesToDisplay = ["title", "author"];
+          var rowToAdd = "<tr>";
+          for (var j = 0; j < nodesToDisplay.length; j++) {
+            if (nodesToDisplay[j] === "lastCommunication" && flightplan[i][nodesToDisplay[j]] !== "Never") {
+            } else {
+              rowToAdd += "<td>" + flightplan[i][nodesToDisplay[j]] + "</td>";
+            }
+          }
+          rowToAdd += '<td>';
+          rowToAdd += '<button id="open-' + flightplan[i]["_id"] + '" title="Load Saved Progress" type="button" class="btn btn-success btn-xs loadBtn"><i class="fa fa-folder-open-o"></i></button>';
+          rowToAdd += '<button id="del-' + flightplan[i]["_id"] + '" title="Delete Saved Progress" type="button" class="btn btn-danger btn-xs deleteBtn"><i class="fa fa-trash-o"></i></button>';
+          rowToAdd += '</td>';
+          rowToAdd += "</tr>";
+          $('#flightplanListTable tr:last').after(rowToAdd);
+
+        }
+        $('#flightplanListTable').trigger("update");
+
+        $(".loadBtn").click(function() {
+          loadedFlightplan = true;
+          $("#createFlightplan").html("Update FlightPlan");
+          loadedFpId = (this.id).split("-")[1];
+          getFlightplan((this.id).split("-")[1]);
+          $('#loadModal').modal('hide');
+        });
+
+        $(".deleteBtn").click(function() {
+          console.log(this.id);
+          console.log( (this.id).split("-")[1] );
+
+          helper.del("/api/flightplan/" + (this.id).split("-")[1]);
+          location.reload();
+        });
+
+        $('#loadModal').modal('show');
+      });
+
   });
 
   hookUpAddDelButtons(); // Cycle through every step and substep created and hook them up.
