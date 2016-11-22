@@ -12,6 +12,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var flash = require('connect-flash');
 var session = require('express-session');
+var fs = require('fs');
 
 // Passport
 var passport = require('passport');
@@ -27,9 +28,9 @@ var https = require('https');
 // Database Name
 var databaseName = "eucalyptusDB4";
 // SSL parameters: disabled by default, define key & cert files to use if enable
-var ssl = false;
-var sslKeyLoc = "ssl/key.pem";
-var sslCertLoc = "ssl/cert.cert";
+var ssl = true;
+var sslKeyLoc = "ssl/server.key";
+var sslCertLoc = "ssl/server.crt";
 // Pick a port for the server to run on
 var port = process.env.PORT || 8001;
 // Use Basic Auth on API?
@@ -144,6 +145,6 @@ if (ssl) {
     cert: fs.readFileSync(sslCertLoc)
   };
 
-  https.createServer(sslOptions, app).listen(443);
-  console.log("Listening HTTPS on Port: 443");
+  https.createServer(sslOptions, app).listen(8443);
+  console.log("Listening HTTPS on Port: 8443");
 }
