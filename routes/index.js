@@ -34,7 +34,11 @@ router.post('/signup', passport.authenticate('local-signup', {
   failureFlash: true,
 }));
 
-router.post('/login', passport.authenticate('local-login'), function(req, res) {
+router.post('/login', passport.authenticate('local-login', {
+  successRedirect: '/profile',
+  failureRedirect: '/login',
+  failureFlash: true,
+}), function(req, res) {
   res.redirect(req.session.returnTo || '/');
   delete req.session.returnTo;
 });
