@@ -29,8 +29,8 @@ var https = require('https');
 var databaseName = "eucalyptusDB4";
 // SSL parameters: disabled by default, define key & cert files to use if enable
 var ssl = true;
-var sslKeyLoc = "ssl/server.key";
-var sslCertLoc = "ssl/server.crt";
+var sslKeyLoc = "../ssl/server.key";
+var sslCertLoc = "../ssl/server.crt";
 // Pick a port for the server to run on
 var port = process.env.PORT || 8001;
 // Use Basic Auth on API?
