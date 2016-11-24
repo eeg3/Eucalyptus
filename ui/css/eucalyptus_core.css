@@ -39,13 +39,23 @@ body {
   letter-spacing: 1px;
   font-weight: 500;
 }
-.sp-databox-panel-heading-dark {
+/*.sp-databox-panel-heading-dark {
   text-align: left;
   border-width: 1px;
   border-style: solid;
   border-color: rgba(134, 139, 133, 0.31);
   color: black;
   font-weight: 500;
+  font-size: 16px;
+} */
+.sp-databox-panel-heading-dark {
+  text-align: left;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgba(134, 139, 133, 0.31);
+  color: white;
+  background-color: #2D2D2D;
+  letter-spacing: 1px;
   font-size: 16px;
 }
 .sp-databox-panel-body {
@@ -508,10 +518,13 @@ input[type="checkbox"]:checked + .euc-green:before {
 .euc-green2:before {
   content: "";
   display: inline-block;
-  width: 18px;
+  width: 120px;
   height: 18px;
   border-radius: 2px;
   background-color: #dff0d8;
+  content: "Hiding Incomplete";
+  font-size: 12px;
+  text-align: center;
   border: 1px solid #1DBE60;
   overflow:hidden;
 }
@@ -519,7 +532,7 @@ input[type="checkbox"]:checked + .euc-green:before {
 input[type="checkbox"]:checked + .euc-green2:before {
   color: #FFF;
   background-color: #5cb85c;
-  content: "\2022";
+  content: "Showing All";
   font-size: 12px;
   text-align: center;
   display:inline-block;
