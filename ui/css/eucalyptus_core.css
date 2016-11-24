@@ -39,6 +39,15 @@ body {
   letter-spacing: 1px;
   font-weight: 500;
 }
+.sp-databox-panel-heading-dark {
+  text-align: left;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgba(134, 139, 133, 0.31);
+  color: black;
+  font-weight: 500;
+  font-size: 16px;
+}
 .sp-databox-panel-body {
   border-width: 1px;
   border-style: solid;
@@ -323,8 +332,9 @@ body {
 .tablecontainer { width: 1600px; overflow; hidden;}
 
 .notesTextArea {
-  width: 200px;
-  height: 55px;
+  width: 250px;
+  height: 100%;
+  overflow-y:scroll;
 }
 
 canvas {
