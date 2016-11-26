@@ -35,13 +35,10 @@ router.post('/signup', passport.authenticate('local-signup', {
 }));
 
 router.post('/login', passport.authenticate('local-login', {
-  successRedirect: '/profile',
+  successReturnToOrRedirect: '/',
   failureRedirect: '/login',
   failureFlash: true,
-}), function(req, res) {
-  res.redirect(req.session.returnTo || '/');
-  delete req.session.returnTo;
-});
+}));
 
 
 router.get('/fpbuilder', isLoggedIn, function(req, res, next) {
