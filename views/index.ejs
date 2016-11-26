@@ -8,7 +8,11 @@
   <script src="/js/ApiHelper.js"></script>
   <script src="/js/root.js"></script>
 
-  <header class="container-fluid">
+  <!-- Intro.JS -->
+  <link href="/css/introjs.css" rel="stylesheet">
+  <script src="/js/intro.js"></script>
+
+  <header id="introHeader" class="container-fluid">
     <h1 id="intro" class="loginColor"><i class="fa fa-leaf leafLogo"></i> Eucalyptus</h1>
     <p class="lead loginColor">Conquering complexity with simplicity.</p>
   </header>
@@ -18,7 +22,7 @@
 
     <!-- Search Section -->
     <div class="container-fluid">
-      <div id="searchBar">
+      <div id="fpBreakdown">
         <div class="row">
           <div class="col-sm-12">
             <div class="panel panel-inverse">
@@ -27,7 +31,7 @@
                 <div class="row">
                   <div class="col-sm-4"></div>
                   <div class="col-sm-4">Flightplan Breakdown</div>
-                  <div class="col-sm-4">
+                  <div class="col-sm-4" id="toggleFlightPlan">
                     <form>
                       <label class="radio-inline">Sort by:</label>
                       <label class="radio-inline">

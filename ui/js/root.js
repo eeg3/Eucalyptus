@@ -67,9 +67,9 @@ function parseFlightplans(id, title, category) {
           var tableLineItem = '<tr><td><a href="/flightplan?id=' + id + '">' + title + '</a> <a href="/flightplan?id=' + id + '&load=inflight"><span class="badge">' + savedFlightplans + '</span></a></td></tr>';
         }
         else if (savedFlightplans == 0 && completedFlightplans >= 1) {
-          var tableLineItem = '<tr><td><a href="/flightplan?id=' + id + '">' + title + '</a> <a href="/flightplan?id=' + id + '&load=completed"><span class="badge badge-success">' + completedFlightplans + '</span></a></td></tr>';
+          var tableLineItem = '<tr><td><a href="/flightplan?id=' + id + '">' + title + '</a> <a href="/flightplan?id=' + id + '&load=completed"><span class="badge badge-success savedBadge">' + completedFlightplans + '</span></a></td></tr>';
         } else if (savedFlightplans >= 1 && completedFlightplans >= 1) {
-          var tableLineItem = '<tr><td><a href="/flightplan?id=' + id + '">' + title + '</a> <a href="/flightplan?id=' + id + '&load=inflight"><span class="badge">' + savedFlightplans + '</span></a>&nbsp;<a href="/flightplan?id=' + id + '&load=completed"><span class="badge badge-success">' + completedFlightplans + '</span></a></td></tr>';
+          var tableLineItem = '<tr><td><a href="/flightplan?id=' + id + '">' + title + '</a> <a href="/flightplan?id=' + id + '&load=inflight"><span class="badge">' + savedFlightplans + '</span></a>&nbsp;<a href="/flightplan?id=' + id + '&load=completed"><span class="badge badge-success savedBadge">' + completedFlightplans + '</span></a></td></tr>';
         }
         //var tableLineItem = '<tr><td><a href="/flightplan.html?id=' + id + '">' + title + '</a></td></tr>';
         table.append(tableLineItem);
@@ -86,9 +86,9 @@ function parseFlightplans(id, title, category) {
           var tableLineItem = '<tr><td><a href="/flightplan?id=' + id + '">' + title + '</a> <a href="/flightplan?id=' + id + '&load=inflight"><span class="badge">' + savedFlightplans + '</span></a></td></tr>';
         }
         else if (savedFlightplans == 0 && completedFlightplans >= 1) {
-          var tableLineItem = '<tr><td><a href="/flightplan?id=' + id + '">' + title + '</a> <a href="/flightplan?id=' + id + '&load=completed"><span class="badge badge-success">' + completedFlightplans + '</span></a></td></tr>';
+          var tableLineItem = '<tr><td><a href="/flightplan?id=' + id + '">' + title + '</a> <a href="/flightplan?id=' + id + '&load=completed"><span class="badge badge-success savedBadge">' + completedFlightplans + '</span></a></td></tr>';
         } else if (savedFlightplans >= 1 && completedFlightplans >= 1) {
-          var tableLineItem = '<tr><td><a href="/flightplan?id=' + id + '">' + title + '</a> <a href="/flightplan?id=' + id + '&load=inflight"><span class="badge">' + savedFlightplans + '</span></a>&nbsp;<a href="/flightplan?id=' + id + '&load=completed"><span class="badge badge-success">' + completedFlightplans + '</span></a></td></tr>';
+          var tableLineItem = '<tr><td><a href="/flightplan?id=' + id + '">' + title + '</a> <a href="/flightplan?id=' + id + '&load=inflight"><span class="badge">' + savedFlightplans + '</span></a>&nbsp;<a href="/flightplan?id=' + id + '&load=completed"><span class="badge badge-success savedBadge">' + completedFlightplans + '</span></a></td></tr>';
         }
         $('#' + category + '-table tr:last').after(tableLineItem);
         $('#' + category + '-table tr:last').trigger("update");
@@ -220,6 +220,76 @@ function init () {
         .then(function(data) {
           $("#username").text(data[0]["username"]);
         });
+
+      var introguide = introJs();
+
+      /*              {
+                      element: '',
+                      intro: '',
+                      position: 'bottom'
+                    },
+      */
+
+      introguide.setOptions({
+        steps: [
+              {
+                intro: 'Welcome! We noticed this was your first login. This guided tour will demonstrate how to use Eucalyptus.',
+                position: 'right-bottom'
+              },
+              {
+                //intro: 'Eucalyptus is a simple solution to help with complex processes. By defining complex processes in simple steps, allowing us to easily start and stop them, and enabling us to document our steps, we lessen the operational burden of new solutions.',
+                intro: 'Eucalyptus is a simple solution to help with complex processes.<br><br>The idea is to use a FlightPlan every time you take off with a task. Just like pilots have flightplans to help them remember the gazillion steps they must do, now you will too!',
+                position: 'bottom'
+              },
+              {
+                element: '#categorySection',
+                intro: 'To take off, simply click a FlightPlan and a new instance will be created for you to track your progress and takes notes.',
+                position: 'top'
+              },
+              {
+                element: '#categorySection',
+                intro: 'Interruptions happen during flights!<br><br>If you get interrupted while in a FlightPlan, you can save and return. Saved flights are shown in gray bubbles.',
+                position: 'top'
+              },
+              {
+                element: '#categorySection',
+                intro: 'Sometimes you or a co-pilot need to remember what happened during a flight!<br><br>When done with a flight, save it so your Flight notes can be visible later. Green bubbles show Completed Flights.',
+                position: 'top'
+              },
+              {
+                element: '#toggleFlightPlan',
+                intro: 'How FlightPlans are categorized can be toggled between Category or Product.',
+                position: 'bottom'
+              },
+              {
+                element: '.fa-home',
+                intro: 'Need to get back here?<br><br>Simply select \"<i class="fa fa-home">\"</i> to get back.',
+                position: 'bottom'
+              },
+              {
+                element: '.fa-plus',
+                intro: 'Want to create your own FlightPlan for other pilots to use?<br><br>Select \"<i class="fa fa-plus">\"</i> to go to the FlightPlan Builder.',
+                position: 'bottom'
+              },
+              {
+                element: '.fa-question',
+                intro: 'Need more training before taking off?<br><br>Select \"<i class="fa fa-question">\"</i> for more help.',
+                position: 'bottom'
+              },
+              {
+                element: '.fa-user',
+                intro: 'If need to go to your User Profile, Admin Portal, or Logout, select the \"<i class="fa fa-user">\"</i> dropdown for more options.',
+                position: 'bottom'
+              },
+              {
+                intro: 'Thanks for viewing the walkthrough!<br><br>Have fun creating and using FlightPlans to make your operational processes simpler!',
+                position: 'bottom'
+              }
+        ],
+        tooltipClass: 'customDefault'
+      });
+
+      introguide.start();
 
     });
 }

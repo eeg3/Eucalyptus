@@ -614,3 +614,7 @@ ol ol {
     left: -.5em;
     border-left-color: #5cb85c;
 }
+
+.customDefault {
+  width: 500px;
+}
