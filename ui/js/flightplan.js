@@ -49,6 +49,7 @@ function initiateStepFlow(steps, substeps) {
         // If checkboxB's length is 0 then time to modify next step's substep instead of a non-existing substep in this current step
 
         if (!($("#" + checkboxB).length)) {
+          $("#li-" + (this.id.split("-")[2])).css("text-decoration", "line-through");
           checkboxB = this.id.split("-")[0] + "-" + this.id.split("-")[1] + "-" + (this.id.split("-")[2]*1 +1) + "-" + 1;
           nextRow = "row-substep-" + checkboxB.split("-")[2] + "-1";
         }
@@ -72,6 +73,9 @@ function initiateStepFlow(steps, substeps) {
             $("input#" + checkboxB).prop("disabled", true);
             if (sequential) {
               $("#" + nextRow).css("color", "white"); // Hide next sub-step until this sub-step is complete.
+            }
+            if(nextRow.split("-")[3] == "1") { // Un-crossout the section in the TOC if it's not complete.
+              $("#li-" + (this.id.split("-")[2])).css("text-decoration", "");
             }
             stepsComplete--;
             updateCompletionStatus();
@@ -108,15 +112,14 @@ function parseSteps(steps) {
     launchers.push(substeps[0].split(",,,")[1]);
 
     if ($(window).width() >= 660) {
-      var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="panel panel-inverse"><div class="panel-heading sp-databox-panel-heading-dark">' + stepTitle + ' <button id="launch-' + stepNumber + '" type="button" class="btn btn-success btn-xs launchButton"><i class="fa fa-rocket"></i> Launch</button><button id="automate-' + stepNumber + '" type="button" class="btn btn-success btn-xs launchButton" disabled><i class="fa fa-cogs"></i> Automate</button></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div><';
+      var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="panel panel-inverse"><div class="panel-heading sp-databox-panel-heading-dark">' + stepTitle + ' <button id="launch-' + stepNumber + '" type="button" class="btn btn-success btn-xs launchButton"><i class="fa fa-rocket"></i> Launch</button><button id="automate-' + stepNumber + '" type="button" class="btn btn-success btn-xs launchButton" disabled><i class="fa fa-cogs"></i> Automate</button></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div>';
     } else {
-      var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="panel panel-inverse"><div class="panel-heading sp-databox-panel-heading-dark">' + stepTitle + '<br><center><button id="launch-' + stepNumber + '" type="button" class="btn btn-success btn-xs "><i class="fa fa-rocket"></i> Launch</button><button id="automate-' + stepNumber + '" type="button" class="btn btn-success btn-xs " disabled><i class="fa fa-cogs"></i> Automate</button></center></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div><';
+      var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="panel panel-inverse"><div class="panel-heading sp-databox-panel-heading-dark"><center>' + stepTitle + '<br><button id="launch-' + stepNumber + '" type="button" class="btn btn-success btn-xs "><i class="fa fa-rocket"></i> Launch</button><button id="automate-' + stepNumber + '" type="button" class="btn btn-success btn-xs " disabled><i class="fa fa-cogs"></i> Automate</button></center></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div>';
 
     }
 
-
-
     $("#stepsSection").append(newDivHTML);
+    $("#tocList").append('<li id="li-' + stepNumber + '"><a href="#row-' + stepNumber + '">' + stepTitle + '</a></li>');
 
     /* Add Launchers */
     // What else could we launch?
@@ -561,12 +564,20 @@ function loadFlightplan(idToLoad) {
               //console.log("we should be checking: " + this.id);
               $("#" + this.id).prop('checked', true);
               $("#" + this.id).prop('disabled', false);
+              $("#li-" + currentStep).css("text-decoration", "line-through");
           } else if (parseInt(currentStep) == parseInt(lastCheckedStep)) {
             if (parseInt(currentSubstep) <= parseInt(lastCheckedSubstep)) {
               //console.log("checking2");
               //console.log("we should be checking: " + this.id);
               $("#" + this.id).prop('checked', true);
               $("#" + this.id).prop('disabled', false);
+
+              var nextRow = "status-substep-" + currentStep + "-" + (parseInt(currentSubstep)*1 + 1);
+              console.log("next row!!!! : " + nextRow);
+              if (!($("#" + nextRow).length)) {
+                console.log("next row does not exist : " + nextRow);
+                $("#li-" + currentStep).css("text-decoration", "line-through");
+              }
             } else if (parseInt(currentSubstep) == parseInt(lastCheckedSubstep)+1) {
               //console.log("enabling");
               $("#" + this.id).prop('checked', false);
@@ -614,8 +625,8 @@ function loadFlightplan(idToLoad) {
 
             });
           } else {
-            $("#toggleSequential").prop("checked", true);
-            toggleSeq("initialize");
+            //$("#toggleSequential").prop("checked", true);
+            //toggleSeq("initialize");
           }
 
 
@@ -645,9 +656,10 @@ function beginsWith(str, suffix) {
 }
 
 function toggleSeq(state) {
+  console.log("state: " + state);
   var checkboxHit = 0; // This is done to prevent the next item in list to be done from being hidden.
 
-  if($(this).is(":checked") || state == "initialize") { // If toggleSequential is checked
+  if($(this).is(":checked") || state == "initialize" || state == false) { // If toggleSequential is checked
   //if(1 == 1) { // If toggleSequential is checked
     sequential = false;
     $("tr[id^='row-substep-']").each(function () {
@@ -679,7 +691,12 @@ function init () {
   //var result = beginsWith("abc", "|");
   //console.log("beginsWith: " + result);
 
-  $('#toggleSequential').change(toggleSeq);
+  //$('#toggleSequential').change(toggleSeq);
+
+  $('#toggleSequential').on('switchChange.bootstrapSwitch', function(event, state) {
+    console.log("Toggle Seq: " + state);
+    toggleSeq(state);
+  });
 
   $('#test').click(function() {
     toggleSeq("initialize");
@@ -835,7 +852,17 @@ function init () {
 
   });
 
+  // Code to avoid navbar covering up top of jumped-to anchor
+  window.addEventListener("hashchange", function() { scrollBy(0, -60) })
+
   $(document).ready(function() { // Enable tooltips after all the steps are processed.
+
+    $("#toggleSequential").bootstrapSwitch({
+      onColor: 'success',
+      offColor: 'success',
+      state: false
+    });
+
     var load = urlParam('load');
     if(load == "inflight") {
       $(".loadFP").trigger("click");
