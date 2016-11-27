@@ -889,6 +889,65 @@ function init () {
       }
     }
     // End Leave Warning
+    
+    var introguide = introJs();
+
+    introguide.setOptions({
+      steps: [
+            {
+              intro: 'We noticed this was your first time using a FlightPlan. This guided tour will demonstrate how to use the FlightPlan.',
+              position: 'bottom'
+            },
+            {
+              element: '#activeFlightCol',
+              intro: 'This section shows what Active Flight is loaded.<br><br>If you haven\'t saved the flight yet, it will show "Not Saved".<br><br>If you have loaded a flight, the title of that loaded flight will be shown.',
+              position: 'bottom'
+            },
+            {
+            	element: '#tocList',
+            	intro: 'These are all of the steps within the FlightPlan. As you complete the FlightPlan, these will be crossed off.',
+            	position: 'top'
+            },
+            {
+            	element: '#loadDiv',
+            	intro: 'Load a previous Flight that was not completed.',
+            	position: 'top'
+            },
+            {
+            	element: '#saveDiv',
+            	intro: 'Save a Flight to come back and finish later.',
+            	position: 'top'
+            },
+            {
+            	element: '#completedDiv',
+            	intro: 'View a past Flight that was completed.',
+            	position: 'top'
+            },
+            {
+            	element: '#toggleBoxes',
+            	intro: 'Toggle between showing all steps, or only showing steps as they are completed.',
+            	position: 'top'
+            },
+            {
+            	element: '#row-1',
+            	intro: 'Actions are broken down into steps and sub-steps.',
+            	position: 'top'
+            },
+            {
+            	element: '#launcher-1',
+            	intro: 'Launchers will open new windows where the step\'s actions can be completed.',
+            	position: 'top'
+            },
+            {
+            	element: '#completeSubmit',
+            	intro: 'Once the Flight is complete, submit it and it will be saved for reference later.',
+            	position: 'top'
+            }
+      ],
+      tooltipClass: 'customDefault'
+    });
+
+    introguide.start();
 
   });
 }
