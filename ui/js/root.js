@@ -223,13 +223,6 @@ function init () {
 
       var introguide = introJs();
 
-      /*              {
-                      element: '',
-                      intro: '',
-                      position: 'bottom'
-                    },
-      */
-
       introguide.setOptions({
         steps: [
               {

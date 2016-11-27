@@ -687,6 +687,7 @@ function init () {
       }
     }
     // End Leave Warning
+
   });
 
   // We want to track if anything changes so that we can warn the user if they try to exit before saving.
@@ -700,6 +701,74 @@ function init () {
 
   $("#createNewFP").click(function() {
     $('#myModal').modal('hide');
+
+    var introguide = introJs();
+
+    introguide.setOptions({
+      steps: [
+            {
+              intro: 'We noticed this was your first time using the FlightPlan Builder. This guided tour will demonstrate how to get started creating your own flights for you and other pilots to use.',
+              position: 'right-bottom'
+            },
+            {
+              //intro: 'Eucalyptus is a simple solution to help with complex processes. By defining complex processes in simple steps, allowing us to easily start and stop them, and enabling us to document our steps, we lessen the operational burden of new solutions.',
+              intro: 'This builder is meant to <b>create templates</b> for future Flights.<br><br>If you meant to actually take a Flight instead, simply go back <i class="fa fa-home"></i> and then select a prepared FlightPlan to get started.',
+              position: 'bottom'
+            },
+            {
+              element: '#summaryRow',
+              intro: 'First, enter the characteristics of the FlightPlan. These help future pilots understand what the FlightPlan is for.<br><br>In gray, you can see example text for each field.',
+              position: 'bottom'
+            },
+            {
+              element: '#stepsSection',
+              intro: 'Next up is the steps section, where the magic happens. These are the steps that future pilots will use to navigate the flight.<br><br>These should be as unambiguous as possible, so that anyone can follow them. Do not assume anyone will know start, middle, or ending steps. <b>Make sure to document everything!</b>',
+              position: 'top'
+            },
+            {
+              element: '#stepTitle-1',
+              intro: 'Each step is a collection of sub-steps that will be executed to accomplish the step\'s goals.<br><br>Enter a title for each step to give the pilot an idea of what will be accomplished through the sub-steps.',
+              position: 'top'
+            },
+            {
+              element: '#stepLauncher-1',
+              intro: 'This is a step launcher! Put in a URI/URL here that pilots can click if they need to execute the step on another page. The launcher will pop up in a new window when "Launch" is selected.<br><br>Ideally, each step should be accomplished within the launcher location. If a step needs multiple launchers, it should be broken out into multiple steps.',
+              position: 'top'
+            },
+            {
+              element: '#row-substep-1-1',
+              intro: 'Each substep has a details section and an actions section.<br><br>Details is the high level summary of the substep, and Action is what all happens in the substep.',
+              position: 'bottom'
+            },
+            {
+              element: '#addButton-substep-1-1',
+              intro: 'Steps are made up of multiple substeps (usually). Click the <i class="fa fa-plus"></i> to add more substeps to the step.',
+              position: 'bottom'
+            },
+            {
+              element: '#addButton-1',
+              intro: 'FlightPlans are made up of multiple steps. Click the <i class="fa fa-plus"></i> to add more steps.',
+              position: 'bottom'
+            },
+            {
+              element: '#createFlightplan',
+              intro: 'Done with the FlightPlan (or just ready to save it)? Click \'Create FlightPlan\' to add the FlightPlan to the system.<br><br>Don\'t worry, you can add/edit/delete it later if needed!<br><br>To edit or delete later, simply re-launch the FlightPlan Builder and choose "Modify Existing".',
+              position: 'top'
+            },
+            {
+              intro: 'We recommend testing the FlightPlan after creation to make sure it is clear and concise to follow.<br><br>If something is ambiguous, edit the FlightPlan to add more steps or substeps!',
+              position: 'bottom'
+            },
+            {
+              intro: 'Thanks for viewing the walkthrough! Have fun creating FlightPlans!',
+              position: 'bottom'
+            }
+      ],
+      tooltipClass: 'customDefault'
+    });
+
+    introguide.start();
+
   });
 
   $("#loadExistingFP").click(function() {
@@ -751,6 +820,25 @@ function init () {
         });
 
         $('#loadModal').modal('show');
+
+        var introguide = introJs();
+
+        introguide.setOptions({
+          steps: [
+            {
+              intro: 'We noticed this was your first time modifying an existing FlightPlan!<br><br>Here you can edit or delete existing FlightPlans that anyone within your system has created.Please proceed with caution as changes are not recoverable.',
+              position: 'right-bottom'
+            },
+            {
+              intro: 'To load a FlightPlan into the Builder, simply select the <i class="fa fa-folder-open-o"></i> button next to the FlightPlan to load it and begin editing.<br><br>To delete a FlightPlan, simply select the <i class="fa fa-trash-o"></i> button next to the FlightPlan to permanently delete it.',
+              position: 'right-bottom'
+            }
+          ],
+          tooltipClass: 'customDefault'
+        });
+
+        introguide.start();
+
       });
 
   });
