@@ -16,18 +16,24 @@ function init () {
   currentTimestamp();
 
   $('#changePassword').click(function() {
-    helper.get("/api/getUserInfo")
-      .then(function(data) {
-        var userId = data[0]["id"];
-        var userPatch = {};
-        userPatch["password"] = $('input:password[name=patchPassword]').val();
-        console.log("password: " + $('input:password[name=patchPassword]').val())
-        console.log("user id: " + userId);
-        if (userId !== "" && userPatch["password"] !== "") {
-          helper.patch("/users/" + userId, userPatch);
-          location.reload();
-        }
-      });
+    if ($('input:password[name=patchPassword]').val() == $('input:password[name=patchPassword2]').val()) {
+      helper.get("/api/getUserInfo")
+        .then(function(data) {
+          var userId = data[0]["id"];
+          var userPatch = {};
+          userPatch["password"] = $('input:password[name=patchPassword]').val();
+          console.log("password: " + $('input:password[name=patchPassword]').val())
+          console.log("user id: " + userId);
+          if (userId !== "" && userPatch["password"] !== "") {
+            helper.patch("/users/" + userId, userPatch);
+            location.reload();
+          }
+        });
+    } else {
+      // Passwords don't match
+      $("#passError").html("Passwords do not match. Please re-try.");
+      $("#passError").css("color", "red");
+    }
   });
 
     $(document).ready(function(){ // Enable tooltips after all the steps are processed.
