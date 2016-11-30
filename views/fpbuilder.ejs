@@ -72,36 +72,48 @@
 
   </div> <!-- End Container -->
 
-  <!-- Search Section -->
-  <div id="importExistingDiv" class="container-fluid">
-
-    <div class="row">
-      <div class="col-sm-12">
-        <div class="panel panel-inverse">
-          <div id="importer-panel-header" class="panel-heading">FlightPlan Importer</div>
-          <div class="panel-body">
+  <div id="loadSuccessModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title success" id="gridSystemModalLabel">FlightPlan Imported Successfully!</h4>
+        </div>
+        <div class="modal-body">
+          <div class="panel">
+            <div class="panel-body sp-databox-panel-body">
               <div class="row">
-                <div class="col-sm-3"></div>
-                <div class="col-sm-6">
-                  <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Example.FLP">
-                    <span class="input-group-btn">
-                      <button class="btn btn-default" type="button">Browse</button>
-                    </span>
-                  </div><!-- /input-group -->
-                  <br />
-                  <div id="submitFlightplan" class="btn-group">
-                    <button id="createFlightplan" type="button" class="btn btn-success">Import FlightPlan</button>
+                <div class="col-sm-6 sp-databox-left">
+                  <div class="sp-databox">
+                    <button id="viewLoad" class="invisBtn">
+                      <div class="sp-databox-item">
+                        <p class="sp-databox-item-header">View</p>
+                        <p class="sp-databox-item-descr">Open a Flight with Uploaded FlightPlan</p>
+                      </div>
+                    </button>
                   </div>
                 </div>
-                <div class="col-sm-3"></div>
+                <div class="col-sm-6 sp-databox-right">
+                  <div class="sp-databox">
+                    <button id="editLoad" class="invisBtn">
+                      <div class="sp-databox-item">
+                        <p class="sp-databox-item-header">Edit</p>
+                        <p class="sp-databox-item-descr">Modify Uploaded FlightPlan with Builder</p>
+                      </div>
+                    </button>
+                  </div>
+                </div>
               </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-
-  </div> <!-- End Container -->
+        <!--<div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>-->
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
 
   <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
     <div class="modal-dialog" role="document">
@@ -129,11 +141,26 @@
                     <button id="loadExistingFP" class="invisBtn">
                       <div class="sp-databox-item">
                         <p class="sp-databox-item-header">Modify Existing</p>
-                        <p class="sp-databox-item-descr">Load and Edit a FlightPlan</p>
+                        <p class="sp-databox-item-descr">Edit an Existing FlightPlan</p>
                       </div>
                     </button>
                   </div>
                 </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-3"></div>
+                <div class="col-sm-6 sp-databox-right">
+                  <div class="sp-databox">
+                    <label class="fakeBtn">
+                      <div class="sp-databox-item">
+                        <p class="sp-databox-item-header">Import Existing</p>
+                        <p class="sp-databox-item-descr">Load a FlightPlan from File</p>
+                      </div>
+                      <input type="file" id="flpUpload" style="display: none;">
+                    </label>
+                  </div>
+                </div>
+                <div class="col-sm-3"></div>
               </div>
             </div>
           </div>

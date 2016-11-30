@@ -7,6 +7,7 @@ var staticFields = ["title", "description", "category", "author", "product", "re
 var formModified = false;
 var loadedFlightplan = false;
 var loadedFpId = undefined;
+var obj;
 
 // We use these arrays to store the step & substep order so if user removes and adds steps & substeps in random ways, we track that properly and keep them in expected order.
 var stepOrder = [];
@@ -67,7 +68,6 @@ function addStep(currentStep) {
   // Check for a place to put the step
   for(var i = 1; i < 50; i++) {
     if(!($("#row-" + i).length)) {
-      console.log("step number found is still: " + i);
       stepNumber = i;
       break;
     }
@@ -75,11 +75,13 @@ function addStep(currentStep) {
 
   stepOrder.splice(stepOrder.indexOf(parseInt(currentStep))+1, 0, stepNumber);
 
+  /*
   console.log("-----");
   for (var o = 0; o < stepOrder.length; o++) {
     console.log("Step Order: " + stepOrder[o]);
   }
   console.log("-----");
+  */
 
   //  var newDivHTML = '<div class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step ' + stepNumber + '&nbsp;&nbsp;<i id="addButton-' + stepNumber + '" class="fa fa-plus leafLogo"></i>&nbsp;<i id="addButton-' + stepNumber + '" class="fa fa-minus minus"></i></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
   //var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step ' + stepNumber + '&nbsp;&nbsp;<a id="addButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-plus"></i></a><a id="delButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-minus minus"></i></a></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
@@ -147,11 +149,13 @@ function addSubStep(stepNumber, substepNumber, details, action) {
 
   substepOrder.splice(substepOrder.indexOf(currentSubstepID)+1, 0, newSubstepID);
 
+  /*
   console.log("-----");
   for (var o = 0; o < substepOrder.length; o++) {
     console.log("Substep Order: " + substepOrder[o]);
   }
   console.log("-----");
+  */
 
   var substepName = "#";
   var substepCode = "substep-" + stepNumber + "-" + substepNumber; // Example: substep-2-1
@@ -175,12 +179,12 @@ function addSubStep(stepNumber, substepNumber, details, action) {
 
   if (details != undefined) {
     $("#details-" + substepCode).val(details);
-    console.log("setting #details-" + substepCode + " to: " + details);
+    //console.log("setting #details-" + substepCode + " to: " + details);
   }
   if (action != undefined) {
-    console.log("action: " + action);
+    //console.log("action: " + action);
     $("#action-" + substepCode).val(action);
-    console.log("setting #action-" + substepCode + " to: " + action);
+    //console.log("setting #action-" + substepCode + " to: " + action);
   }
 
 
@@ -212,11 +216,13 @@ function hookUpAddDelButtons() {
             substepOrder.splice(substepOrder.indexOf((this.id.split("-")[1])+ "," + n), 1);
           }
         }
+        /*
         console.log("-----");
         for (var o = 0; o < substepOrder.length; o++) {
           console.log("Substep Order: " + substepOrder[o]);
         }
         console.log("-----");
+        */
       }); // Hook del button
 
       // Hook substeps up.
@@ -409,7 +415,7 @@ function exportFlightplan() {
 
       for (var o = 0; o < substepOrder.length; o++) {
         if (substepOrder[o].split(",")[0] == i) {
-          console.log("Substep parsing: " + substepOrder[o]);
+          //console.log("Substep parsing: " + substepOrder[o]);
           j = substepOrder[o].split(",")[1];
 
           if ($("#row-substep-" + i + "-" + j).length) {
@@ -538,6 +544,7 @@ function exportFlightplan() {
     } else {
       helper.post("/api/flightplan/", flightplanPost);
     }
+    formModified = false; // Reset this or it will ask if we want to reload after submitting.
     location.reload();
   } else {
     console.log("Form invald.");
@@ -595,6 +602,7 @@ function getFlightplan(id) {
       });
     });
 
+    formModified = false;
 }
 
 function displaySummary(id) {
@@ -627,13 +635,14 @@ function createBoard(steps) {
 
     if(!(i == steps.length)) {
       addStep(i);
+      console.log("adding step #: " + i);
     }
 
     $("#stepTitle-" + i).val(substeps[0].split(',,,')[0]);
     $("#stepLauncher-" + i).val(substeps[0].split(',,,')[1]);
 
     for (var j = 1; j < (substeps.length); j++) {
-      console.log("substep [" + i + "," + j + "]: " + substeps[j]);
+      //console.log("substep [" + i + "," + j + "]: " + substeps[j]);
       var details = substeps[j].split(',,,')[1];
       var action = substeps[j].split(',,,')[2];
       if (j == 1) {
@@ -650,7 +659,6 @@ function createBoard(steps) {
 
 function init () {
   currentTimestamp();
-  console.log("urlparam: " + urlParam('id'));
 
   createStep(1);
 
@@ -659,7 +667,7 @@ function init () {
   // Enable tooltips after all the steps are processed.
   $(document).ready(function() {
     $('[data-toggle="tooltip"]').tooltip();
-
+    $("#loadSuccessModal").hide();
 
     if (!(urlParam('id') == undefined)) {
       loadedFlightplan = true;
@@ -771,13 +779,97 @@ function init () {
 
   });
 
+  $("#importExistingFP").click(function() {
+    $('#myModal').modal('hide');
+    $('#createNewDiv').hide();
+    $('#importExistingDiv').show();
+  });
+
+  $("#importFlightplan").click(function() {
+    alert("Working!");
+  }); // Hook clicking Create FlightPlan
+
+
+  $("#flpUpload").on('change', function() {
+    var file = $("#flpUpload").prop('files')[0];
+    var textType = /text.*/;
+
+    if (file.type.match(textType)) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          obj = JSON.parse(reader.result);
+
+
+          helper.post("/api/flightplan/", obj);
+
+          /*
+          console.log("obj[_id]: " + obj["_id"]);
+          console.log("obj[title]: " + obj["title"]);
+          console.log("obj[author]: " + obj["author"]);
+          console.log("obj[revision]: " + obj["revision"]);
+          console.log("obj[category]: " + obj["category"]);
+          console.log("obj[product]: " + obj["product"]);
+          console.log("obj[description]: " + obj["description"]);
+          console.log("obj[steps]: " + obj["steps"]);
+          */
+
+          $('#myModal').modal('hide');
+          $('#loadSuccessModal').modal('show');
+          // End Find
+
+        } catch (e) {
+          console.log("Invalid FlightPlan File!");
+        }
+      }
+      reader.readAsText(file);
+    } else {
+      console.log("Invalid FlightPlan File!");
+    }
+
+  });
+
+  $("#viewLoad").click(function() {
+
+    helper.get("/api/flightplan/")
+      .then(function(data){
+        for (var i = 0; i < data.length; i++) {
+          if (data[i]["title"] == obj["title"]) {
+            formModified = false;
+            window.location.replace("/flightplan?id=" + data[i]["_id"]);
+            break;
+          }
+        }
+      });
+  });
+
+  $("#editLoad").click(function() {
+    $('#loadSuccessModal').modal('hide');
+    loadedFlightplan = true;
+    $("#createFlightplan").html("Update FlightPlan");
+    // Find the new FP ID
+
+    helper.get("/api/flightplan/")
+      .then(function(data){
+        for (var i = 0; i < data.length; i++) {
+          if (data[i]["title"] == obj["title"]) {
+            $('#createNewDiv').show();
+            $('#importExistingDiv').hide();
+            getFlightplan(data[i]["_id"]);
+            $("#createFlightplan").html("Update FlightPlan");
+            break;
+          }
+        }
+      });
+  });
+
   $("#loadExistingFP").click(function() {
     //window.print();
     //saveFlightplan();
     $('#myModal').modal('hide');
 
     helper.get("/api/flightplan/")
-      .then(function(data){
+      .then(function(data) {
         var flightplan = data;
 
         // Clear old loads
@@ -816,7 +908,9 @@ function init () {
           console.log( (this.id).split("-")[1] );
 
           helper.del("/api/flightplan/" + (this.id).split("-")[1]);
-          location.reload();
+          formModified = false; // Reset this or it will ask if we want to reload after submitting.
+          $(this).closest('tr').remove();
+          //location.reload();
         });
 
         $('#loadModal').modal('show');
