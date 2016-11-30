@@ -792,41 +792,34 @@ function init () {
 
   $("#flpUpload").on('change', function() {
     var file = $("#flpUpload").prop('files')[0];
-    var textType = /text.*/;
-
-    if (file.type.match(textType)) {
-      var reader = new FileReader();
-      reader.onload = function(e) {
-        try {
-          obj = JSON.parse(reader.result);
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        obj = JSON.parse(reader.result);
 
 
-          helper.post("/api/flightplan/", obj);
+        helper.post("/api/flightplan/", obj);
 
-          /*
-          console.log("obj[_id]: " + obj["_id"]);
-          console.log("obj[title]: " + obj["title"]);
-          console.log("obj[author]: " + obj["author"]);
-          console.log("obj[revision]: " + obj["revision"]);
-          console.log("obj[category]: " + obj["category"]);
-          console.log("obj[product]: " + obj["product"]);
-          console.log("obj[description]: " + obj["description"]);
-          console.log("obj[steps]: " + obj["steps"]);
-          */
+        /*
+        console.log("obj[_id]: " + obj["_id"]);
+        console.log("obj[title]: " + obj["title"]);
+        console.log("obj[author]: " + obj["author"]);
+        console.log("obj[revision]: " + obj["revision"]);
+        console.log("obj[category]: " + obj["category"]);
+        console.log("obj[product]: " + obj["product"]);
+        console.log("obj[description]: " + obj["description"]);
+        console.log("obj[steps]: " + obj["steps"]);
+        */
 
-          $('#myModal').modal('hide');
-          $('#loadSuccessModal').modal('show');
-          // End Find
+        $('#myModal').modal('hide');
+        $('#loadSuccessModal').modal('show');
+        // End Find
 
-        } catch (e) {
-          console.log("Invalid FlightPlan File!");
-        }
+      } catch (e) {
+        console.log("Invalid FlightPlan File!");
       }
-      reader.readAsText(file);
-    } else {
-      console.log("Invalid FlightPlan File!");
     }
-
+    reader.readAsText(file);
   });
 
   $("#viewLoad").click(function() {
