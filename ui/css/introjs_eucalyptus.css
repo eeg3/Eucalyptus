@@ -5,3 +5,11 @@
 .introjs-helperNumberLayer {
   background: #5cb85c;
 }
+
+h4 {
+  margin-top: 0px;
+}
+
+canvas {
+  width: 300px;
+}
