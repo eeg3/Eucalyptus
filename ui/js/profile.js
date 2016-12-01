@@ -43,5 +43,20 @@ function init () {
           $("#username").text(data[0]["username"]);
         });
 
+        var introguide = introJs();
+
+        $("#helpBtn").click(function() {
+          introguide.setOptions({
+            steps: [
+              {
+                intro: 'This is your profile page. Here, you can update your password or sign out of the system.',
+                position: 'right-bottom'
+              }
+            ],
+            tooltipClass: 'customDefault'
+          });
+          introguide.start();
+        });
+
     });
 }

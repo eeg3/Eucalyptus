@@ -57,7 +57,7 @@ function parseFlightplans(id, title, category) {
           $("#categorySection").append('</div>');
         }
 
-        var table = $('<table id="' + category + '-table"></table>').addClass('table table-bordered table-striped sp-databox-table');
+        var table = $('<table id="' + category + '-table"></table>').addClass('table table-bordered table-striped sp-databox-table-sm');
         var body = $('<tbody>');
         table.append(body);
         if (savedFlightplans == 0 && completedFlightplans == 0) {
@@ -206,6 +206,10 @@ function init () {
 
     $(document).ready(function(){ // Enable tooltips after all the steps are processed.
 
+      $("#helpBtn").click(function() {
+        introguide.start();
+      });
+
       $("#categoryRadio").click(function() {
         populateFlightplans("category");
       });
@@ -226,7 +230,7 @@ function init () {
       introguide.setOptions({
         steps: [
               {
-                intro: 'Welcome! We noticed this was your first login. This guided tour will demonstrate how to use Eucalyptus.',
+                intro: 'Welcome! This guided tour will demonstrate how to use Eucalyptus Dashboard.',
                 position: 'right-bottom'
               },
               {

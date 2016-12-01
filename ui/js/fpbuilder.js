@@ -777,6 +777,10 @@ function init () {
 
     introguide.start();
 
+    $("#helpBtn").click(function() {
+      introguide.start();
+    });
+
   });
 
   $("#importExistingFP").click(function() {
@@ -913,7 +917,7 @@ function init () {
         introguide.setOptions({
           steps: [
             {
-              intro: 'We noticed this was your first time modifying an existing FlightPlan!<br><br>Here you can edit or delete existing FlightPlans that anyone within your system has created.Please proceed with caution as changes are not recoverable.',
+              intro: 'We noticed this was your first time modifying an existing FlightPlan!<br><br>Here you can edit or delete existing FlightPlans that anyone within your system has created.<br><br>Please proceed with caution as changes are not recoverable.',
               position: 'right-bottom'
             },
             {
@@ -925,6 +929,19 @@ function init () {
         });
 
         introguide.start();
+
+        $("#helpBtn").click(function() {
+          introguide.setOptions({
+            steps: [
+              {
+                intro: 'Here you can edit or delete existing FlightPlans that anyone within your system has created.<br><br>Please proceed with caution as changes are not recoverable after saved/updated.',
+                position: 'right-bottom'
+              }
+            ],
+            tooltipClass: 'customDefault'
+          });
+          introguide.start();
+        });
 
       });
 

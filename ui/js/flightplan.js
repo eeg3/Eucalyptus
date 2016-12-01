@@ -133,7 +133,7 @@ function parseSteps(steps) {
       // * Ticketing Sites
 
     //var table = $('<table></table>').addClass('table table-bordered table-striped sp-databox-table-lg');
-    var table = $('<table></table>').addClass('table table-bordered table-striped sp-databox-table-md');
+    var table = $('<table></table>').addClass('table table-bordered table-striped sp-databox-table-sm');
 
     if ($(window).width() >= 660) {
       var head = $('<thead><tr class="success"><th width="95px">Sub-Step</th><th>Details</th><th>Action</th><th>Notes&nbsp;<span data-toggle="tooltip" data-placement="top" title="Enter notes here to keep track of what you actually did."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></th><th>Status</th></tr></thead>');
@@ -857,6 +857,10 @@ function init () {
 
   $(document).ready(function() { // Enable tooltips after all the steps are processed.
 
+    $("#helpBtn").click(function() {
+      introguide.start();
+    });
+
     $("#toggleSequential").bootstrapSwitch({
       onColor: 'success',
       offColor: 'success',
@@ -889,13 +893,13 @@ function init () {
       }
     }
     // End Leave Warning
-    
+
     var introguide = introJs();
 
     introguide.setOptions({
       steps: [
             {
-              intro: 'We noticed this was your first time using a FlightPlan. This guided tour will demonstrate how to use the FlightPlan.',
+              intro: 'This guided tour will demonstrate how to use a FlightPlan.',
               position: 'bottom'
             },
             {
