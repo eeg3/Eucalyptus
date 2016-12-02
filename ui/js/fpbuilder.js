@@ -663,6 +663,10 @@ function createBoard(steps) {
 }
 
 function init () {
+
+  $("#stepsSection").css("min-width", "750px");
+  $("#stepsSection").css("width", "auto !important");
+  
   currentTimestamp();
 
   createStep(1);

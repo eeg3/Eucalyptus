@@ -111,12 +111,16 @@ function parseSteps(steps) {
     var stepTitle = substeps[0].split(",,,")[0];
     launchers.push(substeps[0].split(",,,")[1]);
 
+
     if ($(window).width() >= 660) {
       var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="panel panel-inverse"><div class="panel-heading sp-databox-panel-heading-dark">' + stepTitle + ' <button id="launch-' + stepNumber + '" type="button" class="btn btn-success btn-xs launchButton"><i class="fa fa-rocket"></i> Launch</button><button id="automate-' + stepNumber + '" type="button" class="btn btn-success btn-xs launchButton" disabled><i class="fa fa-cogs"></i> Automate</button></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div>';
     } else {
       var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="panel panel-inverse"><div class="panel-heading sp-databox-panel-heading-dark"><center>' + stepTitle + '<br><button id="launch-' + stepNumber + '" type="button" class="btn btn-success btn-xs "><i class="fa fa-rocket"></i> Launch</button><button id="automate-' + stepNumber + '" type="button" class="btn btn-success btn-xs " disabled><i class="fa fa-cogs"></i> Automate</button></center></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div>';
 
     }
+
+//    var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="panel panel-inverse"><div class="panel-heading sp-databox-panel-heading-dark">' + stepTitle + ' <button id="launch-' + stepNumber + '" type="button" class="btn btn-success btn-xs launchButton"><i class="fa fa-rocket"></i> Launch</button><button id="automate-' + stepNumber + '" type="button" class="btn btn-success btn-xs launchButton" disabled><i class="fa fa-cogs"></i> Automate</button></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div>';
+
 
     $("#stepsSection").append(newDivHTML);
     $("#tocList").append('<li id="li-' + stepNumber + '"><a href="#row-' + stepNumber + '">' + stepTitle + '</a></li>');
@@ -140,6 +144,8 @@ function parseSteps(steps) {
     } else {
       var head = $('<thead><tr class="success"><th>Sub-Step</th><th>Details</th><th>Action</th><th>Status</th></tr></thead>');
     }
+
+    //var head = $('<thead><tr class="success"><th>Sub-Step</th><th>Details</th><th>Action</th><th>Status</th></tr></thead>');
     var body = $('<tbody>');
     table.append(head);
     table.append(body);
@@ -181,6 +187,9 @@ function parseSteps(steps) {
       if ($(window).width() >= 660) {
         tableLineItem += '<td><textarea id="notes-' + substepCode + '" class="notesTextArea" rows="1" placeholder="Notes" /></td>';
       }
+
+      //tableLineItem += '<td><textarea id="notes-' + substepCode + '" class="notesTextArea" rows="1" placeholder="Notes" /></td>';
+
       if (i == 0 && j == 1) {
         tableLineItem += '<td><input type="checkbox" id="status-' + substepCode + '" class=""><label for="status-' + substepCode + '" class="euc-green"></label></td>';
       } else {
@@ -693,13 +702,20 @@ function init () {
 
   //$('#toggleSequential').change(toggleSeq);
 
+  if ($(window).width() >= 660) {
+    $("#stepsSection").css("min-width", "750px");
+    $("#stepsSection").css("width", "auto !important");
+  } else {
+    $("#resolutionModal").modal('show');
+  }
+
   $('#toggleSequential').on('switchChange.bootstrapSwitch', function(event, state) {
     console.log("Toggle Seq: " + state);
     toggleSeq(state);
   });
 
-  $('#test').click(function() {
-    toggleSeq("initialize");
+  $('#reload').click(function() {
+    location.reload();
   });
 
   currentTimestamp();
@@ -872,12 +888,6 @@ function init () {
       $(".loadFP").trigger("click");
     } else if (load == "completed") {
       $(".showCompleted").trigger("click");
-    }
-
-    // Make mobile more friendly
-    if ($(window).width() < 660) {
-      $("#leftSideTitle").hide();
-      $("#rightSideTitle").hide();
     }
 
     // Leave Warning
