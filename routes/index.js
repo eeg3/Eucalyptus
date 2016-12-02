@@ -70,7 +70,7 @@ router.get('/api/getUserInfo', isLoggedIn, function(req, res, next) {
       email: req.user.local.email,
       walkthroughDashboard: req.user.local.walkthroughDashboard,
       walkthroughFlightplan: req.user.local.walkthroughFlightplan,
-      walkthroughFpbuilder: req.user.local.walkthroughFpbuilder     
+      walkthroughFpbuilder: req.user.local.walkthroughFpbuilder
     }
   ];
   res.json(userInfo);
