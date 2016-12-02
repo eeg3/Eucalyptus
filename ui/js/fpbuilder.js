@@ -669,13 +669,19 @@ function init () {
     $('[data-toggle="tooltip"]').tooltip();
     $("#loadSuccessModal").hide();
 
+
     if (!(urlParam('id') == undefined)) {
       loadedFlightplan = true;
       loadedFpId = urlParam('id');
       getFlightplan(loadedFpId);
       $("#createFlightplan").html("Update FlightPlan");
     } else {
-      $('#myModal').modal('show');
+      //$('#myModal').modal('show');
+      $('#myModal').modal({
+        show: true,
+        backdrop: 'static',
+        keyboard: false
+      });
     }
 
     // We want to track if anything changes so that we can warn the user if they try to exit before saving.
@@ -910,7 +916,11 @@ function init () {
           //location.reload();
         });
 
-        $('#loadModal').modal('show');
+        $('#loadModal').modal({
+          show: true,
+          backdrop: 'static',
+          keyboard: false
+        });
 
         var introguide = introJs();
 

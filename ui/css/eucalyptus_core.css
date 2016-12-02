@@ -490,6 +490,15 @@ background-size: cover;
     width: 120px !important;
 }
 
+h4 {
+  margin-top: 0px;
+}
+
+canvas {
+  width: 300px;
+}
+
+
 .helpIntro {
   text-align: justify;
 }

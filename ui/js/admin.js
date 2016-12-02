@@ -2,13 +2,7 @@ window.onload = init;
 
 var showSteps = false;
 
-function getFlightplans() {
-  /*
-  helper.get("api/flightplan/"):
-    Will return an array of flightplan objects.
-    Those objects can then be sorted through with a for() loop based on .length.
-    Inside that for() object[i].parameter can be used.
-  */
+/*function getFlightplans() {
   helper.get("/api/flightplan/")
     .then(function(data){
       var flightplan = data;
@@ -57,6 +51,7 @@ function getFlightplans() {
 
     });
 }
+*/
 
 function getUsers() {
   /*
@@ -119,7 +114,7 @@ function currentTimestamp() {
 function init () {
   currentTimestamp();
 
-  getFlightplans();
+  //getFlightplans();
   getUsers();
 
   $('#patchFlightplanButton').click(function() {
