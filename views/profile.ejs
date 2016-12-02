@@ -23,9 +23,10 @@
       <div class="text-center">
         <div class="jumbotron">
           <h2><i class=" fa fa-user"></i> User Info</h2><br>
-          <span><strong>user id</strong>: <%= user._id ? user._id : '' %></span><br>
+          <!-- <span><strong>user id</strong>: <%= user._id ? user._id : '' %></span><br> -->
+          <span><strong>Name:</strong>: <%= user.local.name  %></span><br>
           <% if (user.local.email != null) { %>
-            <strong>email</strong>: <%= user.local.email %><br><br>
+            <strong>Email</strong>: <%= user.local.email %><br><br>
           <% } %>
           <div class="row">
             <div class="col-sm-2"></div>

@@ -177,6 +177,53 @@ function populateFlightplans(sortOption) {
     });
 }
 
+function createChart(itemName, chartName) {
+  helper.get("/api/flightplan/")
+    .then(function(data){
+      var items = [];
+      var flightPlansPerItem = [];
+
+      for (var i = 0; i < data.length; i++) {
+        var item = data[i][itemName];
+        console.log("data[i][item]: " + data[i][itemName]);
+        var itemLoc = items.indexOf(item);
+
+        if (itemLoc != -1) {
+          flightPlansPerItem[itemLoc]++;
+        } else {
+          items.push(item);
+          flightPlansPerItem.push(1);
+        }
+
+      }
+
+      for(var i = 0; i < items.length; i++) {
+        console.log("items[" + i + "]: " + items[i]);
+      }
+
+      var ctx2 = document.getElementById(chartName).getContext('2d');
+      var myChart2 = new Chart(ctx2, {
+        type: 'doughnut',
+        data: {
+          labels: items,
+          datasets: [{
+            backgroundColor: [
+              "#9b59b6",
+              "#e74c3c",
+              "#34495e",
+              "#2ecc71",
+              "#3498db",
+              "#95a5a6",
+              "#f1c40f",
+            ],
+            data: flightPlansPerItem
+          }]
+        }
+      });
+
+    });
+}
+
 function init () {
   currentTimestamp();
   /*
@@ -208,62 +255,8 @@ function init () {
     $(document).ready(function(){ // Enable tooltips after all the steps are processed.
 
 
-      // Charts!
-
-      helper.get("/api/flightplan/")
-        .then(function(data){
-          var categories = [];
-          var authors = [];
-          var flightPlansPerAuthor = [];
-
-          for (var i = 0; i < data.length; i++) {
-            //console.log("id: " + data[i]._id);
-            //console.log("title: " + data[i].title);
-            //console.log("category: " + data[i].category);
-            //if(categories.indexOf(data[i].category) == -1) {
-            //    categories.push(data[i].category);
-            //}
-            var author = data[i].author;
-            var authLoc = authors.indexOf(author);
-            console.log("author: " + author);
-            if (authLoc != -1) {
-              flightPlansPerAuthor[authLoc]++;
-              console.log("appending value to " + author + " at location: " + authLoc);
-            } else {
-              console.log("adding " + author + " with value: " + 1);
-              authors.push(author);
-              flightPlansPerAuthor.push(1);
-            }
-
-          }
-
-          console.log("authors[0] = " + authors[0]);
-          console.log("flightPlansPerAuthor[0] = " + flightPlansPerAuthor[0]);
-
-          var ctx2 = document.getElementById("myChart2").getContext('2d');
-          var myChart2 = new Chart(ctx2, {
-            type: 'doughnut',
-            data: {
-              labels: authors,
-              datasets: [{
-                backgroundColor: [
-                  "#9b59b6",
-                  "#e74c3c",
-                  "#34495e",
-                  "#2ecc71",
-                  "#3498db",
-                  "#95a5a6",
-                  "#f1c40f",
-                ],
-                data: flightPlansPerAuthor
-              }]
-            }
-          });
-          //populateChart();
-
-        });
-
-      // Charts!
+      // FlightPlans by Product
+      createChart("product", "myChart2");
 
       $("#helpBtn").click(function() {
         introguide.start();
@@ -278,11 +271,6 @@ function init () {
       });
 
       $('[data-toggle="tooltip"]').tooltip();
-
-      helper.get("/api/getUserInfo")
-        .then(function(data) {
-          $("#username").text(data[0]["username"]);
-        });
 
       var introguide = introJs();
 
@@ -345,7 +333,18 @@ function init () {
         tooltipClass: 'customDefault'
       });
 
-      introguide.start();
+      helper.get("/api/getUserInfo")
+        .then(function(data) {
+          $("#username").text(data[0]["name"]);
+
+          if(data[0]["walkthroughDashboard"] == true) {
+            introguide.start();
+
+            var userPatch = {};
+            userPatch["walkthroughDashboard"] = false;
+            helper.patch("/users/" + data[0]["id"], userPatch);
+          }
+        });
 
     });
 }

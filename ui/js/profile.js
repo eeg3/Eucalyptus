@@ -40,7 +40,7 @@ function init () {
 
       helper.get("/api/getUserInfo")
         .then(function(data) {
-          $("#username").text(data[0]["username"]);
+          $("#username").text(data[0]["name"]);
         });
 
         var introguide = introJs();

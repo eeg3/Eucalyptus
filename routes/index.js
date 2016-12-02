@@ -66,7 +66,11 @@ router.get('/api/getUserInfo', isLoggedIn, function(req, res, next) {
   var userInfo = [
     {
       id: req.user._id,
-      username : req.user.local.email
+      name: req.user.local.name,
+      email: req.user.local.email,
+      walkthroughDashboard: req.user.local.walkthroughDashboard,
+      walkthroughFlightplan: req.user.local.walkthroughFlightplan,
+      walkthroughFpbuilder: req.user.local.walkthroughFpbuilder     
     }
   ];
   res.json(userInfo);

@@ -17,7 +17,11 @@ var routes = function(User) {
       } else {
         user.local.email = req.body.email;
         user.local.password = user.generateHash(req.body.password);
+        user.local.name = req.body.name;
         user.local.enabled = false;
+        user.local.walkthroughDashboard = true;
+        user.local.walkthroughFlightplan = true;
+        user.local.walkthroughFpbuilder = true;
         user.save();
         res.status(201);
         res.send(user);

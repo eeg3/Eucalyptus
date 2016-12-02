@@ -880,12 +880,6 @@ function init () {
       $("#rightSideTitle").hide();
     }
 
-    helper.get("/api/getUserInfo")
-      .then(function(data) {
-        currentUser = data[0]["username"];
-        $("#username").text(data[0]["username"]);
-      });
-
     // Leave Warning
     window.onbeforeunload = function() {
       if (formModified) {
@@ -951,7 +945,18 @@ function init () {
       tooltipClass: 'customDefault'
     });
 
-    introguide.start();
+    helper.get("/api/getUserInfo")
+      .then(function(data) {
+        currentUser = data[0]["name"];
+        $("#username").text(data[0]["name"]);
+        if(data[0]["walkthroughFlightplan"] == true) {
+          introguide.start();
+
+          var userPatch = {};
+          userPatch["walkthroughFlightplan"] = false;
+          helper.patch("/users/" + data[0]["id"], userPatch);
+        }
+      });
 
   });
 }

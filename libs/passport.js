@@ -38,6 +38,11 @@ module.exports = function(passport) {
             newUser.local.enabled = true;
           }
 
+          newUser.local.name = req.body.name;
+          newUser.local.walkthroughDashboard = true;
+          newUser.local.walkthroughFlightplan = true;
+          newUser.local.walkthroughFpbuilder = true;
+
           newUser.save(function(err) {
             if (err)
               throw err;

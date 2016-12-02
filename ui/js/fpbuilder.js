@@ -8,6 +8,7 @@ var formModified = false;
 var loadedFlightplan = false;
 var loadedFpId = undefined;
 var obj;
+var currentUser = "";
 
 // We use these arrays to store the step & substep order so if user removes and adds steps & substeps in random ways, we track that properly and keep them in expected order.
 var stepOrder = [];
@@ -520,9 +521,13 @@ function exportFlightplan() {
     if (titlePost !== "") {
       flightplanPost["title"] = titlePost;
     }
+    /*
     if (authorPost !== "") {
       flightplanPost["author"] = authorPost;
     }
+    */
+
+    flightplanPost["author"] = currentUser;
     if (revisionPost !== "") {
       flightplanPost["revision"] = revisionPost;
     }
@@ -691,7 +696,8 @@ function init () {
 
     helper.get("/api/getUserInfo")
       .then(function(data) {
-        $("#username").text(data[0]["username"]);
+        currentUser = data[0]["name"];
+        $("#username").text(data[0]["name"]);
       });
 
     // Leave Warning
@@ -781,7 +787,16 @@ function init () {
       tooltipClass: 'customDefault'
     });
 
-    introguide.start();
+    helper.get("/api/getUserInfo")
+      .then(function(data) {
+        if(data[0]["walkthroughFpbuilder"] == true) {
+          introguide.start();
+
+          var userPatch = {};
+          userPatch["walkthroughFpbuilder"] = false;
+          helper.patch("/users/" + data[0]["id"], userPatch);
+        }
+      });
 
     $("#helpBtn").click(function() {
       introguide.start();
@@ -922,6 +937,7 @@ function init () {
           keyboard: false
         });
 
+/*
         var introguide = introJs();
 
         introguide.setOptions({
@@ -939,6 +955,7 @@ function init () {
         });
 
         introguide.start();
+*/
 
         $("#helpBtn").click(function() {
           introguide.setOptions({

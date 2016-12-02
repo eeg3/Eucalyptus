@@ -67,8 +67,12 @@ function getUsers() {
       for (var i = 0; i < data.length; i++) {
         var rowToAdd = "<tr>";
         rowToAdd += "<td>" + users[i]["_id"] + "</td>";
+        rowToAdd += "<td>" + users[i]["local"]["name"] + "</td>";
         rowToAdd += "<td>" + users[i]["local"]["email"] + "</td>";
         rowToAdd += "<td>" + users[i]["local"]["enabled"] + "</td>";
+        rowToAdd += "<td>" + users[i]["local"]["walkthroughDashboard"] + "</td>";
+//        rowToAdd += "<td>" + users[i]["local"]["walkthroughFlightplan"] + "</td>";
+//        rowToAdd += "<td>" + users[i]["local"]["walkthroughFpbuilder"] + "</td>";
         rowToAdd += '<td><button id="enable-' + users[i]["_id"] + '" type="button" title="Enable" class="btn btn-success btn-xs enableAcct"><i class="fa fa-check"></i></button>&nbsp;&nbsp;<button id="disable-' + users[i]["_id"] + '" type="button" title="Disable" class="btn btn-warning btn-xs disableAcct"><i class="fa fa-ban"></i></button>&nbsp;&nbsp;<button id="delete-' + users[i]["_id"] + '" type="button" title="Delete" class="btn btn-danger btn-xs deleteAcct"><i class="fa fa-remove"></i></button></td>'
         rowToAdd += "</tr>";
         $('#userDetailsTable tr:last').after(rowToAdd);
@@ -117,6 +121,7 @@ function init () {
   //getFlightplans();
   getUsers();
 
+/*
   $('#patchFlightplanButton').click(function() {
 
     var flightplanId = $('input:text[name=patchFpId]').val();
@@ -159,13 +164,16 @@ function init () {
     helper.patch("/api/flightplan/" + flightplanId, flightplanPatch)
     location.reload();
   });
+  */
 
   $('#patchButton').click(function() {
 
     var userId = $('input:text[name=patchId]').val();
+    var userName = $('input:text[name=patchName]').val();
     var userEnabled = $('input:text[name=patchEnabled]').val();
     var userEmail = $('input:text[name=patchEmail]').val();
     var userPassword = $('input:text[name=patchPassword]').val();
+    var walkthrough = $('input:text[name=patchWalkthrough]').val();
 
     var userPatch = {};
 
@@ -174,12 +182,23 @@ function init () {
       return;
     }
 
+    if (userName !== "") {
+      userPatch["name"] = userName;
+    }
+
     if (userEmail !== "") {
       userPatch["email"] = userEmail;
     }
 
     if (userPassword !== "") {
       userPatch["password"] = userPassword;
+    }
+
+    console.log("wtD: " + walkthrough);
+    if (walkthrough == "true") {
+      userPatch["walkthroughDashboard"] = true;
+    } else if (walkthrough == "false") {
+      userPatch["walkthroughDashboard"] = false;
     }
 
     if (userEnabled == "true") {
@@ -203,7 +222,7 @@ function init () {
 
     helper.get("/api/getUserInfo")
       .then(function(data) {
-        $("#username").text(data[0]["username"]);
+        $("#username").text(data[0]["name"]);
       });
 
   });

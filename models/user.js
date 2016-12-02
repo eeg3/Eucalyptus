@@ -6,7 +6,10 @@ var userSchema = mongoose.Schema({
     name: String,
     email: String,
     password: String,
-    enabled: Boolean
+    enabled: Boolean,
+    walkthroughDashboard: Boolean,
+    walkthroughFlightplan: Boolean,
+    walkthroughFpbuilder: Boolean
   }
 });
 
