@@ -50,6 +50,10 @@ router.get('/flightplan', isLoggedIn, function(req, res, next) {
   res.render('flightplan', { user: req.user });
 });
 
+router.get('/flightplan-min', isLoggedIn, function(req, res, next) {
+  res.render('flightplan-min', { user: req.user });
+});
+
 router.get('/apitoolkit', isLoggedIn, function(req, res, next) {
   res.render('apitoolkit', { title: 'Express' });
 });

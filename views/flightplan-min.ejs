@@ -1,0 +1,242 @@
+<% include partials/head %>
+
+<script src="/js/ApiHelper.js"></script>
+<script src="/js/flightplan-min.js"></script>
+
+<!-- Intro.JS -->
+<link href="/css/introjs.css" rel="stylesheet">
+  <script src="/js/intro.js"></script>
+<!-- Custom Intro.JS CSS Tweaks -->
+<link href="/css/introjs_eucalyptus.css" rel="stylesheet">
+
+<!-- Bootstrap-switch -->
+<link href="/css/bootstrap-switch.css" rel="stylesheet">
+<script src="/js/bootstrap-switch.js"></script>
+
+
+<body id="flightBody">
+<% include partials/navbar %>
+
+<!-- Search Section -->
+<div class="container-fluid">
+
+<div id="summaryPanel" class="row">
+  <div class="col-sm-12">
+    <div class="panel panel-inverse">
+      <div id="intro-panel-header" class="panel-heading">
+        <div class="row">
+          <div class="col-sm-2">
+            <div id="leftSideTitle">
+              <!--
+              <label class="radio-inline">Show All:&nbsp;&nbsp;</label>
+              <input id="toggleSequential" class="" type="checkbox" name="my-checkbox">
+              <label for="toggleSequential" class="euc-green2"></label>
+            -->
+            </div>
+          </div>
+          <div id="activeFlightCol" class="col-sm-8">Active Flight: <span id="currentInflight" class="leafLogo">Not Saved</span></div>
+          <div class="col-sm-2">
+            <div id="rightSideTitle">
+              <!--
+              <button type="button" title="Save Progress" class="btn btn-success btn-xs saveFP"><i class="fa fa-save"></i></button>
+              <button title="Load Saved Progress" type="button" class="btn btn-success btn-xs loadFP"><i class="fa fa-folder-open-o"></i></button>
+              <button title="View Completed FlightPlans" type="button" class="btn btn-success btn-xs showCompleted"><i class="fa fa-file-text-o"></i></button>
+            -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div id="manJumbo" class="jumbotron">
+          <h2><span id="flightplanTitle">Title</span></h2>
+          <h6>Developed by: <span id="flightplanAuthor"></span></h6>
+          <div class="alert alert-gray">
+            <h5><span id="flightplanDescription"></span></h5>
+        </div>
+
+          <!--<div id="flightplanHeaderSection">
+            <table class="table table-bordered table-striped sp-databox-table">
+              <tbody>
+                <tr><td>Category <span data-toggle="tooltip" data-placement="right" title="Categories are groupings of similar flightplans."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></td><td><span id="flightplanCategory" class="flightplanHeader"></span></td></tr>
+                <tr><td>Product <span data-toggle="tooltip" data-placement="right" title="Flightplans are tied to products and versions so they stay relevant."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></td><td><span id="flightplanProduct" class="flightplanHeader"></span></td></tr>
+                <tr><td>Description <span data-toggle="tooltip" data-placement="right" title="The purpose of the flightplan."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></td><td><span id="flightplanDescription" class="flightplanHeader"></span></td></tr>
+                <tr><td>Revision <span data-toggle="tooltip" data-placement="right" title="As flightplans are updated, revisions are added."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></td><td><span id="flightplanRevision" class="flightplanHeader"></span></td></tr>
+                <tr><td>Author <span data-toggle="tooltip" data-placement="right" title="The creator of the flightplan."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></td><td><span id="flightplanAuthor" class="flightplanHeader"></span></td></tr></tr>
+              </tbody>
+            </table>
+          </div>-->
+          <div class="progress">
+            <div id="completionStatus" class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 5%">
+            </div>
+          </div>
+          <!--
+          <div class="btn-group">
+            <button type="button" title="Load Progress" class="btn btn-success btn-lg headerButton loadFP"><i class="fa fa-folder-open-o fa-2x"></i><span class="headerButtonText"><br>Load Progress</span></button>
+          </div>
+          <div class="btn-group">
+            <button title="Save Progress" type="button" class="btn btn-success btn-lg headerButton saveFP"><i class="fa fa-save fa-2x"></i><span class="headerButtonText"><br>Save Progress</span></button>
+          </div>
+          <div class="btn-group">
+            <button title="View Completed FlightPlans" type="button" class="btn btn-success btn-lg headerButton showCompleted"><i class="fa fa-file-text-o fa-2x"></i><span class="headerButtonText"><br>View Completed</span></button>
+          </div>
+          -->
+          <ol class="rectangle-list" id="tocList">
+            <!--<li><a href="">Preparation</a></li>
+            <li><a href="">Create App Stack in App Volumes</a></li>
+            <li><a href="">Install Applications into App Stack</a></li>
+            <li><a href="">Assign the App State</a></li>
+            <li><a href="">Test the App Stack</a></li>-->
+        </ol>
+
+          <div id="loadDiv" class="btn-group">
+            <button type="button" title="Load Progress" class="btn btn-success btn-md headerButton loadFP"><i class="fa fa-folder-open-o fa-2x"></i><span class="headerButtonText"><br>Load Progress</span></button>
+          </div>
+          <div id="saveDiv" class="btn-group">
+            <button title="Save Progress" type="button" class="btn btn-success btn-md headerButton saveFP"><i class="fa fa-save fa-2x"></i><span class="headerButtonText"><br>Save Progress</span></button>
+          </div>
+          <div id="completedDiv" class="btn-group">
+            <button title="View Completed FlightPlans" type="button" class="btn btn-success btn-md headerButton showCompleted"><i class="fa fa-file-text-o fa-2x"></i><span class="headerButtonText"><br>View Completed</span></button>
+          </div>
+          <div id="toggleBoxes">
+            <span class="toggleLabels">Sequential Processing</span><br />
+            <input id="toggleSequential" type="checkbox" name="bswitch" checked>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Search Section -->
+
+<div id="stepsSection">
+
+</div>
+
+<div>
+  <button id="completeSubmit" type="button" class="btn btn-success">Complete FlightPlan</button>
+  <br /><br />
+</div>
+
+</div> <!-- End Container -->
+
+<div id="loadModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <h4 class="modal-title" id="gridSystemModalLabel">Load Inflight FlightPlan</h4>
+    </div>
+    <div class="modal-body">
+      <div class="panel">
+        <div class="panel-body sp-databox-panel-body">
+
+          <div class="row">
+            <div class="col-sm-12">
+              <table id="inflightListTable" class="table table-bordered">
+                <thead>
+                  <th>Title</th><th>User</th><th>Action</th>
+                </thead>
+                <tbody><tr></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--<div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      <button type="button" class="btn btn-primary">Save changes</button>
+    </div>-->
+  </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div id="viewCompletedModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <h4 class="modal-title" id="gridSystemModalLabel">View Completed FlightPlan</h4>
+    </div>
+    <div class="modal-body">
+      <div class="panel">
+        <div class="panel-body sp-databox-panel-body">
+
+          <div class="row">
+            <div class="col-sm-12">
+              <table id="completedListTable" class="table table-bordered">
+                <thead>
+                  <th>Title</th><th>User</th><th>Action</th>
+                </thead>
+                <tbody><tr></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--<div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      <button type="button" class="btn btn-primary">Save changes</button>
+    </div>-->
+  </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div id="saveModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <h4 class="modal-title" id="saveModal-title">Save / Complete Flight</h4>
+    </div>
+    <div class="modal-body">
+      <div class="panel">
+        <div class="panel-body sp-databox-panel-body">
+
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <label for="saveTitle">Flight Name: </label>
+                <input type="text" class="form-control" name="saveTitle"></input>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button id="saveSubmit" type="button" class="btn btn-success">Submit</button>
+      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+  </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div id="resolutionModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <h4 class="modal-title" id="saveModal-title">Warning</h4>
+    </div>
+    <div class="modal-body">
+      <span>The resolution of your browser has resulted in removing "Notes" functionality for each sub-step.<br><br> To enable the ability to take notes, please increase browser window size and reload the page. If using a mobile device, please switch to landscape mode and reload the page.</span>
+    </div>
+    <div class="modal-footer">
+      <button id="reload" type="button" class="btn btn-danger">Reload</button>
+      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    </div>
+  </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<footer class="container-fluid">
+  <div class="alert alert-gray">
+    <p id="footer"><i class="fa fa-copyright"></i>&nbsp;2016 <a href="https://github.com/eeg3">https://github.com/eeg3</a>
+  </div>
+</footer>
+
+</body>
+</html>

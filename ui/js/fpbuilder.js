@@ -666,7 +666,7 @@ function init () {
 
   $("#stepsSection").css("min-width", "750px");
   $("#stepsSection").css("width", "auto !important");
-  
+
   currentTimestamp();
 
   createStep(1);
@@ -729,6 +729,8 @@ function init () {
     var introguide = introJs();
 
     introguide.setOptions({
+      exitOnEsc: false,
+      exitOnOverlayClick: false,
       steps: [
             {
               intro: 'We noticed this was your first time using the FlightPlan Builder. This guided tour will demonstrate how to get started creating your own flights for you and other pilots to use.',

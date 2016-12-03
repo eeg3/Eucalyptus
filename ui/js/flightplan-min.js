@@ -140,9 +140,9 @@ function parseSteps(steps) {
     var table = $('<table></table>').addClass('table table-bordered table-striped sp-databox-table-sm');
 
     if ($(window).width() >= 660) {
-      var head = $('<thead><tr class="success"><th width="95px">Sub-Step</th><th>Details</th><th>Action</th><th>Notes&nbsp;<span data-toggle="tooltip" data-placement="top" title="Enter notes here to keep track of what you actually did."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></th><th>Status</th></tr></thead>');
+      var head = $('<thead><tr class="success"><th width="95px">Sub-Step</th><th>Action</th><th>Notes&nbsp;<span data-toggle="tooltip" data-placement="top" title="Enter notes here to keep track of what you actually did."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></th><th>Status</th></tr></thead>');
     } else {
-      var head = $('<thead><tr class="success"><th>Sub-Step</th><th>Details</th><th>Action</th><th>Status</th></tr></thead>');
+      var head = $('<thead><tr class="success"><th>Sub-Step</th><th>Action</th><th>Status</th></tr></thead>');
     }
 
     //var head = $('<thead><tr class="success"><th>Sub-Step</th><th>Details</th><th>Action</th><th>Status</th></tr></thead>');
@@ -181,7 +181,7 @@ function parseSteps(steps) {
 
       var tableLineItem = '<tr id="row-' + substepCode + '" class="">';
       tableLineItem += '<td id="' + substepCode + '" class="st-substep-col">' + substepName + '</td>';
-      tableLineItem += '<td id="details-' + substepCode + '" class="st-details-col">' + substepDetails + '</td>';
+      //tableLineItem += '<td id="details-' + substepCode + '" class="st-details-col">' + substepDetails + '</td>';
       tableLineItem += '<td id="action-' + substepCode + '" class="st-action-col">' + substepAction + '</td>';
       //tableLineItem += '<td><input type="text" id="notes-' + substepCode + '" class="form-control input-sm" placeholder="Notes" /></td>';
       if ($(window).width() >= 660) {
@@ -703,8 +703,8 @@ function init () {
   //$('#toggleSequential').change(toggleSeq);
 
   if ($(window).width() >= 660) {
-    $("#stepsSection").css("min-width", "750px");
-    $("#stepsSection").css("width", "auto !important");
+//    $("#stepsSection").css("min-width", "750px");
+//    $("#stepsSection").css("width", "auto !important");
   } else {
     $("#resolutionModal").modal('show');
   }

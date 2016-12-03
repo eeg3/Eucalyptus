@@ -275,6 +275,8 @@ function init () {
       var introguide = introJs();
 
       introguide.setOptions({
+        exitOnEsc: false,
+        exitOnOverlayClick: false,
         steps: [
               {
                 intro: 'Welcome! This guided tour will demonstrate how to use Eucalyptus Dashboard.',
