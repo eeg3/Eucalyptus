@@ -14,7 +14,6 @@ var currentUser = "";
 var stepOrder = [];
 var substepOrder = [];
 
-
 function currentTimestamp() {
   var date = new Date();
   var timestamp = (date.getMonth()+1) + "/"
@@ -29,22 +28,16 @@ function currentTimestamp() {
 function createStep(stepNumber) {
 
   stepOrder.push(stepNumber);
-  //for (var o = 0; o < stepOrder.length; o++) {
-  //  console.log("Step Order: " + stepOrder[o]);
-  //}
 
-  //  var newDivHTML = '<div class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step ' + stepNumber + '&nbsp;&nbsp;<i id="addButton-' + stepNumber + '" class="fa fa-plus leafLogo"></i>&nbsp;<i id="addButton-' + stepNumber + '" class="fa fa-minus minus"></i></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
   if(stepNumber == 1) {
-    //var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step ' + stepNumber + '&nbsp;&nbsp;<a id="addButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-plus"></i></a></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
     var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step #&nbsp;<input type="text" class="input-medium" id="stepTitle-' + stepNumber + '" placeholder="Step Title"></input><input type="text" class="input-medium" id="stepLauncher-' + stepNumber + '" placeholder="Step Launcher URL"></input><a id="addButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-plus"></i></a></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
   } else {
-    //var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step ' + stepNumber + '&nbsp;&nbsp;<a id="addButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-plus"></i></a><a id="delButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-minus minus"></i></a></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
     var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step #&nbsp;<input type="text" class="input-medium" id="stepTitle-' + stepNumber + '" placeholder="Step Title"><input type="text" class="input-medium" id="stepLauncher-' + stepNumber + '" placeholder="Step Launcher URL"></input></input><a id="addButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-plus"></i></a><a id="delButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-minus minus"></i></a></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
   }
   $("#stepsSection").append(newDivHTML);
 
   var table = $('<table id="table-' + stepNumber + '"></table>').addClass('table table-bordered table-striped sp-databox-table');;
-  var head = $('<thead><tr><td>Sub-Step</td><td>Details</td><td>Action</td></tr></thead>');
+  var head = $('<thead><tr><td>Sub-Step</td><td>Details</td></tr></thead>');
   var body = $('<tbody>');
   table.append(head);
   table.append(body);
@@ -76,23 +69,11 @@ function addStep(currentStep) {
 
   stepOrder.splice(stepOrder.indexOf(parseInt(currentStep))+1, 0, stepNumber);
 
-  /*
-  console.log("-----");
-  for (var o = 0; o < stepOrder.length; o++) {
-    console.log("Step Order: " + stepOrder[o]);
-  }
-  console.log("-----");
-  */
-
-  //  var newDivHTML = '<div class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step ' + stepNumber + '&nbsp;&nbsp;<i id="addButton-' + stepNumber + '" class="fa fa-plus leafLogo"></i>&nbsp;<i id="addButton-' + stepNumber + '" class="fa fa-minus minus"></i></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
-  //var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step ' + stepNumber + '&nbsp;&nbsp;<a id="addButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-plus"></i></a><a id="delButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-minus minus"></i></a></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
   var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step #&nbsp;<input type="text" class="input-medium" id="stepTitle-' + stepNumber + '" placeholder="Step Title"></input><input type="text" class="input-medium" id="stepLauncher-' + stepNumber + '" placeholder="Step Launcher URL"></input><a id="addButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-plus"></i></a><a id="delButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-minus minus"></i></a></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
-  //$("#stepsSection").append(newDivHTML);
   $("#row-" + currentStep).after(newDivHTML);
 
-  // Add a table name so we can add to it
   var table = $('<table id="table-'+ stepNumber + '"></table>').addClass('table table-bordered table-striped sp-databox-table');
-  var head = $('<thead><tr><td>Sub-Step</td><td>Details</td><td>Action</td></tr></thead>');
+  var head = $('<thead><tr><td>Sub-Step</td><td>Details</td></tr></thead>');
   var body = $('<tbody>');
   table.append(head);
   table.append(body);
@@ -107,8 +88,6 @@ function addStep(currentStep) {
   table.append(tableEnd);
 
   $("#" + stepNumber).append(table);
-  //$("#row-" + currentStep).append(table);
-
 }
 
 function createSubStep(stepNumber, substepNumber) {
@@ -120,7 +99,6 @@ function createSubStep(stepNumber, substepNumber) {
   var tableLineItem = '<tr id="row-' + substepCode + '">';
   tableLineItem += '<td id="' + substepCode + '" class="st-substep-col borderTD">' + substepName + '</td>';
   tableLineItem += '<td><input type="text" id="details-' + substepCode + '" class="form-control input-sm" placeholder="Sub-Step Details" /></td>';
-  tableLineItem += '<td><input type="text" id="action-' + substepCode + '" class="form-control input-sm" placeholder="Sub-Step Action" /></td>';
   if (substepNumber == 1) {
     tableLineItem += '<td class="borderTD"><a id="addButton-' + substepCode + '" class="btn btn-small leafLogo"><i class="fa fa-plus"></i></a>&nbsp;&nbsp;</td>';
   } else {
@@ -130,15 +108,12 @@ function createSubStep(stepNumber, substepNumber) {
   return tableLineItem;
 }
 
-function addSubStep(stepNumber, substepNumber, details, action) {
+function addSubStep(stepNumber, substepNumber, details) {
 
   var currentSubstepID = stepNumber + "," + substepNumber;
   var currentSubstepNumber = substepNumber;
-
-  //var subStepCode = "substep-" + stepNumber + "-";
   var substepNumber = 999;
 
-  // Check for a place to put the substep
   for(var i = 1; i < 50; i++) {
     if(!($("#row-substep-" + stepNumber + "-" + i).length)) {
       substepNumber = i;
@@ -150,21 +125,12 @@ function addSubStep(stepNumber, substepNumber, details, action) {
 
   substepOrder.splice(substepOrder.indexOf(currentSubstepID)+1, 0, newSubstepID);
 
-  /*
-  console.log("-----");
-  for (var o = 0; o < substepOrder.length; o++) {
-    console.log("Substep Order: " + substepOrder[o]);
-  }
-  console.log("-----");
-  */
-
   var substepName = "#";
   var substepCode = "substep-" + stepNumber + "-" + substepNumber; // Example: substep-2-1
   var tableLineItem = '<tr id="row-' + substepCode + '">';
   tableLineItem += '<td id="' + substepCode + '" class="st-substep-col borderTD">' + substepName + '</td>';
   tableLineItem += '<td ><input type="text" id="details-' + substepCode + '" class="form-control input-sm" placeholder="Sub-Step Details" /></td>';
 
-  tableLineItem += '<td><input type="text" id="action-' + substepCode + '" class="form-control input-sm" placeholder="Sub-Step Action" /></td>';
   if (substepNumber == 1) {
     tableLineItem += '<td class="borderTD"><a id="addButton-' + substepCode + '" class="btn btn-small leafLogo"><i class="fa fa-plus"></i></a>&nbsp;&nbsp;</td>';
   } else {
@@ -172,22 +138,11 @@ function addSubStep(stepNumber, substepNumber, details, action) {
   }
   tableLineItem += '</tr>';
 
-  //$('#table-' + stepNumber + ' tr:last').after(tableLineItem);
   $("#row-substep-" + stepNumber + "-" + currentSubstepNumber).after(tableLineItem);
-
-
-
 
   if (details != undefined) {
     $("#details-" + substepCode).val(details);
-    //console.log("setting #details-" + substepCode + " to: " + details);
   }
-  if (action != undefined) {
-    //console.log("action: " + action);
-    $("#action-" + substepCode).val(action);
-    //console.log("setting #action-" + substepCode + " to: " + action);
-  }
-
 
 }
 
@@ -210,20 +165,10 @@ function hookUpAddDelButtons() {
         // Delete all substeps for substepOrder
         for (var n = 0; n < 5; n++) { // Should change this to just stop when value doens't exist
           var valToDel = (this.id.split("-")[1])+ "," + n;
-          //console.log("Deleting: " + valToDel);
-          //console.log("Does " + valToDel + " exist? " + substepOrder.indexOf((this.id.split("-")[1])+ "," + n));
           if (substepOrder.indexOf((this.id.split("-")[1])+ "," + n) != -1) {
-            console.log("Deleting: " + valToDel);
             substepOrder.splice(substepOrder.indexOf((this.id.split("-")[1])+ "," + n), 1);
           }
         }
-        /*
-        console.log("-----");
-        for (var o = 0; o < substepOrder.length; o++) {
-          console.log("Substep Order: " + substepOrder[o]);
-        }
-        console.log("-----");
-        */
       }); // Hook del button
 
       // Hook substeps up.
@@ -239,7 +184,6 @@ function hookUpAddDelButtons() {
           $("#delButton-substep-" + i + "-" + j).click(function() {
             var trToDelete = "row-" + (this.id).split("-")[1] + "-" + (this.id).split("-")[2] + "-" + (this.id).split("-")[3];
             $("#" +trToDelete).remove();
-            console.log("deleting: " + (this.id.split("-")[2])+ "," + (this.id).split("-")[3]);
             substepOrder.splice(substepOrder.indexOf((this.id.split("-")[2])+ "," + (this.id).split("-")[3]), 1);
           }); // Hook del button
         }
@@ -264,57 +208,24 @@ function hookUpInputValidation() {
 
   staticFields.forEach(function(entry) {
     $("#" + entry).on('input', function() {
-      //if($("#" + this.id).val() == "") {
-        $("#" + this.id).css("border", "1px solid #ccc");
-        //$("#errorMessage").html("");
-    //  }
+      $("#" + this.id).css("border", "1px solid #ccc");
     });
   });
 
   for (var i = 0; i < 50; i++) {
     for (var j = 0; j < 50; j++) {
-      $("#action-substep-" + i + "-" + j).on('input', function() {
-        if($("#" + this.id).val() == "") {
-          $("#" + this.id).css("border", "1px solid #ccc");
-          //$("#errorMessage").html("");
-        } else {
-
-          //$("#errorMessage").html("");
-          if ($("#" + this.id).val().indexOf(";;;") != -1) {
-            //$("#errorMessage").html("ERROR: Steps cannot contain the ';' character.");
-            $("#" + this.id).css("border", "1px solid red");
-            return;
-          } else if ($("#" + this.id).val().indexOf("|||") != -1) {
-            //$("#errorMessage").html("ERROR: Steps cannot contain the '|' character.");
-            $("#" + this.id).css("border", "1px solid red");
-            return;
-          } else if ($("#" + this.id).val().indexOf(",,,") != -1) {
-            //$("#errorMessage").html("ERROR: Steps cannot contain the '|' character.");
-            $("#" + this.id).css("border", "1px solid red");
-            return;
-          } else {
-            $("#" + this.id).css("border", "1px solid #ccc");
-          }
-        }
-      });
 
       $("#details-substep-" + i + "-" + j).on('input', function() {
         if($("#" + this.id).val() == "") {
           $("#" + this.id).css("border", "1px solid #ccc");
-          //$("#errorMessage").html("");
         } else {
-
-          //$("#errorMessage").html("");
           if ($("#" + this.id).val().indexOf(";;;") != -1) {
-            //$("#errorMessage").html("ERROR: Steps cannot contain the ';' character.");
             $("#" + this.id).css("border", "1px solid red");
             return;
           } else if ($("#" + this.id).val().indexOf("|||") != -1) {
-            //$("#errorMessage").html("ERROR: Steps cannot contain the '|' character.");
             $("#" + this.id).css("border", "1px solid red");
             return;
           } else if ($("#" + this.id).val().indexOf(",,,") != -1) {
-            //$("#errorMessage").html("ERROR: Steps cannot contain the '|' character.");
             $("#" + this.id).css("border", "1px solid red");
             return;
           } else {
@@ -345,14 +256,10 @@ function exportFlightplan() {
   });
 
   // Check for a place to put the step
-  //for(var i = 1; i < 50; i++) {
   stepOrder.forEach(function(i) {
     if($("#row-" + i).length) { // If step exists
       stepNumber++;
       substepNumber = 1;
-
-      //console.log("Launcher: " + $("#stepLauncher-1").val());
-      // stepLauncher-# stepTitle-#
 
       if ($("#stepTitle-" + i).length) {
         if($("#stepTitle-" + i).val() == "") {
@@ -361,8 +268,6 @@ function exportFlightplan() {
           validated = 0;
           return;
         }
-        //($("#" + this.id).val().indexOf(";;;") != -1)
-        //if (cleanOfSemicolons.test( $("#stepTitle-" + i).val() ) == false) {
         if ($("#stepTitle-" + i).val().indexOf(";;;") != -1) {
           $("#errorMessage").html("ERROR: Steps cannot contain the string ';;;'.");
           validated = 0;
@@ -388,9 +293,7 @@ function exportFlightplan() {
 
       if ($("#stepLauncher-" + i).length) {
         if ($("#stepLauncher-" + i).val() == "") {
-          //$("#errorMessage").html("ERROR: Cannot have empty step launcher.");
           stepsString += "noLauncher|";
-        //} else if (cleanOfSemicolons.test( $("#stepLauncher-" + i).val() ) == false) {
         } else if ($("#stepLauncher-" + i).val().indexOf(";;;") != -1) {
           $("#errorMessage").html("ERROR: Launcher cannot contain the string ';;;'.");
           validated = 0;
@@ -416,19 +319,12 @@ function exportFlightplan() {
 
       for (var o = 0; o < substepOrder.length; o++) {
         if (substepOrder[o].split(",")[0] == i) {
-          //console.log("Substep parsing: " + substepOrder[o]);
           j = substepOrder[o].split(",")[1];
 
           if ($("#row-substep-" + i + "-" + j).length) {
             if($("#details-substep-" + i + "-" + j).val() == "") {
               $("#errorMessage").html("ERROR: Cannot have empty steps.");
               $("#details-substep-" + i + "-" + j).css("border", "1px solid red");
-              validated = 0;
-              return;
-            }
-            if($("#action-substep-" + i + "-" + j).val() == "") {
-              $("#errorMessage").html("ERROR: Cannot have empty steps.");
-              $("#action-substep-" + i + "-" + j).css("border", "1px solid red");
               validated = 0;
               return;
             }
@@ -452,29 +348,7 @@ function exportFlightplan() {
               validated = 0;
             }
 
-            if ($("#action-substep-" + i + "-" + j).val().indexOf(";;;") != -1) {
-              $("#errorMessage").html("ERROR: Steps cannot contain the string ';;;'.");
-              validated = 0;
-            } else if ($("#action-substep-" + i + "-" + j).val().indexOf("|||") != -1) {
-              $("#errorMessage").html("ERROR: Steps cannot contain the string '|||'.");
-              validated = 0;
-            } else if ($("#action-substep-" + i + "-" + j).val().indexOf(",,,") != -1) {
-              $("#errorMessage").html("ERROR: Steps cannot contain the string ',,,'.");
-              validated = 0;
-            } else if (beginsWith($("#action-substep-" + i + "-" + j).val(), ";") || endsWith($("#action-substep-" + i + "-" + j).val(), ";"))  {
-              $("#errorMessage").html("ERROR: Steps cannot begin or end with the ';' character.");
-              validated = 0;
-            } else if (beginsWith($("#action-substep-" + i + "-" + j).val(), "|") || endsWith($("#action-substep-" + i + "-" + j).val(), "|"))  {
-              $("#errorMessage").html("ERROR: Steps cannot begin or end with the '|' character.");
-              validated = 0;
-            } else if (beginsWith($("#action-substep-" + i + "-" + j).val(), ",") || endsWith($("#action-substep-" + i + "-" + j).val(), ","))  {
-              $("#errorMessage").html("ERROR: Steps cannot begin or end with the ',' character.");
-              validated = 0;
-            }
-
-            stepsString += substepNumber + ",,," + $("#details-substep-" + i + "-" + j).val() + ",,," + $("#action-substep-" + i + "-" + j).val() + "|||";
-            //console.log(substepNumber + " Details: " + $("#details-substep-" + i + "-" + j).val() );
-            //console.log(substepNumber + " Action:" + $("#action-substep-" + i + "-" + j).val() );
+            stepsString += substepNumber + ",,," + $("#details-substep-" + i + "-" + j).val() + "|||";
             substepNumber++;
           }
 
@@ -490,42 +364,19 @@ function exportFlightplan() {
 
 
   if(validated) {
-    console.log("Title: " + $("#title").val());
-    console.log("Author: " + $("#author").val());
-    console.log("Description: " + $("#description").val());
-    console.log("Product: " + $("#product").val());
-    console.log("Category: " + $("#category").val());
-    console.log("Revision: " + $("#revision").val());
-    console.log("Steps: " + stepsString);
-
-    // Insert code to actually post to API
-    //var flightplanId = $('input:text[name=patchId]').val();
     var titlePost = $("#title").val();
     var authorPost = $("#author").val();
     var revisionPost = $("#revision").val();
     var categoryPost = $("#category").val();
     var productPost = $("#product").val();
     var descriptionPost = $("#description").val();
-    //var outcome = $('input:text[name=patchOutcome]').val();
     var stepsPost = stepsString;
-
-    // Begin validation code
-
-    //var cleanInput = new RegExp("^[^;]+$");
-    //console.log("validate: " + cleanInput.test('abc1;23') ); // Returns true if it is clean, and false if it is unclean
-
-    // End validation code
 
     var flightplanPost = {};
 
     if (titlePost !== "") {
       flightplanPost["title"] = titlePost;
     }
-    /*
-    if (authorPost !== "") {
-      flightplanPost["author"] = authorPost;
-    }
-    */
 
     flightplanPost["author"] = currentUser;
     if (revisionPost !== "") {
@@ -551,8 +402,6 @@ function exportFlightplan() {
     }
     formModified = false; // Reset this or it will ask if we want to reload after submitting.
     location.reload();
-  } else {
-    console.log("Form invald.");
   }
 
 }
@@ -594,12 +443,8 @@ function getFlightplan(id) {
           createBoard(flightplan[i]["steps"]);
           hookUpAddDelButtons();
           hookUpInputValidation();
-          //parseSteps(flightplan[i]["steps"]);
         }
       }
-
-      //stepQuantity = findTotalStepQuantity();
-      //initiateStepFlow(stepQuantity.steps, stepQuantity.substeps);
 
       // Enable tooltips after all the steps are processed.
       $(document).ready(function(){
@@ -640,21 +485,17 @@ function createBoard(steps) {
 
     if(!(i == steps.length)) {
       addStep(i);
-      console.log("adding step #: " + i);
     }
 
     $("#stepTitle-" + i).val(substeps[0].split(',,,')[0]);
     $("#stepLauncher-" + i).val(substeps[0].split(',,,')[1]);
 
     for (var j = 1; j < (substeps.length); j++) {
-      //console.log("substep [" + i + "," + j + "]: " + substeps[j]);
       var details = substeps[j].split(',,,')[1];
-      var action = substeps[j].split(',,,')[2];
       if (j == 1) {
         $("#details-substep-" + i + "-1").val(details);
-        $("#action-substep-" + i + "-1").val(action);
       } else {
-        addSubStep(i, j-1, details, action);
+        addSubStep(i, j-1, details);
       }
     }
   }
@@ -710,7 +551,6 @@ function init () {
         return "New information not saved. Do you wish to leave the page?";
       }
     }
-    // End Leave Warning
 
   });
 
@@ -737,7 +577,6 @@ function init () {
               position: 'right-bottom'
             },
             {
-              //intro: 'Eucalyptus is a simple solution to help with complex processes. By defining complex processes in simple steps, allowing us to easily start and stop them, and enabling us to document our steps, we lessen the operational burden of new solutions.',
               intro: 'This builder is meant to <b>create templates</b> for future Flights.<br><br>If you meant to actually take a Flight instead, simply go back <i class="fa fa-home"></i> and then select a prepared FlightPlan to get started.',
               position: 'bottom'
             },
@@ -763,7 +602,7 @@ function init () {
             },
             {
               element: '#row-substep-1-1',
-              intro: 'Each substep has a details section and an actions section.<br><br>Details is the high level summary of the substep, and Action is what all happens in the substep.',
+              intro: 'Each substep has a details section, which are the summary of the substep.',
               position: 'bottom'
             },
             {
@@ -816,38 +655,17 @@ function init () {
     $('#importExistingDiv').show();
   });
 
-  $("#importFlightplan").click(function() {
-    alert("Working!");
-  }); // Hook clicking Create FlightPlan
-
-
   $("#flpUpload").on('change', function() {
     var file = $("#flpUpload").prop('files')[0];
     var reader = new FileReader();
     reader.onload = function(e) {
       try {
         obj = JSON.parse(reader.result);
-
-
         helper.post("/api/flightplan/", obj);
-
-        /*
-        console.log("obj[_id]: " + obj["_id"]);
-        console.log("obj[title]: " + obj["title"]);
-        console.log("obj[author]: " + obj["author"]);
-        console.log("obj[revision]: " + obj["revision"]);
-        console.log("obj[category]: " + obj["category"]);
-        console.log("obj[product]: " + obj["product"]);
-        console.log("obj[description]: " + obj["description"]);
-        console.log("obj[steps]: " + obj["steps"]);
-        */
-
         $('#myModal').modal('hide');
         $('#loadSuccessModal').modal('show');
-        // End Find
-
       } catch (e) {
-        console.log("Invalid FlightPlan File!");
+        // Invalid Flightplan File is getting here.
       }
     }
     reader.readAsText(file);
@@ -871,7 +689,6 @@ function init () {
     $('#loadSuccessModal').modal('hide');
     loadedFlightplan = true;
     $("#createFlightplan").html("Update FlightPlan");
-    // Find the new FP ID
 
     helper.get("/api/flightplan/")
       .then(function(data){
@@ -888,8 +705,6 @@ function init () {
   });
 
   $("#loadExistingFP").click(function() {
-    //window.print();
-    //saveFlightplan();
     $('#myModal').modal('hide');
 
     helper.get("/api/flightplan/")
@@ -928,13 +743,9 @@ function init () {
         });
 
         $(".deleteBtn").click(function() {
-          console.log(this.id);
-          console.log( (this.id).split("-")[1] );
-
           helper.del("/api/flightplan/" + (this.id).split("-")[1]);
           formModified = false; // Reset this or it will ask if we want to reload after submitting.
           $(this).closest('tr').remove();
-          //location.reload();
         });
 
         $('#loadModal').modal({
@@ -942,26 +753,6 @@ function init () {
           backdrop: 'static',
           keyboard: false
         });
-
-/*
-        var introguide = introJs();
-
-        introguide.setOptions({
-          steps: [
-            {
-              intro: 'We noticed this was your first time modifying an existing FlightPlan!<br><br>Here you can edit or delete existing FlightPlans that anyone within your system has created.<br><br>Please proceed with caution as changes are not recoverable.',
-              position: 'right-bottom'
-            },
-            {
-              intro: 'To load a FlightPlan into the Builder, simply select the <i class="fa fa-folder-open-o"></i> button next to the FlightPlan to load it and begin editing.<br><br>To delete a FlightPlan, simply select the <i class="fa fa-trash-o"></i> button next to the FlightPlan to permanently delete it.',
-              position: 'right-bottom'
-            }
-          ],
-          tooltipClass: 'customDefault'
-        });
-
-        introguide.start();
-*/
 
         $("#helpBtn").click(function() {
           introguide.setOptions({

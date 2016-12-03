@@ -2,7 +2,7 @@ window.onload = init;
 
 // Global variables
 var stepsComplete = 0;
-var launchers = []; // We use the launchers variable to work around the scope...
+var launchers = [];
 var mobile = false;
 var loadedNote = false;
 var completed = false;
@@ -21,8 +21,10 @@ function currentTimestamp() {
   $('#footer').append("<br /> Current Time: " + timestamp);
 }
 
+// initiateStepFlow(steps, substeps)
+// Makes it so checkboxes are enabled or disabled if the previous checkbox is checked or unchecked.
 function initiateStepFlow(steps, substeps) {
-  // The following for section makes it so checkboxes are enabled or disabled if the previous checkbox is checked or unchecked
+
 
   // Take action per step
   for (var i = 1; i<steps+1; i++) {
@@ -87,130 +89,88 @@ function initiateStepFlow(steps, substeps) {
 
   } // End action per step
 
-  // Hard-code Show All for testing
-  /*
-  $("tr[id^='row-substep-']").each(function () {
-    $("#" + this.id).css("color", "black"); // Unhide next sub-step since this sub-step is complete.
-  });
-
-  $('#toggleSequential').prop('checked', true);
-  */
 }
 
+// parseSteps(steps)
+// This function actually populates the steps div based on the object's steps element.
 function parseSteps(steps) {
   var steps = steps.split(";;;");
   var numberOfSteps = steps.length;
 
   for (var i = 0;i < steps.length; i++) { // This for loop processes each step
-
-    // Example substep: launcherAddress|A,Sub-step item to do from object,RDP to ServerA|B,Sub-step item to do from object again,Open Citrix Studio|C,Sub-step item to do lastly,Open PVS Console;
     var stepNumber = i+1;
-
     var substeps = steps[i].split("|||");
-
     var stepTitle = substeps[0].split(",,,")[0];
     launchers.push(substeps[0].split(",,,")[1]);
 
-
+    // We change the way each step's header is displayed if size is too small; otherwise, it looks weird.
     if ($(window).width() >= 660) {
       var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="panel panel-inverse"><div class="panel-heading sp-databox-panel-heading-dark">' + stepTitle + ' <button id="launch-' + stepNumber + '" type="button" class="btn btn-success btn-xs launchButton"><i class="fa fa-rocket"></i> Launch</button><button id="automate-' + stepNumber + '" type="button" class="btn btn-success btn-xs launchButton" disabled><i class="fa fa-cogs"></i> Automate</button></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div>';
     } else {
       var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="panel panel-inverse"><div class="panel-heading sp-databox-panel-heading-dark"><center>' + stepTitle + '<br><button id="launch-' + stepNumber + '" type="button" class="btn btn-success btn-xs "><i class="fa fa-rocket"></i> Launch</button><button id="automate-' + stepNumber + '" type="button" class="btn btn-success btn-xs " disabled><i class="fa fa-cogs"></i> Automate</button></center></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div>';
 
     }
-
-//    var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="panel panel-inverse"><div class="panel-heading sp-databox-panel-heading-dark">' + stepTitle + ' <button id="launch-' + stepNumber + '" type="button" class="btn btn-success btn-xs launchButton"><i class="fa fa-rocket"></i> Launch</button><button id="automate-' + stepNumber + '" type="button" class="btn btn-success btn-xs launchButton" disabled><i class="fa fa-cogs"></i> Automate</button></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div>';
-
-
     $("#stepsSection").append(newDivHTML);
+
+    // The Table of Contents is composed of all of the steps. They are clickable to jump to relevant section.
     $("#tocList").append('<li id="li-' + stepNumber + '"><a href="#row-' + stepNumber + '">' + stepTitle + '</a></li>');
 
-    /* Add Launchers */
-    // What else could we launch?
-      // * Documentation
-      // * KB Articles
-      // * Management Consoles
-      // * VM Consoles
-      // * Remote Desktop
-      // * Virtual Desktops
-      // * Virtual Apps
-      // * Ticketing Sites
-
-    //var table = $('<table></table>').addClass('table table-bordered table-striped sp-databox-table-lg');
     var table = $('<table></table>').addClass('table table-bordered table-striped sp-databox-table-sm');
 
+    // Similar to modifying step's header if display size is too small, we also disable note-taking because it doesn't work well on devices this small.
+    // This section just disabled the th header for Notes. It's also removed from being shown in each substep loop.
+    // A warning is displayed in a modal later notifying the user of this.
     if ($(window).width() >= 660) {
-      var head = $('<thead><tr class="success"><th width="95px">Sub-Step</th><th>Details</th><th>Action</th><th>Notes&nbsp;<span data-toggle="tooltip" data-placement="top" title="Enter notes here to keep track of what you actually did."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></th><th>Status</th></tr></thead>');
+      var head = $('<thead><tr class="success"><th width="95px">Sub-Step</th><th>Details</th><th>Notes&nbsp;<span data-toggle="tooltip" data-placement="top" title="Enter notes here to keep track of what you actually did."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></th><th>Status</th></tr></thead>');
     } else {
-      var head = $('<thead><tr class="success"><th>Sub-Step</th><th>Details</th><th>Action</th><th>Status</th></tr></thead>');
+      var head = $('<thead><tr class="success"><th>Sub-Step</th><th>Details</th><th>Status</th></tr></thead>');
     }
-
-    //var head = $('<thead><tr class="success"><th>Sub-Step</th><th>Details</th><th>Action</th><th>Status</th></tr></thead>');
-    var body = $('<tbody>');
     table.append(head);
+
+    var body = $('<tbody>');
     table.append(body);
 
-    if ( substeps[0].split(",,,")[1] == "noLauncher") {
+    // If there isn't a launcher, disable the button.
+    if (substeps[0].split(",,,")[1] == "noLauncher") {
       $("#launch-" + stepNumber).prop("disabled", true);
     }
 
+    // Hook up clicking Launcher to the URL configured in the FlightPlan.
     $("#launch-" + stepNumber).click(function() {
-      //alert("yo from: " + this.id);
       var strWindowFeatures = "location=no,height=800,width=1050,scrollbars=no,status=no,resizable=no";
-      //var strWindowFeatures = "";
-      //var URL = "https://vcs01.eeg3.lab/admin";
-      var URL = launchers[this.id.split("-")[1]-1]; // We use the launchers variable to work around the scope...
+      var URL = launchers[this.id.split("-")[1]-1];
       var win = window.open(URL, "_blank", strWindowFeatures);
     });
 
-    $("#popout-" + stepNumber).click(function() {
-      //alert("yo from: " + this.id);
-      var strWindowFeatures = "location=no,height=200,width=1000,scrollbars=no,status=no,resizable=no";
-      //var strWindowFeatures = "";
-      var URL = "http://localhost:8001/flightplan-popout.html";
-      //var URL = launchers[this.id.split("-")[1]-1]; // We use the launchers variable to work around the scope...
-      var win = window.open(URL, "_blank", strWindowFeatures);
-    });
-
-    for (var j = 1; j < substeps.length; j++) { // This for loop processes each substep of each step
+    // This for loop processes each substep of each step.
+    for (var j = 1; j < substeps.length; j++) {
       var substepNumber = j;
       var substepName = substeps[j].split(",,,")[0];
       var substepDetails = substeps[j].split(",,,")[1];
-      var substepAction = substeps[j].split(",,,")[2];
       var substepCode = "substep-" + stepNumber + "-" + substepNumber; // Example: substep-2-1
 
       var tableLineItem = '<tr id="row-' + substepCode + '" class="">';
       tableLineItem += '<td id="' + substepCode + '" class="st-substep-col">' + substepName + '</td>';
       tableLineItem += '<td id="details-' + substepCode + '" class="st-details-col">' + substepDetails + '</td>';
-      tableLineItem += '<td id="action-' + substepCode + '" class="st-action-col">' + substepAction + '</td>';
-      //tableLineItem += '<td><input type="text" id="notes-' + substepCode + '" class="form-control input-sm" placeholder="Notes" /></td>';
+      // Again disable Notes if window is too small.
       if ($(window).width() >= 660) {
         tableLineItem += '<td><textarea id="notes-' + substepCode + '" class="notesTextArea" rows="1" placeholder="Notes" /></td>';
       }
-
-      //tableLineItem += '<td><textarea id="notes-' + substepCode + '" class="notesTextArea" rows="1" placeholder="Notes" /></td>';
-
+      // Add checkboxes for completion.
       if (i == 0 && j == 1) {
         tableLineItem += '<td><input type="checkbox" id="status-' + substepCode + '" class=""><label for="status-' + substepCode + '" class="euc-green"></label></td>';
       } else {
         tableLineItem += '<td><input type="checkbox" id="status-' + substepCode + '" class="" disabled><label for="status-' + substepCode + '" class="euc-green"></label></td>';
       }
+
       tableLineItem += '</tr>';
-
       table.append(tableLineItem);
-
-  //    console.log("Step Number: " + stepNumber);
-  //    console.log("Substep-Number: " + substepNumber);
-  //    console.log("Sub-step # | Details | Action");
-  //    console.log(substepName + " | " + substepDetails + " | " + substepAction);
-
     }
 
     var tableEnd = $('</tbody>');
     table.append(tableEnd);
 
     $("#" + stepNumber).append(table);
-
   }
 
   // We want to track if anything changes so that we can warn the user if they try to exit before saving.
@@ -220,6 +180,8 @@ function parseSteps(steps) {
 
 }
 
+// updateCompletionStatus()
+// This function handles calculating the completion status bar. We also keep the status bar at atleast 5%.
 function updateCompletionStatus() {
   var stepCount = findTotalStepQuantity();
   var percentComplete = (stepsComplete / stepCount.substeps) * 100;
@@ -227,6 +189,8 @@ function updateCompletionStatus() {
   $("#completionStatus").css("width", percentComplete + '%');
 }
 
+// getFlightplan()
+// Grabs the FlightPlan itself from the FlightPlan API.
 function getFlightplan() {
   /*
   helper.get("api/flightplan/"):
@@ -238,22 +202,19 @@ function getFlightplan() {
     .then(function(data){
       var flightplan = data;
       var flightplanEntry = "";
-
       var passedId = urlParam('id');
-      console.log("passedId: " + passedId);
 
+      // Search all the flightplans until we get the one that matches the passed Id.
       for (var i = 0; i < data.length; i++) {
-        var nodesToDisplay = ["_id", "title", "author", "revision", "category", "product", "description", "steps"];
-
         if (flightplan[i]["_id"] == passedId) {
           var flightplanSteps = flightplan[i]["steps"];
-          displaySummary();
-          parseSteps(flightplanSteps);
+          displaySummary(); // Generate the Summary section.
+          parseSteps(flightplanSteps); // Generate the Steps section.
         }
       }
 
       stepQuantity = findTotalStepQuantity();
-      initiateStepFlow(stepQuantity.steps, stepQuantity.substeps);
+      initiateStepFlow(stepQuantity.steps, stepQuantity.substeps); // Hook Up step checkbox logic.
 
       // Enable tooltips after all the steps are processed.
       $(document).ready(function(){
@@ -266,70 +227,32 @@ function getFlightplan() {
 }
 
 function displaySummary() {
-
-  $("#flightplanHeaderSection").html(""); // Clear it
+  $("#flightplanHeaderSection").html(""); // Clear it before we add it.
 
   helper.get("/api/flightplan/")
     .then(function(data){
       var flightplan = data;
       var flightplanEntry = "";
-
       var passedId = urlParam('id');
 
+      // Search for FlightPlan then show its title, author, and description.
       for (var i = 0; i < data.length; i++) {
-        var nodesToDisplay = ["_id", "title", "author", "revision", "category", "product", "description", "steps"];
-
         if (flightplan[i]["_id"] == passedId) {
-
-          // Example steps string: "A,Sub-step item to do from object,RDP to ServerA|B,Sub-step item to do from object again,Open Citrix Studio|C,Sub-step item to do lastly,Open PVS Console;A,Sub-step item to do in 2,RDP to ServerB|B,Sub-step item to do in 2,RDP to Server|C,Sub-step item to do in 2,RDP to ServerD"
-          var flightplanSteps = flightplan[i]["steps"];
-
-          /*
-          // Add table
-
-          var table = $('<table></table>').addClass('table table-bordered table-striped sp-databox-table-sm');
-          var body = $('<tbody>');
-          table.append(body);
-
-          var tableLineItem = "";
-          tableLineItem += '<tr><td>Category <span data-toggle="tooltip" data-placement="right" title="Categories are groupings of similar flightplans."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></td><td><span id="flightplanCategory" class="flightplanHeader"></span></td></tr>';
-          tableLineItem += '<tr><td>Product <span data-toggle="tooltip" data-placement="right" title="Flightplans are tied to products and versions so they stay relevant."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></td><td><span id="flightplanProduct" class="flightplanHeader"></span></td></tr>';
-          tableLineItem += '<tr><td>Description <span data-toggle="tooltip" data-placement="right" title="The purpose of the flightplan."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></td><td><span id="flightplanDescription" class="flightplanHeader"></span></td></tr>';
-          tableLineItem += '<tr><td>Revision <span data-toggle="tooltip" data-placement="right" title="As flightplans are updated, revisions are added."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></td><td><span id="flightplanRevision" class="flightplanHeader"></span></td></tr>';
-          tableLineItem += '<tr><td>Author <span data-toggle="tooltip" data-placement="right" title="The creator of the flightplan."><i id="categoryInfo" class="fa fa-question-circle-o"></i></span></td><td><span id="flightplanAuthor" class="flightplanHeader"></span></td></tr></tr>';
-
-          table.append(tableLineItem);
-
-          var tableEnd = $('</tbody>');
-          table.append(tableEnd);
-
-          $("#flightplanHeaderSection").append(table);
-          */
-
           var flightplanTitle = flightplan[i]["title"];
           $("#flightplanTitle").html(flightplanTitle);
 
           var flightplanAuthor = flightplan[i]["author"];
           $("#flightplanAuthor").html(flightplanAuthor);
 
-          //var flightplanRevision = flightplan[i]["revision"];
-          //$("#flightplanRevision").html(flightplanRevision);
-
-          //var flightplanCategory = flightplan[i]["category"];
-          //$("#flightplanCategory").html(flightplanCategory);
-
-          //var flightplanProduct = flightplan[i]["product"];
-          //$("#flightplanProduct").html(flightplanProduct);
-
           var flightplanDescription = flightplan[i]["description"];
           $("#flightplanDescription").html(flightplanDescription);
         }
       }
     });
-
 }
 
-// findStepQuantity() finds it based on the DOM created by parseSteps(), and doesn't actually look at the API
+// findStepQuantity()
+// Finds step quantity based on the DOM created by parseSteps(), and doesn't actually look at the API.
 function findTotalStepQuantity() {
   var result = {
     steps: 0,
@@ -349,6 +272,8 @@ function findTotalStepQuantity() {
   return result;
 }
 
+// urlParam(name, url)
+// Gets the id from the URL parameters (e.g. flightplan?id=546345634563456ee)
 function urlParam(name, url) {
     if (!url) {
      url = window.location.href;
@@ -360,33 +285,8 @@ function urlParam(name, url) {
     return results[1] || undefined;
 }
 
-function exportFlightplan() {
-    //details-substep-1-1
-    //action-substep-1-1
-    //notes-substep-1-1
-    var flightplanObject = {
-      flightplanId: "id",
-      title: "title",
-
-    }
-
-    for (var i = 1; i < 100; i++) {
-      if(!$("#details-substep-" + i + "-1").length == 0) {
-        for (var j = 1; j < 100; j++) {
-          if(!$("#details-substep-" + i + "-" + j).length == 0) {
-            console.log($("#details-substep-" + i + "-" + j).text());
-            console.log($("#action-substep-" + i + "-" + j).text());
-            console.log($("#notes-substep-" + i + "-" + j).val());
-            //console.log("notes-substep-" + i + "-" + j + ": " + $("#notes-substep-" + i + "-" + j).val());
-          } else {
-            console.log("details-substep-" + i + "-" + j + " does not exist. Breaking.");
-            break;
-          }
-        }
-      }
-    }
-}
-
+// saveFlightplan(status)
+// Saves the FlightPlan.
 function saveFlightplan(status) {
 
   var saveTitle = "";
@@ -395,12 +295,10 @@ function saveFlightplan(status) {
   var saveAlreadyExists = false;
   var passedId = urlParam('id');
   var lastChecked = "";
-  //var completed = false;
 
   // Save instead of Save As if already loaded
   if (status == "new") {
     saveTitle = $('input:text[name=saveTitle]').val();
-    //user = $('input:text[name=saveUser]').val();
     user = currentUser;
   } else if (status == "existing") {
     saveTitle = $("#currentInflight").text();
@@ -411,7 +309,6 @@ function saveFlightplan(status) {
 
   // Find last checked item so we can save progress
   $("input[id^='status-substep-']").each(function () {
-    console.log(this.id + ": " + $("#" + this.id).prop('checked'));
     if($("#" + this.id).prop('checked')) {
       lastChecked = this.id;
     }
@@ -426,12 +323,9 @@ function saveFlightplan(status) {
       var validated = 1;
 
       for (var i = 0; i < data.length; i++) {
-        var nodesToDisplay = ["_id", "referencedFlightplan", "user", "notes"];
-
         if (inflight[i]["title"] == saveTitle) {
           saveAlreadyExists = true;
           savedInflight = inflight[i]["_id"];
-          console.log("savedInflight: " + savedInflight);
         }
       }
 
@@ -439,21 +333,14 @@ function saveFlightplan(status) {
         if(!$("#details-substep-" + i + "-1").length == 0) {
           for (var j = 1; j < 100; j++) {
             if(!$("#details-substep-" + i + "-" + j).length == 0) {
-              //console.log($("#details-substep-" + i + "-" + j).text());
-              //console.log($("#action-substep-" + i + "-" + j).text());
-              //console.log($("#notes-substep-" + i + "-" + j).val());
-              //console.log("notes-substep-" + i + "-" + j + ": " + $("#notes-substep-" + i + "-" + j).val());
               if (($("#notes-substep-" + i + "-" + j).val().indexOf("|||") != -1)) {
                 alert("ERROR: Notes cannot contain the string '|||'. Please remove and re-save.");
-                //$("#errorMessage").html("ERROR: Launcher cannot contain the string ';;;'.");
                 validated = 0;
               } else if (($("#notes-substep-" + i + "-" + j).val().indexOf(";;;") != -1)) {
                 alert("ERROR: Notes cannot contain the string ';;;'. Please remove and re-save.");
-                //$("#errorMessage").html("ERROR: Launcher cannot contain the string ';;;'.");
                 validated = 0;
               } else if (($("#notes-substep-" + i + "-" + j).val().indexOf(",,,") != -1)) {
                 alert("ERROR: Notes cannot contain the string ',,,'. Please remove and re-save.");
-                //$("#errorMessage").html("ERROR: Launcher cannot contain the string ';;;'.");
                 validated = 0;
               } else if (beginsWith($("#notes-substep-" + i + "-" + j).val(), ";") || endsWith($("#notes-substep-" + i + "-" + j).val(), ";")) {
                 alert("ERROR: Notes cannot begin or end with the character ';'. Please remove and re-save.");
@@ -468,7 +355,6 @@ function saveFlightplan(status) {
                 notes += "notes-substep-" + i + "-" + j + "|||" + $("#notes-substep-" + i + "-" + j).val() + ";;;";
               }
             } else {
-              //console.log("details-substep-" + i + "-" + j + " does not exist. Breaking.");
               break;
             }
           }
@@ -503,10 +389,8 @@ function saveFlightplan(status) {
             $("#currentInflight").html(saveTitle);
           } else {
             $("modalError").html("Error: Save name already exists. Not overwriting.")
-            console.log("Save already exists. Not overwriting.");
           }
         } else {
-          // patch code
           helper.patch("/api/inflight/" + savedInflight, inflightPost);
           $("#currentInflight").html(saveTitle);
         }
@@ -516,6 +400,8 @@ function saveFlightplan(status) {
 
 }
 
+// loadFlightPlan(idToLoad)
+// This function loads previously saved or completed FlightPlans.
 function loadFlightplan(idToLoad) {
 
   var inflightNotes = "";
@@ -540,10 +426,8 @@ function loadFlightplan(idToLoad) {
         }
 
         // Process Notes
-        //console.log("inflightNotes: " + inflightNotes);
         if (inflightNotes != "") {
           (inflightNotes.split(';;;')).forEach(function(item) {
-            //console.log("note location: " + item.split("|")[0] + " | note value: " + item.split("|")[1]);
             $("#" + item.split("|||")[0]).val( item.split("|||")[1] );
           });
         }
@@ -563,47 +447,31 @@ function loadFlightplan(idToLoad) {
         $("input[id^='status-substep-']").each(function () {
           var currentStep = (this.id).split("-")[2];
           var currentSubstep = (this.id).split("-")[3];
-          //console.log("----");
-          //console.log("currentStep / current Substep: " + currentStep + " / " + currentSubstep);
-          //console.log("lastCheckedStep / lastCheckedSubstep: " + lastCheckedStep + " / " + lastCheckedSubstep);
-          //console.log("#status-substep-" + lastCheckedStep + "-" + (parseInt(lastCheckedSubstep)+1));
 
           if (parseInt(currentStep) < parseInt(lastCheckedStep)) {
-              //console.log("checking");
-              //console.log("we should be checking: " + this.id);
               $("#" + this.id).prop('checked', true);
               $("#" + this.id).prop('disabled', false);
               $("#li-" + currentStep).css("text-decoration", "line-through");
           } else if (parseInt(currentStep) == parseInt(lastCheckedStep)) {
             if (parseInt(currentSubstep) <= parseInt(lastCheckedSubstep)) {
-              //console.log("checking2");
-              //console.log("we should be checking: " + this.id);
               $("#" + this.id).prop('checked', true);
               $("#" + this.id).prop('disabled', false);
 
               var nextRow = "status-substep-" + currentStep + "-" + (parseInt(currentSubstep)*1 + 1);
-              console.log("next row!!!! : " + nextRow);
               if (!($("#" + nextRow).length)) {
-                console.log("next row does not exist : " + nextRow);
                 $("#li-" + currentStep).css("text-decoration", "line-through");
               }
             } else if (parseInt(currentSubstep) == parseInt(lastCheckedSubstep)+1) {
-              //console.log("enabling");
               $("#" + this.id).prop('checked', false);
               $("#" + this.id).prop('disabled', false);
             } else {
-              //console.log("we should be unchecking: " + this.id);
               $("#" + this.id).prop('checked', false);
               $("#" + this.id).prop('disabled', true);
-              //console.log("shouldnt be checked");
             }
           } else {
-            //console.log("we should be unchecking: " + this.id);
             $("#" + this.id).prop('checked', false);
             $("#" + this.id).prop('disabled', true);
-            //console.log("shouldnt be checked");
           }
-          //console.log("----");
 
           // Unhide substeps based on last checked
           if (sequential) {
@@ -611,16 +479,7 @@ function loadFlightplan(idToLoad) {
               var currentStep = (this.id).split("-")[2];
               var currentSubstep = (this.id).split("-")[3];
 
-              /*if (parseInt(currentStep) <= parseInt(lastCheckedStep)) {
-                if (parseInt(currentSubstep) <= parseInt(lastCheckedSubstep)) {
-                  $("#" + this.id).css("color", "black"); // Unhide next sub-step since this sub-step is complete.
-                } else if (parseInt(currentSubstep) == parseInt(lastCheckedSubstep)+1) {
-                  $("#" + this.id).css("color", "black"); // Unhide next sub-step since this sub-step is complete.
-                }
-              } */
-
               if (parseInt(currentStep) < parseInt(lastCheckedStep)) {
-                //console.log("this.id: " + this.id);
                 $("#" + this.id).css("color", "black"); // Unhide next sub-step since this sub-step is complete.
               } else if (parseInt(currentStep) == parseInt(lastCheckedStep)) {
                 if (parseInt(currentSubstep) <= parseInt(lastCheckedSubstep)) {
@@ -633,27 +492,19 @@ function loadFlightplan(idToLoad) {
               }
 
             });
-          } else {
-            //$("#toggleSequential").prop("checked", true);
-            //toggleSeq("initialize");
           }
-
-
 
           // One-off code to check if lastChecked is the end of a step, because if it is then we need to handle next step's first Substep
           if($("#status-substep-" + lastCheckedStep + "-" + (parseInt(lastCheckedSubstep)+1)).length == 0) {
-            //console.log("lastChecked is the end of a step");
-            //console.log("this is: " + "#status-substep-" + (parseInt(lastCheckedStep)+1) + "-1");
             $("#status-substep-" + (parseInt(lastCheckedStep)+1) + "-1").prop('checked', false);
             $("#status-substep-" + (parseInt(lastCheckedStep)+1) + "-1").prop('disabled', false);
             $("#row-substep-" + (parseInt(lastCheckedStep)+1) + "-1").css("color", "black");
-
           }
+
         });
 
       });
   }
-
 }
 
 function endsWith(str, suffix) {
@@ -664,12 +515,12 @@ function beginsWith(str, suffix) {
     return (str.substr(0, suffix.length) == suffix);
 }
 
+// toggleSeq(state)
+// Toggles whether we show all steps at once or sequentially as they are completed.
 function toggleSeq(state) {
-  console.log("state: " + state);
   var checkboxHit = 0; // This is done to prevent the next item in list to be done from being hidden.
 
   if($(this).is(":checked") || state == "initialize" || state == false) { // If toggleSequential is checked
-  //if(1 == 1) { // If toggleSequential is checked
     sequential = false;
     $("tr[id^='row-substep-']").each(function () {
       $("#" + this.id).css("color", "black"); // Unhide next sub-step since this sub-step is complete.
@@ -696,12 +547,6 @@ function init () {
   // initiateStepFlow() goes through all the DOM objects created by paresSteps() and activates the logic around the checkboxes around hooks, hiding, and disabling flows.
   // updateCompletionStatus() is hooked into onClick for all the checkboxes by initiateStepFlow() to activate the logic on user activity.
 
-  //row-substep-
-  //var result = beginsWith("abc", "|");
-  //console.log("beginsWith: " + result);
-
-  //$('#toggleSequential').change(toggleSeq);
-
   if ($(window).width() >= 660) {
     $("#stepsSection").css("min-width", "750px");
     $("#stepsSection").css("width", "auto !important");
@@ -710,7 +555,6 @@ function init () {
   }
 
   $('#toggleSequential').on('switchChange.bootstrapSwitch', function(event, state) {
-    console.log("Toggle Seq: " + state);
     toggleSeq(state);
   });
 
@@ -722,20 +566,16 @@ function init () {
   getFlightplan();
 
   $("#delRows").click(function() {
-    //$('#inflightListTable tr').remove();
     $('#inflightListTable tr').not(function(){ return !!$(this).has('th').length; }).remove();
   });
 
   $("#saveSubmit").click(function() {
-    //$('#saveModal').modal('show');
-
     saveFlightplan('new');
     formModified = false;
     $('#saveModal').modal('hide');
   });
 
   $("#completeSubmit").click(function() {
-    //$('#saveModal').modal('show');
     completed = true;
     $("#saveModal-title").html("Complete Flight");
     if (loadedNote) {
@@ -743,14 +583,9 @@ function init () {
     } else {
       $('#saveModal').modal('show');
     }
-    //location.reload();
-    //$('#saveModal').modal('hide');
   });
 
   $(".showCompleted").click(function() {
-    //window.print();
-    //saveFlightplan();
-
     helper.get("/api/inflight/")
       .then(function(data){
         var inflight = data;
@@ -765,11 +600,7 @@ function init () {
               var nodesToDisplay = ["title", "user"];
               var rowToAdd = "<tr>";
               for (var j = 0; j < nodesToDisplay.length; j++) {
-                if (nodesToDisplay[j] === "lastCommunication" && inflight[i][nodesToDisplay[j]] !== "Never") {
-                  //rowToAdd += '<td><a href="/api/screenshot/' + flightplans[i][nodesToDisplay[j]] + '">' + flightplans[i][nodesToDisplay[j]] + '</a></td>';
-                } else {
-                  rowToAdd += "<td>" + inflight[i][nodesToDisplay[j]] + "</td>";
-                }
+                rowToAdd += "<td>" + inflight[i][nodesToDisplay[j]] + "</td>";
               }
               rowToAdd += '<td>';
               rowToAdd += '<button id="open-' + inflight[i]["_id"] + '" title="Load Saved Progress" type="button" class="btn btn-success btn-xs loadBtn"><i class="fa fa-folder-open-o"></i></button>';
@@ -783,17 +614,11 @@ function init () {
         $('#completedListTable').trigger("update");
 
         $(".loadBtn").click(function() {
-          console.log(this.id);
-          console.log( (this.id).split("-")[1] );
-
           loadFlightplan((this.id).split("-")[1]);
           $('#viewCompletedModal').modal('hide');
         });
 
         $(".deleteBtn").click(function() {
-          console.log(this.id);
-          console.log( (this.id).split("-")[1] );
-
           helper.del("/api/inflight/" + (this.id).split("-")[1]);
           location.reload();
         });
@@ -813,9 +638,6 @@ function init () {
   });
 
   $(".loadFP").click(function() {
-    //window.print();
-    //saveFlightplan();
-
     helper.get("/api/inflight/")
       .then(function(data){
         var inflight = data;
@@ -830,11 +652,7 @@ function init () {
               var nodesToDisplay = ["title", "user"];
               var rowToAdd = "<tr>";
               for (var j = 0; j < nodesToDisplay.length; j++) {
-                if (nodesToDisplay[j] === "lastCommunication" && inflight[i][nodesToDisplay[j]] !== "Never") {
-                  //rowToAdd += '<td><a href="/api/screenshot/' + flightplans[i][nodesToDisplay[j]] + '">' + flightplans[i][nodesToDisplay[j]] + '</a></td>';
-                } else {
-                  rowToAdd += "<td>" + inflight[i][nodesToDisplay[j]] + "</td>";
-                }
+                rowToAdd += "<td>" + inflight[i][nodesToDisplay[j]] + "</td>";
               }
               rowToAdd += '<td>';
               rowToAdd += '<button id="open-' + inflight[i]["_id"] + '" title="Load Saved Progress" type="button" class="btn btn-success btn-xs loadBtn"><i class="fa fa-folder-open-o"></i></button>';
@@ -848,17 +666,11 @@ function init () {
         $('#inflightListTable').trigger("update");
 
         $(".loadBtn").click(function() {
-          console.log(this.id);
-          console.log( (this.id).split("-")[1] );
-
           loadFlightplan((this.id).split("-")[1]);
           $('#loadModal').modal('hide');
         });
 
         $(".deleteBtn").click(function() {
-          console.log(this.id);
-          console.log( (this.id).split("-")[1] );
-
           helper.del("/api/inflight/" + (this.id).split("-")[1]);
           location.reload();
         });
@@ -871,7 +683,7 @@ function init () {
   // Code to avoid navbar covering up top of jumped-to anchor
   window.addEventListener("hashchange", function() { scrollBy(0, -60) })
 
-  $(document).ready(function() { // Enable tooltips after all the steps are processed.
+  $(document).ready(function() {
 
     $("#helpBtn").click(function() {
       introguide.start();
@@ -896,10 +708,9 @@ function init () {
         return "New information not saved. Do you wish to leave the page?";
       }
     }
-    // End Leave Warning
 
+    // Walkthrough Code
     var introguide = introJs();
-
     introguide.setOptions({
       exitOnEsc: false,
       exitOnOverlayClick: false,
