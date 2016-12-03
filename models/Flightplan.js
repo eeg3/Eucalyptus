@@ -20,9 +20,6 @@ var flightplanModel = new Schema({
   description: {
     type: String
   },
-  outcome: {
-    type: String
-  },
   steps: {
     type: String
   }

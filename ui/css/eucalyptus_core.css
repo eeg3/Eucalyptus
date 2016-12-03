@@ -39,15 +39,7 @@ body {
   letter-spacing: 1px;
   font-weight: 500;
 }
-/*.sp-databox-panel-heading-dark {
-  text-align: left;
-  border-width: 1px;
-  border-style: solid;
-  border-color: rgba(134, 139, 133, 0.31);
-  color: black;
-  font-weight: 500;
-  font-size: 16px;
-} */
+
 .sp-databox-panel-heading-dark {
   text-align: left;
   border-width: 1px;
@@ -403,9 +395,6 @@ background-size: cover;
 }
 
 #indexBody {
-  /* background: url(/img/background-min.png) no-repeat center center fixed; */
-  /*background: url(/img/converged-par.jpg) no-repeat center center fixed;*/
-  /*background: url(/img/preso-3.png) no-repeat center center fixed;*/
 background: linear-gradient(rgba(64,64,64,.75),rgba(64,64,64,.75)), url(/img/preso-3.png) no-repeat center center fixed;
 -webkit-background-size: cover;
 -moz-background-size: cover;

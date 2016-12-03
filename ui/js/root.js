@@ -72,14 +72,12 @@ function parseFlightplans(id, title, category) {
         } else if (savedFlightplans >= 1 && completedFlightplans >= 1) {
           var tableLineItem = '<tr><td><a href="/flightplan?id=' + id + '">' + title + '</a> <a href="/flightplan?id=' + id + '&load=inflight"><span class="badge">' + savedFlightplans + '</span></a>&nbsp;<a href="/flightplan?id=' + id + '&load=completed"><span class="badge badge-success savedBadge">' + completedFlightplans + '</span></a></td></tr>';
         }
-        //var tableLineItem = '<tr><td><a href="/flightplan.html?id=' + id + '">' + title + '</a></td></tr>';
         table.append(tableLineItem);
         var tableEnd = $('</tbody>');
         table.append(tableEnd);
 
         $("#" + category).append(table);
       } else { // Add to section if it already exists
-        //var tableLineItem = '<tr><td><a href="/flightplan.html?id=' + id + '">' + title + '</a></td></tr>';
         if (savedFlightplans == 0 && completedFlightplans == 0) {
           var tableLineItem = '<tr><td><a href="/flightplan?id=' + id + '">' + title + '</a></td></tr>';
 
@@ -110,7 +108,6 @@ function populateChart() {
     rowCount.push($('#' + categoryName + '-table tr').length);
    });
 
-  //var chartLabels = ["Installation", "Configuration", "Manage"];
   var chartLabels = newColumns;
   var ctx = $("#myChart");
 
@@ -133,7 +130,6 @@ function populateChart() {
           "#e74c3c",
           "#34495e"
         ],
-        //data: [7, 2, 1]
         data: rowCount
       }]
     }
@@ -159,21 +155,13 @@ function populateFlightplans(sortOption) {
       var categories = [];
 
       for (var i = 0; i < data.length; i++) {
-        //console.log("id: " + data[i]._id);
-        //console.log("title: " + data[i].title);
-        //console.log("category: " + data[i].category);
-        //if(categories.indexOf(data[i].category) == -1) {
-        //    categories.push(data[i].category);
-        //}
+
         if (sortOption == "category") {
           parseFlightplans(data[i]._id, data[i].title, data[i].category);
         } else {
           parseFlightplans(data[i]._id, data[i].title, data[i].product);
         }
       }
-
-      //populateChart();
-
     });
 }
 
@@ -185,7 +173,6 @@ function createChart(itemName, chartName) {
 
       for (var i = 0; i < data.length; i++) {
         var item = data[i][itemName];
-        console.log("data[i][item]: " + data[i][itemName]);
         var itemLoc = items.indexOf(item);
 
         if (itemLoc != -1) {
@@ -195,10 +182,6 @@ function createChart(itemName, chartName) {
           flightPlansPerItem.push(1);
         }
 
-      }
-
-      for(var i = 0; i < items.length; i++) {
-        console.log("items[" + i + "]: " + items[i]);
       }
 
       var ctx2 = document.getElementById(chartName).getContext('2d');
@@ -226,127 +209,102 @@ function createChart(itemName, chartName) {
 
 function init () {
   currentTimestamp();
-  /*
-  helper.get("/api/flightplan/")
-    .then(function(data){
-      var categories = [];
+  populateFlightplans(displayOption);
 
-      for (var i = 0; i < data.length; i++) {
-        //console.log("id: " + data[i]._id);
-        //console.log("title: " + data[i].title);
-        //console.log("category: " + data[i].category);
-        //if(categories.indexOf(data[i].category) == -1) {
-        //    categories.push(data[i].category);
-        //}
-        //parseFlightplans(data[i]._id, data[i].title, data[i].category);
-        parseFlightplans(data[i]._id, data[i].title, data[i].product);
-      }
 
-      populateChart();
+  $(document).ready(function(){ // Enable tooltips after all the steps are processed.
 
-      $("#toggleDisplay").click(function() {
-        //Insert logic here
-      });
+    // FlightPlans by Product
+    createChart("product", "myChart2");
+
+    $("#helpBtn").click(function() {
+      introguide.start();
     });
-    */
-    populateFlightplans(displayOption);
 
-
-    $(document).ready(function(){ // Enable tooltips after all the steps are processed.
-
-
-      // FlightPlans by Product
-      createChart("product", "myChart2");
-
-      $("#helpBtn").click(function() {
-        introguide.start();
-      });
-
-      $("#categoryRadio").click(function() {
-        populateFlightplans("category");
-      });
-
-      $("#productRadio").click(function() {
-        populateFlightplans("product");
-      });
-
-      $('[data-toggle="tooltip"]').tooltip();
-
-      var introguide = introJs();
-
-      introguide.setOptions({
-        exitOnEsc: false,
-        exitOnOverlayClick: false,
-        steps: [
-              {
-                intro: 'Welcome! This guided tour will demonstrate how to use Eucalyptus Dashboard.',
-                position: 'right-bottom'
-              },
-              {
-                //intro: 'Eucalyptus is a simple solution to help with complex processes. By defining complex processes in simple steps, allowing us to easily start and stop them, and enabling us to document our steps, we lessen the operational burden of new solutions.',
-                intro: 'Eucalyptus is a simple solution to help with complex processes.<br><br>The idea is to use a FlightPlan every time you take off with a task. Just like pilots have flightplans to help them remember the gazillion steps they must do, now you will too!',
-                position: 'bottom'
-              },
-              {
-                element: '#categorySection',
-                intro: 'To take off, simply click a FlightPlan and a new instance will be created for you to track your progress and takes notes.',
-                position: 'top'
-              },
-              {
-                element: '#categorySection',
-                intro: 'Interruptions happen during flights!<br><br>If you get interrupted while in a FlightPlan, you can save and return. Saved flights are shown in gray bubbles.',
-                position: 'top'
-              },
-              {
-                element: '#categorySection',
-                intro: 'Sometimes you or a co-pilot need to remember what happened during a flight!<br><br>When done with a flight, save it so your Flight notes can be visible later. Green bubbles show Completed Flights.',
-                position: 'top'
-              },
-              {
-                element: '#toggleFlightPlan',
-                intro: 'How FlightPlans are categorized can be toggled between Category or Product.',
-                position: 'bottom'
-              },
-              {
-                element: '.fa-home',
-                intro: 'Need to get back here?<br><br>Simply select \"<i class="fa fa-home">\"</i> to get back.',
-                position: 'bottom'
-              },
-              {
-                element: '.fa-plus',
-                intro: 'Want to create your own FlightPlan for other pilots to use?<br><br>Select \"<i class="fa fa-plus">\"</i> to go to the FlightPlan Builder.',
-                position: 'bottom'
-              },
-              {
-                element: '.fa-question',
-                intro: 'Need more training before taking off?<br><br>Select \"<i class="fa fa-question">\"</i> for more help.',
-                position: 'bottom'
-              },
-              {
-                element: '.fa-user',
-                intro: 'If need to go to your User Profile, Admin Portal, or Logout, select the \"<i class="fa fa-user">\"</i> dropdown for more options.',
-                position: 'bottom'
-              },
-              {
-                intro: 'Thanks for viewing the walkthrough!<br><br>Have fun creating and using FlightPlans to make your operational processes simpler!',
-                position: 'bottom'
-              }
-        ],
-        tooltipClass: 'customDefault'
-      });
-
-      helper.get("/api/getUserInfo")
-        .then(function(data) {
-          $("#username").text(data[0]["name"]);
-
-          if(data[0]["walkthroughDashboard"] == true) {
-            introguide.start();
-
-            var userPatch = {};
-            userPatch["walkthroughDashboard"] = false;
-            helper.patch("/users/" + data[0]["id"], userPatch);
-          }
-        });
-
+    $("#categoryRadio").click(function() {
+      populateFlightplans("category");
     });
+
+    $("#productRadio").click(function() {
+      populateFlightplans("product");
+    });
+
+    $('[data-toggle="tooltip"]').tooltip();
+
+    var introguide = introJs();
+
+    introguide.setOptions({
+      exitOnEsc: false,
+      exitOnOverlayClick: false,
+      steps: [
+            {
+              intro: 'Welcome! This guided tour will demonstrate how to use Eucalyptus Dashboard.',
+              position: 'right-bottom'
+            },
+            {
+              intro: 'Eucalyptus is a simple solution to help with complex processes.<br><br>The idea is to use a FlightPlan every time you take off with a task. Just like pilots have flightplans to help them remember the gazillion steps they must do, now you will too!',
+              position: 'bottom'
+            },
+            {
+              element: '#categorySection',
+              intro: 'To take off, simply click a FlightPlan and a new instance will be created for you to track your progress and takes notes.',
+              position: 'top'
+            },
+            {
+              element: '#categorySection',
+              intro: 'Interruptions happen during flights!<br><br>If you get interrupted while in a FlightPlan, you can save and return. Saved flights are shown in gray bubbles.',
+              position: 'top'
+            },
+            {
+              element: '#categorySection',
+              intro: 'Sometimes you or a co-pilot need to remember what happened during a flight!<br><br>When done with a flight, save it so your Flight notes can be visible later. Green bubbles show Completed Flights.',
+              position: 'top'
+            },
+            {
+              element: '#toggleFlightPlan',
+              intro: 'How FlightPlans are categorized can be toggled between Category or Product.',
+              position: 'bottom'
+            },
+            {
+              element: '.fa-home',
+              intro: 'Need to get back here?<br><br>Simply select \"<i class="fa fa-home">\"</i> to get back.',
+              position: 'bottom'
+            },
+            {
+              element: '.fa-plus',
+              intro: 'Want to create your own FlightPlan for other pilots to use?<br><br>Select \"<i class="fa fa-plus">\"</i> to go to the FlightPlan Builder.',
+              position: 'bottom'
+            },
+            {
+              element: '.fa-question',
+              intro: 'Need more training before taking off?<br><br>Select \"<i class="fa fa-question">\"</i> for more help.',
+              position: 'bottom'
+            },
+            {
+              element: '.fa-user',
+              intro: 'If need to go to your User Profile, Admin Portal, or Logout, select the \"<i class="fa fa-user">\"</i> dropdown for more options.',
+              position: 'bottom'
+            },
+            {
+              intro: 'Thanks for viewing the walkthrough!<br><br>Have fun creating and using FlightPlans to make your operational processes simpler!',
+              position: 'bottom'
+            }
+      ],
+      tooltipClass: 'customDefault'
+    });
+
+    helper.get("/api/getUserInfo")
+      .then(function(data) {
+        $("#username").text(data[0]["name"]);
+
+        if(data[0]["walkthroughDashboard"] == true) {
+          introguide.start();
+
+          var userPatch = {};
+          userPatch["walkthroughDashboard"] = false;
+          helper.patch("/users/" + data[0]["id"], userPatch);
+        }
+      });
+
+  });
 }

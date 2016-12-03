@@ -50,7 +50,6 @@ var app = express();
 
 // Load main site routes
 var routes = require('./routes/index');
-//var users = require('./routes/users');
 
 // Configure Views
 app.set('views', path.join(__dirname, 'views'));
@@ -86,17 +85,6 @@ flightplanRouter = require('./routes/flightplanRoutes')(Flightplan);
 var Inflight = require('./models/Inflight');
 // Load the desktop routes that handle POST/GET/PATCH/DELETE for the API; also holds the controller functionality
 inflightRouter = require('./routes/inflightRoutes')(Inflight);
-
-/* Screenshot API not needed yet
-      /***** Screenshot API *****
-      // MongoDB GridFS module
-      var Grid = require('gridfs-stream');
-      Grid.mongo = mongoose.mongo;
-      var gfs = new Grid(mongoose.connection.db);
-      // Load the screenshot routes that handle GET/POST; also holds controller functionality.
-      screenshotRouter = require('./routes/screenshotRoutes')(gfs);
-*/
-
 
 // Static content doesn't need authentication, so allow it to be hit directly
 app.use('/js', express.static(path.join(__dirname, 'ui/js')));
