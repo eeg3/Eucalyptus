@@ -685,3 +685,8 @@ footer {
 #categorySection {
   margin-top: 20px;
 }
+
+.dashboardTable {
+  font-weight: 400;
+  font-size: 14px;
+}

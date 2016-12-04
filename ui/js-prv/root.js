@@ -60,7 +60,7 @@ function parseFlightplans(id, title, category) {
           console.log("closed row");
         }
 
-        var table = $('<table id="' + category + '-table"></table>').addClass('table table-bordered table-striped sp-databox-table-sm');
+        var table = $('<table id="' + category + '-table"></table>').addClass('table table-bordered table-striped sp-databox-table-sm dashboardTable');
         var body = $('<tbody>');
         table.append(body);
         if (savedFlightplans == 0 && completedFlightplans == 0) {

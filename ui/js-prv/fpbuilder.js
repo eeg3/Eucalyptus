@@ -147,7 +147,7 @@ function addSubStep(stepNumber, substepNumber, details) {
 }
 
 function hookUpAddDelButtons() {
-  for(var i = 0; i < 10; i++) {
+  for(var i = 0; i < 70; i++) {
     if(!("#addButton-substep-" + i + "-1").length == 0) {
 
       // Hook steps up.
@@ -172,7 +172,7 @@ function hookUpAddDelButtons() {
       }); // Hook del button
 
       // Hook substeps up.
-      for(var j = 0; j < 10; j++) {
+      for(var j = 0; j < 70; j++) {
         if(!("#addButton-substep-" + i + "-1").length == 0) {
           $("#addButton-substep-" + i + "-" + j).unbind("click"); // Make sure it's clear, otherwise it appends
           $("#addButton-substep-" + i + "-" + j).click(function() {
@@ -293,7 +293,7 @@ function exportFlightplan() {
 
       if ($("#stepLauncher-" + i).length) {
         if ($("#stepLauncher-" + i).val() == "") {
-          stepsString += "noLauncher|";
+          stepsString += "noLauncher|||";
         } else if ($("#stepLauncher-" + i).val().indexOf(";;;") != -1) {
           $("#errorMessage").html("ERROR: Launcher cannot contain the string ';;;'.");
           validated = 0;
@@ -489,6 +489,7 @@ function createBoard(steps) {
 
     $("#stepTitle-" + i).val(substeps[0].split(',,,')[0]);
     $("#stepLauncher-" + i).val(substeps[0].split(',,,')[1]);
+    console.log("#stepLauncher-" + i + ": " + substeps[0].split(',,,')[1]);
 
     for (var j = 1; j < (substeps.length); j++) {
       var details = substeps[j].split(',,,')[1];
