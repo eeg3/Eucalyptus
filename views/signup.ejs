@@ -1,11 +1,12 @@
-<% include partials/head-preauth %>
+<% include partials/head %>
 
-<header class="container-fluid">
-  <h1 id="intro" class="loginColor"><i class="fa fa-leaf leafLogo"></i> Eucalyptus</h1>
-  <p class="lead loginColor">Conquering complexity with simplicity.</p>
-</header>
+<header id="introHeader" class="container-fluid">
+   <h1 id="intro" class="loginColor"><i class="fa fa-leaf leafLogo"></i> Eucalyptus</h1>
+   <p class="lead loginColor">Sign Up</p>
+ </header>
 
 <body id="loginBody">
+  <% include partials/navbar-preauth %>
 
   <div class="col-sm-8 col-sm-offset-2 alert alert-gray">
     This page will create your account within the system; however, before you will be able to login, an Administrator must enable your account.<br />

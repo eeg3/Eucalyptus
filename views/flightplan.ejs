@@ -1,18 +1,23 @@
 <% include partials/head %>
 
-<script src="/js/ApiHelper.js"></script>
-<script src="/js/flightplan.js"></script>
+<script src="/js-prv/ApiHelper.js"></script>
+<script src="/js-prv/flightplan.js"></script>
 
 <!-- Intro.JS -->
 <link href="/css/introjs.css" rel="stylesheet">
-  <script src="/js/intro.js"></script>
+  <script src="/js-pub/introjs/intro.js"></script>
 <!-- Custom Intro.JS CSS Tweaks -->
 <link href="/css/introjs_eucalyptus.css" rel="stylesheet">
 
 <!-- Bootstrap-switch -->
 <link href="/css/bootstrap-switch.css" rel="stylesheet">
-<script src="/js/bootstrap-switch.js"></script>
+<script src="/js-pub/bootstrap-switch/bootstrap-switch.js"></script>
 
+<header id="introHeader" class="container-fluid">
+  <h1 id="flightplanTitle" class="loginColor">Eucalyptus Dashboard</h1>
+  <h6>Developed by: <span id="flightplanAuthor"></span></h6>
+  <hr>
+</header>
 
 <body id="flightBody">
 <% include partials/navbar %>
@@ -29,8 +34,6 @@
       </div>
       <div class="panel-body">
         <div id="manJumbo" class="jumbotron">
-          <h2><span id="flightplanTitle">Title</span></h2>
-          <h6>Developed by: <span id="flightplanAuthor"></span></h6>
           <div class="alert alert-gray">
             <h5><span id="flightplanDescription"></span></h5>
         </div>

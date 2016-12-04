@@ -463,7 +463,7 @@ function displaySummary(id) {
 
       for (var i = 0; i < data.length; i++) {
         if (flightplan[i]["_id"] == id) {
-          $("#loadedText").text("Editing: " + flightplan[i]["title"]);
+          $("#loadedText").text(flightplan[i]["title"]);
           $("#title").val(flightplan[i]["title"]);
           $("#author").val(flightplan[i]["author"]);
           $("#description").val(flightplan[i]["description"]);

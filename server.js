@@ -87,7 +87,8 @@ var Inflight = require('./models/Inflight');
 inflightRouter = require('./routes/inflightRoutes')(Inflight);
 
 // Static content doesn't need authentication, so allow it to be hit directly
-app.use('/js', express.static(path.join(__dirname, 'ui/js')));
+app.use('/js-pub', express.static(path.join(__dirname, 'ui/js-pub')));
+app.use('/js-prv', express.static(path.join(__dirname, 'ui/js-prv')));
 app.use('/css', express.static(path.join(__dirname, 'ui/css')));
 app.use('/fonts', express.static(path.join(__dirname, 'ui/fonts')));
 app.use('/img', express.static(path.join(__dirname, 'ui/img')));

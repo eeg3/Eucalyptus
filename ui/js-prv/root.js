@@ -45,6 +45,7 @@ function parseFlightplans(id, title, category) {
         // Create new row
         if (numOfColumns % 2 == 0) { // If it's even, time to create a new row
           $("#categorySection").append('<div class="row">');
+          console.log("added row");
           numOfColumns++;
         } else {
           numOfColumns++;
@@ -56,6 +57,7 @@ function parseFlightplans(id, title, category) {
 
         if (numOfColumns % 2 == 0) {
           $("#categorySection").append('</div>');
+          console.log("closed row");
         }
 
         var table = $('<table id="' + category + '-table"></table>').addClass('table table-bordered table-striped sp-databox-table-sm');

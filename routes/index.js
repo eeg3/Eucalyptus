@@ -7,9 +7,21 @@ router.get('/', isLoggedIn, function(req, res, next) {
   res.render('index', { user: req.user });
   //res.sendfile("index.html", {root: './ui'});
 });
+router.get('/index-rc', isLoggedIn, function(req, res, next) {
+  res.render('index-rc', { user: req.user });
+  //res.sendfile("index.html", {root: './ui'});
+});
 
 router.get('/login', function(req, res, next) {
-  res.render('login.ejs', { message: req.flash('loginMessage') });
+  if (req.isAuthenticated()) {
+    res.redirect('/');
+  } else {
+    res.render('login.ejs', { message: req.flash('loginMessage') });
+  }
+});
+
+router.get('/welcome', function(req, res, next) {
+  res.render('welcome.ejs', { message: req.flash('loginMessage') });
 });
 
 router.get('/signup', function(req, res) {
@@ -72,7 +84,8 @@ router.get('/api/getUserInfo', isLoggedIn, function(req, res, next) {
   res.json(userInfo);
 });
 
-router.all('/js/*', isLoggedIn);
+router.all('/js-prv/*', isLoggedIn);
+router.all('/js-pub/*');
 
 module.exports = router;
 

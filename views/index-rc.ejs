@@ -1,0 +1,87 @@
+<% include partials/head %>
+
+<!-- Chart.JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.bundle.min.js" integrity="sha256-1uH5nQ+1cUZEU9YOfMzc9rapsWyuGtvKPpvKN9xDgug=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.min.js" integrity="sha256-w8BXa9KXx+nmhO9N4hupvlLy+cAtqEarnB40DVJx2xA=" crossorigin="anonymous"></script>
+
+<!-- Custom JS -->
+<script src="/js-prv/ApiHelper.js"></script>
+<script src="/js-prv/root.js"></script>
+
+<!-- Intro.JS -->
+<link href="/css/introjs.css" rel="stylesheet">
+  <script src="/js-pub/introjs/intro.js"></script>
+<!-- Custom Intro.JS CSS Tweaks -->
+<link href="/css/introjs_eucalyptus.css" rel="stylesheet">
+
+<body id="indexBody">
+
+<% include partials/navbar-preauth %>
+
+
+
+  <header id="splash-header-dashboard">
+        <div class="splash-header-content">
+            <div class="splash-header-content-inner">
+                <h1 id="homeHeading">Eucalyptus Dashboard</h1>
+                <hr>
+                <div id="fpBreakdown">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="panel panel-inverse">
+                        <div class="panel-heading">
+                          <div class="row">
+                            <div class="col-sm-4"></div>
+                            <div class="col-sm-4">Flightplan Breakdown</div>
+                            <div class="col-sm-4" id="toggleFlightPlan">
+                              <form>
+                                <label class="radio-inline">Sort by:</label>
+                                <label class="radio-inline">
+                                  <input id="categoryRadio" type="radio" name="optradio" checked>Category
+                                </label>
+                                <label class="radio-inline">
+                                  <input id="productRadio" type="radio" name="optradio">Product
+                                </label>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="panel-body">
+                          <div class="row">
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-5">
+                              <h4>FlightPlans by Category</h4>
+                              <canvas id="myChart"></canvas>
+                            </div>
+                            <div class="col-sm-5">
+                              <h4>FlightPlans by Product</h4>
+                              <canvas id="myChart2"></canvas>
+                            </div>
+                            <div class="col-sm-1"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <p class="text-faded"></p>
+                <h2 class="section-heading">Available FlightPlans</h2>
+                <hr>
+                <div id="categorySection">
+
+                </div>
+                <h2 class="section-heading">Available FlightPlans</h2>
+                <h1 id="homeHeading">Eucalyptus Dashboard</h1>
+                <hr>
+
+            </div>
+
+        </div>
+      </header>
+
+
+
+
+</body>
+
+</html>

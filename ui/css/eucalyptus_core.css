@@ -1,13 +1,56 @@
 body {
-  margin-top: 75px;
-  margin-left: 7%;
-  margin-right: 7%;
-  padding: 7px 7px 7px 7px;
   font-family: 'ProximaNovaSoft',Helvetica Neue,Helvetica,Arial,sans-serif;
   line-height: 1.42857143;
   color: #333;
   background-color: #fff;
   text-align: center;
+}
+
+#indexBody, #buildBody, #loginBody, #flightBody {
+  margin-top: 80px;
+  margin-left: 7%;
+  margin-right: 7%;
+  padding: 7px 7px 7px 7px;
+}
+
+#intro {
+  margin-top: 10px;
+}
+
+#introHeader {
+  color: white;
+  position: relative;
+  width: 100%;
+  min-height: auto;
+  text-align: center;
+  font-weight: 700;
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 30px;
+}
+.lead {
+  margin-top: 5px;
+}
+#introHeader h1 {
+  font-weight: 700;
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 30px;
+}
+#introHeader hr {
+  margin: 30px auto;
+}
+
+@media (min-width: 768px) {
+  #introHeader h1 {
+    font-size: 50px;
+  }
+  #introHeader p {
+    font-size: 18px;
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 .panel-inverse {
@@ -468,10 +511,6 @@ background-size: cover;
 	}
 }
 
-#intro {
-  margin-top: 10px;
-}
-
 .headerButtonText {
   font-size: 12px;
 }
@@ -629,4 +668,20 @@ ol ol {
 
 .row {
     font-size:  .96em;
+}
+
+.panel-body {
+  color: black;
+}
+
+footer {
+  margin-top: 20px;
+}
+
+#footer {
+    font-size: .9em;
+}
+
+#categorySection {
+  margin-top: 20px;
 }

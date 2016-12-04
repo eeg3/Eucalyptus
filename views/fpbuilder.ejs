@@ -1,19 +1,19 @@
 <% include partials/head %>
 
 <!-- Custom JS -->
-<script src="/js/ApiHelper.js"></script>
-<script src="/js/fpbuilder.js"></script>
+<script src="/js-prv/ApiHelper.js"></script>
+<script src="/js-prv/fpbuilder.js"></script>
 
 <!-- Intro.JS -->
 <link href="/css/introjs.css" rel="stylesheet">
-  <script src="/js/intro.js"></script>
+  <script src="/js-pub/introjs/intro.js"></script>
 <!-- Custom Intro.JS CSS Tweaks -->
 <link href="/css/introjs_eucalyptus.css" rel="stylesheet">
 
-<header class="container-fluid">
-  <h1 id="intro" class="loginColor"><i class="fa fa-leaf leafLogo"></i> Eucalyptus</h1>
-  <p class="lead loginColor">Conquering complexity with simplicity.</p>
-</header>
+<header id="introHeader" class="container-fluid">
+   <h1 id="intro" class="loginColor"><i class="fa fa-leaf leafLogo"></i> Eucalyptus</h1>
+   <p class="lead loginColor">FlightPlan Builder</p>
+ </header>
 
 <body id="buildBody">
   <% include partials/navbar %>
@@ -23,7 +23,7 @@
     <div id="summaryRow" class="row">
       <div class="col-sm-12">
         <div class="panel panel-inverse">
-          <div id="intro-panel-header" class="panel-heading">FlightPlan Builder - <span id="loadedText" class="leafLogo">New FlightPlan</span></div>
+          <div id="intro-panel-header" class="panel-heading">Editing: <span id="loadedText" class="leafLogo">New FlightPlan</span></div>
           <div class="panel-body">
               <div class="row">
                 <div class="col-sm-6">

@@ -1,4 +1,4 @@
-<nav class="navbar navbar-leaf navbar-fixed-top">
+<nav class="navbar navbar-default navbar-leaf navbar-fixed-top">
   <div class="container-fluid">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -11,9 +11,19 @@
     </div>
     <div id="navbar" class="collapse navbar-collapse">
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="/"><span class="fa fa-home fa-lg"></span></a></li>
-        <li><a href="/fpbuilder"><span class="fa fa-plus fa-lg"></span></a></li>
-        <li id="helpBtn"><a href="#"><span class="fa fa-question fa-lg"></span></a></li>
+
+        <li>
+            <a class="page-scroll" href="/">Flights</a>
+        </li>
+        <li>
+            <a class="page-scroll" href="/fpbuilder">Builder</a>
+        </li>
+        <li id="helpBtn">
+            <a class="page-scroll" href="#">Help</a>
+        </li>
+        <li>
+            <a class="page-scroll" href="/welcome">About</a>
+        </li>
         <li id="userDropdown" class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="fa fa-user fa-lg"></span>&nbsp;<span class="caret"></span></a>
             <ul class="dropdown-menu inverse-dropdown">
@@ -22,6 +32,7 @@
               <li><a href="/logout">Logout</a></li>
             </ul>
         </li>
+
       </ul>
     </div><!--/.nav-collapse -->
   </div>
