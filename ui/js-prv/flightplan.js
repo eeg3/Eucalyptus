@@ -89,6 +89,14 @@ function initiateStepFlow(steps, substeps) {
 
   } // End action per step
 
+  $(".unclearBtn").click(function() {
+    //loadFlightplan((this.id).split("-")[1]);
+    //$('#loadModal').modal('hide');
+    $("#unclearStepNumber").text((this.id).split("-")[1]);
+    $("#unclearStepTitle").text((this.id).split("-")[2]);
+    $("#unclearModal").modal('show');
+  });
+
 }
 
 // parseSteps(steps)
@@ -105,7 +113,7 @@ function parseSteps(steps) {
 
     // We change the way each step's header is displayed if size is too small; otherwise, it looks weird.
     if ($(window).width() >= 660) {
-      var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="panel panel-inverse"><div class="panel-heading sp-databox-panel-heading-dark">' + stepTitle + ' <button id="launch-' + stepNumber + '" type="button" class="btn btn-success btn-xs launchButton"><i class="fa fa-rocket"></i> Launch</button><button id="automate-' + stepNumber + '" type="button" class="btn btn-success btn-xs launchButton" disabled><i class="fa fa-cogs"></i> Automate</button></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div>';
+      var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="panel panel-inverse"><div class="panel-heading sp-databox-panel-heading-dark">' + stepTitle + '<button id="unclear-' + stepNumber + '-' + stepTitle + '" class="invisBtn unclearBtn" title="Something unclear?"><i class="fa fa-question-circle" aria-hidden="true"></i></button> <button id="launch-' + stepNumber + '" type="button" class="btn btn-success btn-xs launchButton"><i class="fa fa-rocket"></i> Launch</button><button id="automate-' + stepNumber + '" type="button" class="btn btn-success btn-xs launchButton" disabled><i class="fa fa-cogs"></i> Automate</button></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div>';
     } else {
       var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="panel panel-inverse"><div class="panel-heading sp-databox-panel-heading-dark"><center>' + stepTitle + '<br><button id="launch-' + stepNumber + '" type="button" class="btn btn-success btn-xs "><i class="fa fa-rocket"></i> Launch</button><button id="automate-' + stepNumber + '" type="button" class="btn btn-success btn-xs " disabled><i class="fa fa-cogs"></i> Automate</button></center></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div>';
 

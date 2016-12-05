@@ -168,7 +168,7 @@
   <div class="modal-content">
     <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      <h4 class="modal-title" id="saveModal-title">Warning</h4>
+      <h4 class="modal-title" id="resolutionModal-title">Warning</h4>
     </div>
     <div class="modal-body">
       <span>The resolution of your browser has resulted in removing "Notes" functionality for each sub-step.<br><br> To enable the ability to take notes, please increase browser window size and reload the page. If using a mobile device, please switch to landscape mode and reload the page.</span>
@@ -181,9 +181,39 @@
 </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+<div id="unclearModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <h4 class="modal-title" id="unclearnModal-title">Report Step</h4>
+    </div>
+    <div class="modal-body">
+      <span>Is something within this step unclear, ambiguous, or missing? Please provide some detail so it can be fixed.</span><br />
+      <br />
+      <b>Step Title:</b> <span id="unclearStepTitle"></span><br />
+      <b>Step Number:</b> <span id="unclearStepNumber"></span>
+      <br /><br />
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="form-group">
+            <label for="saveTitle">Report Description</label>
+            <input type="text" class="form-control" name="unclearDescription"></input>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button id="reportUnclear" type="button" class="btn btn-danger">Report</button>
+      <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+    </div>
+  </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <footer class="container-fluid">
   <div class="alert alert-gray">
-    <p id="footer"><i class="fa fa-copyright"></i>&nbsp;2016 <a href="https://github.com/eeg3">https://github.com/eeg3</a>
+    <p id="footer"><i class="fa fa-copyright"></i>&nbsp;2016 <a href="https://github.com/eeg3">https://github.com/eeg3</a></p>
   </div>
 </footer>
 

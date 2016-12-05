@@ -7,10 +7,6 @@ router.get('/', isLoggedIn, function(req, res, next) {
   res.render('index', { user: req.user });
   //res.sendfile("index.html", {root: './ui'});
 });
-router.get('/index-rc', isLoggedIn, function(req, res, next) {
-  res.render('index-rc', { user: req.user });
-  //res.sendfile("index.html", {root: './ui'});
-});
 
 router.get('/login', function(req, res, next) {
   if (req.isAuthenticated()) {
@@ -20,8 +16,8 @@ router.get('/login', function(req, res, next) {
   }
 });
 
-router.get('/welcome', function(req, res, next) {
-  res.render('welcome.ejs', { message: req.flash('loginMessage') });
+router.get('/about', function(req, res, next) {
+  res.render('about.ejs', { message: req.flash('loginMessage') });
 });
 
 router.get('/signup', function(req, res) {

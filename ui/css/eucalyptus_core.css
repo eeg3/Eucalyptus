@@ -13,8 +13,20 @@ body {
   padding: 7px 7px 7px 7px;
 }
 
+#loginForm, #signupForm {
+  color: black;
+}
+
+#signupAlert {
+  margin-top: 10px;
+}
+#loginLead {
+  margin-bottom: 10px !important;
+}
+
 #intro {
   margin-top: 10px;
+  text-transform: none !important;
 }
 
 #introHeader {
@@ -689,4 +701,9 @@ footer {
 .dashboardTable {
   font-weight: 400;
   font-size: 14px;
+}
+
+.unclearBtn {
+  margin: 0 0;
+  outline: none !important;
 }
