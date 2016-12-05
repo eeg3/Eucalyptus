@@ -20,6 +20,10 @@ router.get('/about', function(req, res, next) {
   res.render('about.ejs', { message: req.flash('loginMessage') });
 });
 
+router.get('/robots.txt', function(req, res, next) {
+  res.render('robots.ejs', { message: req.flash('loginMessage') });
+});
+
 router.get('/signup', function(req, res) {
   res.render('signup.ejs', {
     message: req.flash('loginMessage'),
