@@ -7,7 +7,7 @@ var mobile = false;
 var loadedNote = false;
 var completed = false;
 var currentUser = "";
-var sequential = false;
+var sequential = true;
 var formModified = false;
 
 function currentTimestamp() {
@@ -21,7 +21,6 @@ function currentTimestamp() {
   $('#footer').append("<br /> Current Time: " + timestamp);
 }
 
-// initiateStepFlow(steps, substeps)
 // Makes it so checkboxes are enabled or disabled if the previous checkbox is checked or unchecked.
 function initiateStepFlow(steps, substeps) {
 
@@ -99,7 +98,6 @@ function initiateStepFlow(steps, substeps) {
 
 }
 
-// parseSteps(steps)
 // This function actually populates the steps div based on the object's steps element.
 function parseSteps(steps) {
   var steps = steps.split(";;;");
@@ -188,7 +186,6 @@ function parseSteps(steps) {
 
 }
 
-// updateCompletionStatus()
 // This function handles calculating the completion status bar. We also keep the status bar at atleast 5%.
 function updateCompletionStatus() {
   var stepCount = findTotalStepQuantity();
@@ -197,7 +194,6 @@ function updateCompletionStatus() {
   $("#completionStatus").css("width", percentComplete + '%');
 }
 
-// getFlightplan()
 // Grabs the FlightPlan itself from the FlightPlan API.
 function getFlightplan() {
   /*
@@ -227,8 +223,10 @@ function getFlightplan() {
       // Enable tooltips after all the steps are processed.
       $(document).ready(function(){
         $('[data-toggle="tooltip"]').tooltip();
-        $("#toggleSequential").prop("checked", true);
-        toggleSeq("initialize");
+        if (!sequential) {
+          $("#toggleSequential").prop("checked", true);
+          toggleSeq("initialize");
+        }
       });
     });
 
@@ -259,7 +257,6 @@ function displaySummary() {
     });
 }
 
-// findStepQuantity()
 // Finds step quantity based on the DOM created by parseSteps(), and doesn't actually look at the API.
 function findTotalStepQuantity() {
   var result = {
@@ -280,7 +277,6 @@ function findTotalStepQuantity() {
   return result;
 }
 
-// urlParam(name, url)
 // Gets the id from the URL parameters (e.g. flightplan?id=546345634563456ee)
 function urlParam(name, url) {
     if (!url) {
@@ -293,7 +289,6 @@ function urlParam(name, url) {
     return results[1] || undefined;
 }
 
-// saveFlightplan(status)
 // Saves the FlightPlan.
 function saveFlightplan(status) {
 
@@ -408,7 +403,6 @@ function saveFlightplan(status) {
 
 }
 
-// loadFlightPlan(idToLoad)
 // This function loads previously saved or completed FlightPlans.
 function loadFlightplan(idToLoad) {
 
@@ -523,7 +517,6 @@ function beginsWith(str, suffix) {
     return (str.substr(0, suffix.length) == suffix);
 }
 
-// toggleSeq(state)
 // Toggles whether we show all steps at once or sequentially as they are completed.
 function toggleSeq(state) {
   var checkboxHit = 0; // This is done to prevent the next item in list to be done from being hidden.
@@ -700,7 +693,7 @@ function init () {
     $("#toggleSequential").bootstrapSwitch({
       onColor: 'success',
       offColor: 'success',
-      state: false
+      state: sequential
     });
 
     var load = urlParam('load');

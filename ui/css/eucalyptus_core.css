@@ -146,7 +146,8 @@ body {
   margin: 0;
 }
 .sp-databox-table-sm {
-  font-size:  .9em;
+  font-size:  14px;
+  line-height: 18px;
 }
 .sp-databox-table-lg {
   font-size:  1.2em;
@@ -698,10 +699,13 @@ footer {
   margin-top: 20px;
 }
 
+
 .dashboardTable {
-  font-weight: 400;
-  font-size: 14px;
+  font-size: 12px;
+  font-family: 'ProximaNovaSoft',Helvetica Neue,Helvetica,Arial,sans-serif;
 }
+
+
 
 .unclearBtn {
   margin: 0 0;
