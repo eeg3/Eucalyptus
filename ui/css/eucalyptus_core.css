@@ -730,13 +730,13 @@ footer {
   outline: none !important;
 }
 
-#inflightPanel {
+#inflightPanel, #completedPanel {
   margin-bottom: 5px !important;
 }
-#inflightPanelBody {
+#inflightPanelBody, #completedPanelBody {
   padding: 0 0;
 }
-#inflightTable {
+#inflightTable, #completedTable {
   margin-bottom: 0 !important;
 }
 

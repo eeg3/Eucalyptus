@@ -419,10 +419,16 @@ function saveFlightplan(status) {
       }
       if (lastChecked !== "") {
         inflightPost["lastChecked"] = lastChecked;
-      }
+      } 
       if (completed !== "") {
         inflightPost["completed"] = completed;
       }
+
+      var date = new Date();
+      var timestamp = (date.getMonth()+1) + "/"
+                    + (date.getDate()) + "/"
+                    + date.getFullYear();
+      inflightPost["saveDate"] = timestamp;
 
       if (validated) {
         if (!loadedNote) {
@@ -644,7 +650,7 @@ function init () {
               }
               rowToAdd += '<td>';
               rowToAdd += '<button id="open-' + inflight[i]["_id"] + '" title="Load Saved Progress" type="button" class="btn btn-success btn-xs loadBtn"><i class="fa fa-folder-open-o"></i></button>';
-              rowToAdd += '<button id="del-' + inflight[i]["_id"] + '" title="Delete Saved Progress" type="button" class="btn btn-success btn-xs deleteBtn"><i class="fa fa-trash-o"></i></button>';
+              rowToAdd += '<button id="del-' + inflight[i]["_id"] + '" title="Delete Saved Progress" type="button" class="btn btn-danger btn-xs deleteBtn"><i class="fa fa-trash-o"></i></button>';
               rowToAdd += '</td>';
               rowToAdd += "</tr>";
               $('#completedListTable tr:last').after(rowToAdd);
@@ -696,7 +702,7 @@ function init () {
               }
               rowToAdd += '<td>';
               rowToAdd += '<button id="open-' + inflight[i]["_id"] + '" title="Load Saved Progress" type="button" class="btn btn-success btn-xs loadBtn"><i class="fa fa-folder-open-o"></i></button>';
-              rowToAdd += '<button id="del-' + inflight[i]["_id"] + '" title="Delete Saved Progress" type="button" class="btn btn-success btn-xs deleteBtn"><i class="fa fa-trash-o"></i></button>';
+              rowToAdd += '<button id="del-' + inflight[i]["_id"] + '" title="Delete Saved Progress" type="button" class="btn btn-danger btn-xs deleteBtn"><i class="fa fa-trash-o"></i></button>';
               rowToAdd += '</td>';
               rowToAdd += "</tr>";
               $('#inflightListTable tr:last').after(rowToAdd);

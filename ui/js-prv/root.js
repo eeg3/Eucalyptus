@@ -98,6 +98,110 @@ function parseFlightplans(id, title, category) {
 
 }
 
+function populateInprogress() {
+
+  helper.get("/api/inflight/")
+    .then(function(data){
+      var inflight = data;
+      // We only want to clear the table if something is found, so track that.
+      var clearedInprogressLoads = 0;
+
+
+      for (var i = 0; i < data.length; i++) {
+        if (inflight[i]["completed"] == false) {
+          if (clearedInprogressLoads == 0) {
+            // Clear old loads
+            $('#inflightTable tr').not(function(){ return !!$(this).has('th').length; }).remove();
+            clearedInprogressLoads++;
+          }
+          var nodesToDisplay = ["referencedFlightplan", "title", "user", "lastChecked"];
+          var rowToAdd = "<tr>";
+          for (var j = 0; j < nodesToDisplay.length; j++) {
+            if (nodesToDisplay[j] == "lastChecked") {
+              if (inflight[i][nodesToDisplay[j]] == undefined) {
+                rowToAdd += "<td>" + "1-1" + "</td>";
+              } else {
+                rowToAdd += "<td>" + inflight[i][nodesToDisplay[j]].split("-")[2] + "-" + inflight[i][nodesToDisplay[j]].split("-")[3] + "</td>";
+              }
+            } else if (nodesToDisplay[j] == "referencedFlightplan") {
+              rowToAdd += '<td id="inprog-' + inflight[i][nodesToDisplay[j]] + "-" + inflight[i]["title"]  + '" class="referencedFlightplan">' + inflight[i][nodesToDisplay[j]] + '</td>';
+            } else {
+              rowToAdd += "<td>" + inflight[i][nodesToDisplay[j]] + "</td>";
+            }
+          }
+          rowToAdd += "</tr>";
+          $('#inflightTable tr:last').after(rowToAdd);
+        }
+      }
+      $('#inflightTable').trigger("update");
+
+      convertReferenceToTitle();
+    });
+
+}
+
+function populateCompleted() {
+
+  helper.get("/api/inflight/")
+    .then(function(data){
+      var inflight = data;
+      var completedEntriesAdded = 0;
+      var clearedCompletedLoads = 0;
+
+
+      // Clear old loads
+      $('#completedTable tr').not(function(){ return !!$(this).has('th').length; }).remove();
+
+      for (var i = 0; i < data.length; i++) {
+        if(completedEntriesAdded >= 3) {
+          break;
+        }
+        if (inflight[i]["completed"] == true) {
+          if (clearedCompletedLoads == 0) {
+            // Clear old loads
+            $('#completedTable tr').not(function(){ return !!$(this).has('th').length; }).remove();
+            clearedCompletedLoads++;
+          }
+          var nodesToDisplay = ["referencedFlightplan", "title", "user", "saveDate"];
+          var rowToAdd = "<tr>";
+          for (var j = 0; j < nodesToDisplay.length; j++) {
+            if (nodesToDisplay[j] == "referencedFlightplan") {
+              rowToAdd += '<td id="comp-' + inflight[i][nodesToDisplay[j]] + '-' + inflight[i]["title"] + '" class="referencedFlightplan">' + inflight[i][nodesToDisplay[j]] + '</td>';
+            } else {
+              rowToAdd += "<td>" + inflight[i][nodesToDisplay[j]] + "</td>";
+            }
+          }
+          rowToAdd += "</tr>";
+          $('#completedTable tr:last').after(rowToAdd);
+          completedEntriesAdded++;
+        }
+      }
+      $('#completedTable').trigger("update");
+
+      convertReferenceToTitle();
+    });
+
+}
+
+// We grab referencedFlightplan IDs and want to convert all of them to Titles for readability
+function convertReferenceToTitle() {
+  // Re-process all entries and convert the referencedFlightplan ID to its Title
+  $("td[class^='referencedFlightplan']").each(function () {
+    console.log("rfp this.id: " + $(this).html());
+    var trId = $(this).html();
+    helper.get("/api/flightplan/")
+      .then(function(data){
+        var flightplan = data;
+        for (var i = 0; i < data.length; i++) {
+          if (flightplan[i]["_id"] == trId) {
+            $( 'td:contains(' + trId + ')').html(flightplan[i]["title"]);
+          }
+        }
+      });
+
+  });
+}
+
 function populateChart() {
   var newColumns = [];
   var rowCount = [];
@@ -215,6 +319,9 @@ function init () {
   $(document).ready(function(){ // Enable tooltips after all the steps are processed.
 
     $('#inflightTable').tablesorter();
+
+    populateInprogress();
+    populateCompleted();
 
     // FlightPlans by Product
     createChart("product", "myChart2");
