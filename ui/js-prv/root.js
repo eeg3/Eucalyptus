@@ -148,10 +148,6 @@ function populateCompleted() {
       var completedEntriesAdded = 0;
       var clearedCompletedLoads = 0;
 
-
-      // Clear old loads
-      $('#completedTable tr').not(function(){ return !!$(this).has('th').length; }).remove();
-
       for (var i = 0; i < data.length; i++) {
         if(completedEntriesAdded >= 3) {
           break;
