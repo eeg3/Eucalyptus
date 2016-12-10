@@ -4,6 +4,10 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.bundle.min.js" integrity="sha256-1uH5nQ+1cUZEU9YOfMzc9rapsWyuGtvKPpvKN9xDgug=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.min.js" integrity="sha256-w8BXa9KXx+nmhO9N4hupvlLy+cAtqEarnB40DVJx2xA=" crossorigin="anonymous"></script>
 
+  <!-- Tablesorter -->
+  <link href="/css/tablesorter.default.min.css" rel="stylesheet">
+  <script src="/js-pub/tablesorter/jquery.tablesorter.min.js"></script>
+
   <!-- Custom JS -->
   <script src="/js-prv/ApiHelper.js"></script>
   <script src="/js-prv/root.js"></script>
@@ -58,6 +62,60 @@
                   </div>
                   <div class="col-sm-1"></div>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <div id="inflightPanel" class="panel">
+              <div class="panel-heading sp-databox-panel-heading-center">
+                In-Progress Flights
+              </div>
+              <div id="inflightPanelBody" class="panel-body">
+                <div id="inflightSection">
+                  <table id="inflightTable" class="table table-striped tablesorter sp-databox-table-inflight">
+                    <thead>
+                      <tr>
+                        <th>FlightPlan</th>
+                        <th>Flight Name</th>
+                        <th>User</th>
+                        <th>Percent Complete</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr><td>Create App Stack</td><td>WinSCP</td><td>Earl Gay</td><td>50%</td></tr>
+                      <tr><td>Create App Stack</td><td>PaintNET</td><td>Earl Gay</td><td>70%</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div id="inflightPanel" class="panel">
+              <div class="panel-heading sp-databox-panel-heading-center">
+                Recently Completed Flights
+              </div>
+              <div id="inflightPanelBody" class="panel-body">
+                <div id="inflightSection">
+                  <table id="inflightTable" class="table table-striped tablesorter sp-databox-table-inflight">
+                    <thead>
+                      <tr>
+                        <th>FlightPlan</th>
+                        <th>Flight Name</th>
+                        <th>User</th>
+                        <th>Percent Complete</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr><td>Create App Stack</td><td>WinSCP</td><td>Earl Gay</td><td>50%</td></tr>
+                      <tr><td>Create App Stack</td><td>PaintNET</td><td>Earl Gay</td><td>70%</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+
               </div>
             </div>
           </div>

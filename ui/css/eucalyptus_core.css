@@ -95,6 +95,16 @@ body {
   font-weight: 500;
 }
 
+.sp-databox-panel-heading-center {
+  text-align: center;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgba(134, 139, 133, 0.31);
+  color: rgba(113, 114, 116, 0.79);
+  letter-spacing: 1px;
+  font-weight: 500;
+}
+
 .sp-databox-panel-heading-dark {
   text-align: left;
   border-width: 1px;
@@ -154,6 +164,9 @@ body {
 }
 .sp-databox-table-md {
   font-size:  1.0em;
+}
+.sp-databox-table-inflight {
+  font-size: .8em;
 }
 
 .inverse-dropdown {
@@ -394,6 +407,13 @@ body {
   width: 250px;
   height: 100%;
   overflow-y:scroll;
+}
+
+.notesTextAreaStep {
+  width: 95%;
+  height: 100%;
+  overflow-y:scroll;
+  margin-bottom: 10px;
 }
 
 canvas {
@@ -701,13 +721,36 @@ footer {
 
 
 .dashboardTable {
-  font-size: 12px;
+  font-size: 14px;
   font-family: 'ProximaNovaSoft',Helvetica Neue,Helvetica,Arial,sans-serif;
 }
-
-
 
 .unclearBtn {
   margin: 0 0;
   outline: none !important;
+}
+
+#inflightPanel {
+  margin-bottom: 5px !important;
+}
+#inflightPanelBody {
+  padding: 0 0;
+}
+#inflightTable {
+  margin-bottom: 0 !important;
+}
+
+input, textarea {
+  padding-left: 6px;
+}
+input:focus {
+    outline: none !important;
+    border:1px solid #5cb85c;
+    box-shadow: 0 0 10px #719ECE;
+}
+
+textarea:focus {
+        outline: none !important;
+    border:1px solid #5cb85c;
+    box-shadow: 0 0 10px #719ECE;
 }

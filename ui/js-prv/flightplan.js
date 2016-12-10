@@ -7,7 +7,7 @@ var mobile = false;
 var loadedNote = false;
 var completed = false;
 var currentUser = "";
-var sequential = true;
+var sequential = false;
 var formModified = false;
 
 function currentTimestamp() {
@@ -34,10 +34,13 @@ function initiateStepFlow(steps, substeps) {
       // Set checkbox names for current and next item
       var checkboxA = "status-substep-" + i + "-" + j;
       var checkboxB = "status-substep-" + i + "-" + (j*1 + 1);
+      var itemB = i + "-" + (j*1 + 1);
       var row = "row-substep-" + i + "-" + j;
 
       // White out everything except the first row at page open.
-      if ((i == 1) && (j == 1)) { } else {
+      if ((i == 1) && (j == 1)) {
+        $("#" + row).css("font-weight", "700");
+      } else {
         $("#" + row).css("color", "white");
       }
 
@@ -45,6 +48,8 @@ function initiateStepFlow(steps, substeps) {
       $("input#" + checkboxA).click(function(){
         checkboxA = this.id;
         checkboxB = this.id.split("-")[0] + "-" + this.id.split("-")[1] + "-" + this.id.split("-")[2] + "-" + (this.id.split("-")[3]*1 + 1);
+        thisRow = "row-" + this.id.split("-")[1] + "-" + this.id.split("-")[2] + "-" + this.id.split("-")[3];
+        console.log("this row: " + thisRow);
         nextRow = "row-substep-" + checkboxB.split("-")[2] + "-" + checkboxB.split("-")[3];
 
         // If checkboxB's length is 0 then time to modify next step's substep instead of a non-existing substep in this current step
@@ -58,9 +63,12 @@ function initiateStepFlow(steps, substeps) {
         // If checkboxA is checked, then enable the next checkbox; if it isn't, then disable the next checkbox
         if(this.checked) {
           $("input#" + checkboxB).prop("disabled", false);
+          $("#" + thisRow).css("font-weight", "400");
+          //$("#row-substep-" + i + "-" + (j*1 + 1)).css("border", "3px solid black");
           stepsComplete++;
           updateCompletionStatus();
           $("#" + nextRow).css("color", "black"); // Unhide next sub-step since this sub-step is complete.
+          $("#" + nextRow).css("font-weight", "700"); // Unhide next sub-step since this sub-step is complete.
         } else {
           // If trying to uncheck a checkbox way up the chain where others are checked, don't allow it
           try { // Perform a try otherwise the last checkbox will break when trying to un-check it
@@ -75,6 +83,8 @@ function initiateStepFlow(steps, substeps) {
             if (sequential) {
               $("#" + nextRow).css("color", "white"); // Hide next sub-step until this sub-step is complete.
             }
+            $("#" + thisRow).css("font-weight", "700");
+            $("#" + nextRow).css("font-weight", "400");
             if(nextRow.split("-")[3] == "1") { // Un-crossout the section in the TOC if it's not complete.
               $("#li-" + (this.id.split("-")[2])).css("text-decoration", "");
             }
@@ -177,6 +187,7 @@ function parseSteps(steps) {
     table.append(tableEnd);
 
     $("#" + stepNumber).append(table);
+    $("#" + stepNumber).append('<textarea id="notes-' + stepNumber + '" class="notesTextAreaStep" placeholder="Were any additional actions taken as part of this step?" />');
   }
 
   // We want to track if anything changes so that we can warn the user if they try to exit before saving.
@@ -332,6 +343,7 @@ function saveFlightplan(status) {
         }
       }
 
+      // Parse sub-step notes
       for (var i = 1; i < 100; i++) {
         if(!$("#details-substep-" + i + "-1").length == 0) {
           for (var j = 1; j < 100; j++) {
@@ -360,6 +372,33 @@ function saveFlightplan(status) {
             } else {
               break;
             }
+          }
+        }
+      }
+
+      // Parse step notes
+      for (var i = 1; i < 100; i++) {
+        if(!$("#row-" + i).length == 0) {
+          if (($("#notes-" + i ).val().indexOf("|||") != -1)) {
+            alert("ERROR: Notes cannot contain the string '|||'. Please remove and re-save.");
+            validated = 0;
+          } else if (($("#notes-" + i).val().indexOf(";;;") != -1)) {
+            alert("ERROR: Notes cannot contain the string ';;;'. Please remove and re-save.");
+            validated = 0;
+          } else if (($("#notes-" + i).val().indexOf(",,,") != -1)) {
+            alert("ERROR: Notes cannot contain the string ',,,'. Please remove and re-save.");
+            validated = 0;
+          } else if (beginsWith($("#notes-" + i).val(), ";") || endsWith($("#notes-" + i).val(), ";")) {
+            alert("ERROR: Notes cannot begin or end with the character ';'. Please remove and re-save.");
+            validated = 0;
+          } else if (beginsWith($("#notes-" + i).val(), "|") || endsWith($("#notes-" + i).val(), "|")) {
+            alert("ERROR: Notes cannot begin or end with the character '|'. Please remove and re-save.");
+            validated = 0;
+          } else if (beginsWith($("#notes-" + i).val(), ",") || endsWith($("#notes-" + i).val(), ",")) {
+            alert("ERROR: Notes cannot begin or end with the character ','. Please remove and re-save.");
+            validated = 0;
+          } else {
+            notes += "notes-" + i + "|||" + $("#notes-" + i).val() + ";;;";
           }
         }
       }
@@ -543,7 +582,7 @@ function toggleSeq(state) {
 
 function init () {
   // Logic flow:
-  //  getFlightPlan() pulls everything about the FlightPlan from the API, and populates everything about the FlightPlan except for the steps itself. Then ->
+  // getFlightPlan() pulls everything about the FlightPlan from the API, and populates everything about the FlightPlan except for the steps itself. Then ->
   // parseSteps() parses the steps string which holds all the steps and substeps. It creates the divs for the steps an the tables for the substeps. Then ->
   // initiateStepFlow() goes through all the DOM objects created by paresSteps() and activates the logic around the checkboxes around hooks, hiding, and disabling flows.
   // updateCompletionStatus() is hooked into onClick for all the checkboxes by initiateStepFlow() to activate the logic on user activity.
