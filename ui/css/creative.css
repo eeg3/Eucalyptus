@@ -72,7 +72,7 @@ aside {
   transition: all 0.35s;
 }
 .navbar-default .navbar-header .navbar-brand {
-  color: #50af60;
+  /*color: #50af60;*/
   font-family: 'ProximaNovaSoft', 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
   font-weight: 700;
   text-transform: uppercase;
@@ -481,6 +481,7 @@ body {
   color: #fff;
   background-color: #080808
 }
+/*
 @media (max-width:767px) {
   .navbar-leaf .navbar-nav .open .dropdown-menu>.dropdown-header {
     border-color: #080808
@@ -504,6 +505,7 @@ body {
     background-color: transparent
   }
 }
+*/
 .navbar-leaf .navbar-link {
   color: #9d9d9d
 }

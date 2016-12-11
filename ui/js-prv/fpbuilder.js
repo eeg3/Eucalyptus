@@ -30,9 +30,9 @@ function createStep(stepNumber) {
   stepOrder.push(stepNumber);
 
   if(stepNumber == 1) {
-    var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step #&nbsp;<input type="text" class="input-medium" id="stepTitle-' + stepNumber + '" placeholder="Step Title"></input><input type="text" class="input-medium" id="stepLauncher-' + stepNumber + '" placeholder="Step Launcher URL"></input><a id="addButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-plus"></i></a></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
+    var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step #&nbsp;<input type="text" class="stepHeader" id="stepTitle-' + stepNumber + '" placeholder="Step Title"></input><input type="text" class="stepHeader" id="stepLauncher-' + stepNumber + '" placeholder="Step Launcher URL"></input><a id="addButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-plus"></i></a></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
   } else {
-    var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step #&nbsp;<input type="text" class="input-medium" id="stepTitle-' + stepNumber + '" placeholder="Step Title"><input type="text" class="input-medium" id="stepLauncher-' + stepNumber + '" placeholder="Step Launcher URL"></input></input><a id="addButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-plus"></i></a><a id="delButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-minus minus"></i></a></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
+    var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step #&nbsp;<input type="text" class="stepHeader" id="stepTitle-' + stepNumber + '" placeholder="Step Title"><input type="text" class="stepHeader" id="stepLauncher-' + stepNumber + '" placeholder="Step Launcher URL"></input></input><a id="addButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-plus"></i></a><a id="delButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-minus minus"></i></a></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
   }
   $("#stepsSection").append(newDivHTML);
 
@@ -69,7 +69,7 @@ function addStep(currentStep) {
 
   stepOrder.splice(stepOrder.indexOf(parseInt(currentStep))+1, 0, stepNumber);
 
-  var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step #&nbsp;<input type="text" class="input-medium" id="stepTitle-' + stepNumber + '" placeholder="Step Title"></input><input type="text" class="input-medium" id="stepLauncher-' + stepNumber + '" placeholder="Step Launcher URL"></input><a id="addButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-plus"></i></a><a id="delButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-minus minus"></i></a></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
+  var newDivHTML = '<div id="row-' + stepNumber + '" class="row"><div class="col-sm-12"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">Step #&nbsp;<input type="text" class="stepHeader" id="stepTitle-' + stepNumber + '" placeholder="Step Title"></input><input type="text" class="stepHeader" id="stepLauncher-' + stepNumber + '" placeholder="Step Launcher URL"></input><a id="addButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-plus"></i></a><a id="delButton-' + stepNumber + '" class="btn btn-small leafLogo"><i class="fa fa-minus minus"></i></a></div><div id="' + stepNumber + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div></div>';
   $("#row-" + currentStep).after(newDivHTML);
 
   var table = $('<table id="table-'+ stepNumber + '"></table>').addClass('table table-bordered table-striped sp-databox-table');
@@ -98,7 +98,7 @@ function createSubStep(stepNumber, substepNumber) {
   var substepCode = "substep-" + stepNumber + "-" + substepNumber; // Example: substep-2-1
   var tableLineItem = '<tr id="row-' + substepCode + '">';
   tableLineItem += '<td id="' + substepCode + '" class="st-substep-col borderTD">' + substepName + '</td>';
-  tableLineItem += '<td><input type="text" id="details-' + substepCode + '" class="form-control input-sm" placeholder="Sub-Step Details" /></td>';
+  tableLineItem += '<td><input type="text" id="details-' + substepCode + '" class="form-control" placeholder="Sub-Step Details" /></td>';
   if (substepNumber == 1) {
     tableLineItem += '<td class="borderTD"><a id="addButton-' + substepCode + '" class="btn btn-small leafLogo"><i class="fa fa-plus"></i></a>&nbsp;&nbsp;</td>';
   } else {
@@ -129,7 +129,7 @@ function addSubStep(stepNumber, substepNumber, details) {
   var substepCode = "substep-" + stepNumber + "-" + substepNumber; // Example: substep-2-1
   var tableLineItem = '<tr id="row-' + substepCode + '">';
   tableLineItem += '<td id="' + substepCode + '" class="st-substep-col borderTD">' + substepName + '</td>';
-  tableLineItem += '<td ><input type="text" id="details-' + substepCode + '" class="form-control input-sm" placeholder="Sub-Step Details" /></td>';
+  tableLineItem += '<td ><input type="text" id="details-' + substepCode + '" class="form-control" placeholder="Sub-Step Details" /></td>';
 
   if (substepNumber == 1) {
     tableLineItem += '<td class="borderTD"><a id="addButton-' + substepCode + '" class="btn btn-small leafLogo"><i class="fa fa-plus"></i></a>&nbsp;&nbsp;</td>';
@@ -506,7 +506,7 @@ function createBoard(steps) {
 
 function init () {
 
-  $("#stepsSection").css("min-width", "750px");
+  $("#stepsSection").css("min-width", "480px");
   $("#stepsSection").css("width", "auto !important");
 
   currentTimestamp();
