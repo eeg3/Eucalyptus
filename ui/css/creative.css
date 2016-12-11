@@ -166,7 +166,8 @@ aside {
 #splash-header-dashboard {
   position: relative;
   width: 100%;
-  min-height: auto;
+  /*min-height: auto;*/
+  min-height: 100%;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   background-size: cover;
