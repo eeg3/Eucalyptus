@@ -262,7 +262,12 @@ function displaySummary() {
           $("#flightplanAuthor").html(flightplanAuthor);
 
           var flightplanDescription = flightplan[i]["description"];
-          $("#flightplanDescription").html(flightplanDescription);
+          $("#flightplanDescription").html("<h3>" + flightplanDescription + "</h3>");
+          $("#flightplanDescription").append("<br><h5><b>Referenced Documentation</b></h5>");
+          $("#flightplanDescription").append('<ul class="docList">');
+          $("#flightplanDescription").append('<li class="docList"><a href="https://pubs.vmware.com/identity-manager-26/index.jsp#com.vmware.wsp-install_26/GUID-9055C5B4-9D5C-419C-B318-8B18D31D2CC8.html" target="_blank">Deploying VMware Identity Manager</a></li>');
+          $("#flightplanDescription").append('<li class="docList"><a href="https://pubs.vmware.com/identity-manager-26/index.jsp#com.vmware.wsp-install_26/GUID-9055C5B4-9D5C-419C-B318-8B18D31D2CC8.html" target="_blank">Preparing to Install VMware Identity Manager</a></li>');
+          $("#flightplanDescription").append('</ul>');
         }
       }
     });
@@ -419,7 +424,7 @@ function saveFlightplan(status) {
       }
       if (lastChecked !== "") {
         inflightPost["lastChecked"] = lastChecked;
-      } 
+      }
       if (completed !== "") {
         inflightPost["completed"] = completed;
       }

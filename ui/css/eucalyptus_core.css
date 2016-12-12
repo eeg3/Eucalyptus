@@ -758,3 +758,14 @@ textarea:focus {
     border:1px solid #5cb85c;
     box-shadow: 0 0 10px #719ECE;
 }
+
+.docList {
+  margin: 0 0 !important;
+  font-size: .92em !important;
+  list-style: none;
+}
+
+h5 {
+  margin-top: 0;
+  margin-bottom: 5px;
+}

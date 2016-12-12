@@ -25,6 +25,36 @@ function currentTimestamp() {
   $('#footer').append("<br /> Current Time: " + timestamp);
 }
 
+function addRef() {
+
+  var refNumber = null;
+  var currentRefNumber = null;
+
+  for(var i = 1; i < 50; i++) {
+    if(!($("#refRow-" + i).length)) {
+      currentRefNumber = i - 1;
+      refNumber = i;
+      break;
+    }
+  }
+
+  var refName = "refName-" + refNumber;
+  var refUrl = "refUrl-" + refNumber;
+  var tableLineItem = '<tr id="refRow-' + refNumber + '">';
+  tableLineItem += '<td ><input type="text" id="' + refName + '" class="form-control" placeholder="Link Name" /></td>';
+  tableLineItem += '<td ><input type="text" id="' + refUrl + '" class="form-control" placeholder="Link URL" /></td>';
+
+  tableLineItem += '<td class="borderTD"><a id="addRefButton-' + refNumber + '" class="btn btn-small leafLogo"><i class="fa fa-plus"></i></a>&nbsp;&nbsp;<a id="delRefButton-' + refNumber + '" class="btn btn-small leafLogo"><i class="fa fa-minus minus"></i></a></td>';
+
+  tableLineItem += '</tr>';
+
+  //console.log("Adding refRow-" + refNumber + " after refRow ")
+
+  $("#refRow-" + currentRefNumber).after(tableLineItem);
+
+  hookUpAddDelButtons();
+}
+
 function createStep(stepNumber) {
 
   stepOrder.push(stepNumber);
@@ -147,7 +177,24 @@ function addSubStep(stepNumber, substepNumber, details) {
 }
 
 function hookUpAddDelButtons() {
-  for(var i = 0; i < 70; i++) {
+  for(var i = 0; i < 200; i++) {
+
+    if(!("#addRefButton-" + i).length == 0) {
+      $("#addRefButton-" + i).unbind("click"); // Make sure it's clear, otherwise it appends
+      $("#addRefButton-" + i).click(function() {
+        //addSubStep(this.id.split("-")[2], this.id.split("-")[3]);
+        addRef();
+      }); // Hook add button
+    }
+
+    if(!("#delRefButton-" + i).length == 0) {
+      $("#delRefButton-" + i).unbind("click"); // Make sure it's clear, otherwise it appends
+      $("#delRefButton-" + i).click(function() {
+        var refRowToDelete = "refRow-" + (this.id).split("-")[1];
+        $("#" + refRowToDelete).remove();
+      }); // Hook add button
+    }
+
     if(!("#addButton-substep-" + i + "-1").length == 0) {
 
       // Hook steps up.
@@ -172,7 +219,7 @@ function hookUpAddDelButtons() {
       }); // Hook del button
 
       // Hook substeps up.
-      for(var j = 0; j < 70; j++) {
+      for(var j = 0; j < 200; j++) {
         if(!("#addButton-substep-" + i + "-1").length == 0) {
           $("#addButton-substep-" + i + "-" + j).unbind("click"); // Make sure it's clear, otherwise it appends
           $("#addButton-substep-" + i + "-" + j).click(function() {
@@ -213,6 +260,45 @@ function hookUpInputValidation() {
   });
 
   for (var i = 0; i < 50; i++) {
+
+    $("#refName-" + i).on('input', function() {
+      if($("#" + this.id).val() == "") {
+        $("#" + this.id).css("border", "1px solid #ccc");
+      } else {
+        if ($("#" + this.id).val().indexOf(";;;") != -1) {
+          $("#" + this.id).css("border", "1px solid red");
+          return;
+        } else if ($("#" + this.id).val().indexOf("|||") != -1) {
+          $("#" + this.id).css("border", "1px solid red");
+          return;
+        } else if ($("#" + this.id).val().indexOf(",,,") != -1) {
+          $("#" + this.id).css("border", "1px solid red");
+          return;
+        } else {
+          $("#" + this.id).css("border", "1px solid #ccc");
+        }
+      }
+    });
+
+    $("#refUrl-" + i).on('input', function() {
+      if($("#" + this.id).val() == "") {
+        $("#" + this.id).css("border", "1px solid #ccc");
+      } else {
+        if ($("#" + this.id).val().indexOf(";;;") != -1) {
+          $("#" + this.id).css("border", "1px solid red");
+          return;
+        } else if ($("#" + this.id).val().indexOf("|||") != -1) {
+          $("#" + this.id).css("border", "1px solid red");
+          return;
+        } else if ($("#" + this.id).val().indexOf(",,,") != -1) {
+          $("#" + this.id).css("border", "1px solid red");
+          return;
+        } else {
+          $("#" + this.id).css("border", "1px solid #ccc");
+        }
+      }
+    });
+
     for (var j = 0; j < 50; j++) {
 
       $("#details-substep-" + i + "-" + j).on('input', function() {
@@ -504,6 +590,58 @@ function createBoard(steps) {
 
 }
 
+function testExportRef() {
+  var refDocString = "";
+
+  for (var i = 0; i < 100; i++) {
+    if ($("#refRow-" + i).length) {
+      if ($("#refName-" + i).val() != "") {
+        if ($("#refUrl-" + i).val() != "") {
+
+          if ($("#refName-" + i).val().indexOf("|||") != -1) {
+            $("#errorMessage").html("ERROR: Reference documentation entries cannot contain the string '|||'.");
+            validated = 0;
+          } else if ($("#refName-" + i).val().indexOf(",,,") != -1) {
+            $("#errorMessage").html("ERROR: Reference documentation entries cannot contain the string ',,,'.");
+            validated = 0;
+          } else if (beginsWith($("#refName-" + i).val(), ";") || endsWith($("#refName-" + i).val(), ";"))  {
+            $("#errorMessage").html("ERROR: Reference documentation entries cannot begin or end with the ';' character.");
+            validated = 0;
+          } else if (beginsWith($("#refName-" + i).val(), "|") || endsWith($("#refName-" + i).val(), "|"))  {
+            $("#errorMessage").html("ERROR: Reference documentation entries cannot begin or end with the '|' character.");
+            validated = 0;
+          } else if (beginsWith($("#refName-" + i).val(), ",") || endsWith($("#refName-" + i).val(), ","))  {
+            $("#errorMessage").html("ERROR: Reference documentation entries cannot begin or end with the ',' character.");
+            validated = 0;
+          } else {
+            if ($("#refUrl-" + i).val().indexOf("|||") != -1) {
+              $("#errorMessage").html("ERROR: Reference documentation entries cannot contain the string '|||'.");
+              validated = 0;
+            } else if ($("#refUrl-" + i).val().indexOf(",,,") != -1) {
+              $("#errorMessage").html("ERROR: Reference documentation entries cannot contain the string ',,,'.");
+              validated = 0;
+            } else if (beginsWith($("#refUrl-" + i).val(), ";") || endsWith($("#refUrl-" + i).val(), ";"))  {
+              $("#errorMessage").html("ERROR: Reference documentation entries cannot begin or end with the ';' character.");
+              validated = 0;
+            } else if (beginsWith($("#refUrl-" + i).val(), "|") || endsWith($("#refUrl-" + i).val(), "|"))  {
+              $("#errorMessage").html("ERROR: Reference documentation entries cannot begin or end with the '|' character.");
+              validated = 0;
+            } else if (beginsWith($("#refUrl-" + i).val(), ",") || endsWith($("#refUrl-" + i).val(), ","))  {
+              $("#errorMessage").html("ERROR: Reference documentation entries cannot begin or end with the ',' character.");
+              validated = 0;
+            } else {
+              refDocString += $("#refName-" + i).val() + ",,," + $("#refUrl-" + i).val() + "|||";
+            }
+          }
+
+        }
+      }
+    }
+  }
+
+  console.log(refDocString);
+}
+
 function init () {
 
   $("#stepsSection").css("min-width", "480px");
@@ -512,6 +650,10 @@ function init () {
   currentTimestamp();
 
   createStep(1);
+
+  $("#testButton").click(function() {
+    testExportRef();
+  });
 
   $('#importExistingDiv').hide();
 
