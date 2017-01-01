@@ -41,7 +41,7 @@ router.get('/logout', function(req, res) {
 });
 
 router.post('/signup', passport.authenticate('local-signup', {
-  successRedirect: '/',
+  successRedirect: '/logout',
   failureRedirect: '/signup',
   failureFlash: true,
 }));
