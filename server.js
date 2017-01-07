@@ -41,7 +41,11 @@ var lockAPI = false;
 
 /***** Connect to MongoDB *****/
 var dbConnection = 'mongodb://localhost/' + databaseName;
-var db = mongoose.connect(dbConnection, function() {
+var db = mongoose.connect(dbConnection, function(err) {
+  if (err) {
+    console.log("Error connecting to database.");
+    process.exit(1);
+  }
   console.log("Connected to Database: " + dbConnection);
 });
 
