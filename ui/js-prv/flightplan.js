@@ -39,7 +39,7 @@ function initiateStepFlow(steps, substeps) {
 
       // White out everything except the first row at page open.
       if ((i == 1) && (j == 1)) {
-        $("#" + row).css("font-weight", "700");
+        //$("#" + row).css("font-weight", "700");
       } else {
         $("#" + row).css("color", "white");
       }
@@ -63,12 +63,12 @@ function initiateStepFlow(steps, substeps) {
         // If checkboxA is checked, then enable the next checkbox; if it isn't, then disable the next checkbox
         if(this.checked) {
           $("input#" + checkboxB).prop("disabled", false);
-          $("#" + thisRow).css("font-weight", "400");
+          //$("#" + thisRow).css("font-weight", "400");
           //$("#row-substep-" + i + "-" + (j*1 + 1)).css("border", "3px solid black");
           stepsComplete++;
-          updateCompletionStatus();
+          //updateCompletionStatus();
           $("#" + nextRow).css("color", "black"); // Unhide next sub-step since this sub-step is complete.
-          $("#" + nextRow).css("font-weight", "700"); // Unhide next sub-step since this sub-step is complete.
+          //$("#" + nextRow).css("font-weight", "700"); // Unhide next sub-step since this sub-step is complete.
         } else {
           // If trying to uncheck a checkbox way up the chain where others are checked, don't allow it
           try { // Perform a try otherwise the last checkbox will break when trying to un-check it
@@ -83,13 +83,13 @@ function initiateStepFlow(steps, substeps) {
             if (sequential) {
               $("#" + nextRow).css("color", "white"); // Hide next sub-step until this sub-step is complete.
             }
-            $("#" + thisRow).css("font-weight", "700");
-            $("#" + nextRow).css("font-weight", "400");
+            //$("#" + thisRow).css("font-weight", "700");
+            //$("#" + nextRow).css("font-weight", "400");
             if(nextRow.split("-")[3] == "1") { // Un-crossout the section in the TOC if it's not complete.
               $("#li-" + (this.id.split("-")[2])).css("text-decoration", "");
             }
             stepsComplete--;
-            updateCompletionStatus();
+            //updateCompletionStatus();
           }
         }
 
