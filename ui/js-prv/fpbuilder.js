@@ -7,6 +7,8 @@ var staticFields = ["title", "description", "category", "author", "product", "re
 var formModified = false;
 var loadedFlightplan = false;
 var loadedFpId = undefined;
+var loadedFpName = undefined;
+var loadedFpRevision = undefined;
 var obj;
 var currentUser = "";
 
@@ -16,13 +18,18 @@ var substepOrder = [];
 
 function currentTimestamp() {
   var date = new Date();
+  /*
   var timestamp = (date.getMonth()+1) + "/"
                 + (date.getDate()) + "/"
                 + date.getFullYear() + " @ "
                 + date.getHours() + ":" +
                 + date.getMinutes() + ":" +
                 + date.getSeconds();
-  $('#footer').append("<br /> Current Time: " + timestamp);
+  */
+  var timestamp = (date.getMonth()+1) + "/"
+                + (date.getDate()) + "/"
+                + date.getFullYear();
+  return timestamp;
 }
 
 function addRef() {
@@ -452,7 +459,6 @@ function exportFlightplan() {
   if(validated) {
     var titlePost = $("#title").val();
     var authorPost = $("#author").val();
-    var revisionPost = $("#revision").val();
     var categoryPost = $("#category").val();
     var productPost = $("#product").val();
     var descriptionPost = $("#description").val();
@@ -465,9 +471,7 @@ function exportFlightplan() {
     }
 
     flightplanPost["author"] = currentUser;
-    if (revisionPost !== "") {
-      flightplanPost["revision"] = revisionPost;
-    }
+    flightplanPost["revision"] = 1;
     if (categoryPost !== "") {
       flightplanPost["category"] = categoryPost;
     }
@@ -481,8 +485,14 @@ function exportFlightplan() {
       flightplanPost["steps"] = stepsPost;
     }
     if (loadedFlightplan) {
-      helper.patch("/api/flightplan/" + loadedFpId, flightplanPost);
+      if (1==1) { // Need to add logic to only do this if there are saved flights
+        var previousFlightplanPost = {};
+        previousFlightplanPost["title"] = "[Historical] " + loadedFpName + " - " + currentTimestamp();
+        helper.patch("/api/flightplan/" + loadedFpId, previousFlightplanPost);
+      }
 
+      flightplanPost["revision"] = parseInt(loadedFpRevision) + 1;
+      helper.post("/api/flightplan/", flightplanPost);
     } else {
       helper.post("/api/flightplan/", flightplanPost);
     }
@@ -525,6 +535,9 @@ function getFlightplan(id) {
 
       for (var i = 0; i < data.length; i++) {
         if (flightplan[i]["_id"] == id) {
+          loadedFpName = flightplan[i]["title"];
+          loadedFpRevision = flightplan[i]["revision"];
+          loadedFpCategory = flightplan[i]["category"];
           displaySummary(id)
           createBoard(flightplan[i]["steps"]);
           hookUpAddDelButtons();
@@ -647,7 +660,7 @@ function init () {
   $("#stepsSection").css("min-width", "480px");
   $("#stepsSection").css("width", "auto !important");
 
-  currentTimestamp();
+  $('#footer').append("<br /> Current Time: " + currentTimestamp());
 
   createStep(1);
 
