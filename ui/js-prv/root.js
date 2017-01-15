@@ -40,60 +40,61 @@ function parseFlightplans(id, title, category) {
         }
       }
 
-      if ($("#" + category).length == 0) { // Create new section if category doesn't exist
+      if (!(savedFlightplans == 0 && completedFlightplans == 0 && title.includes("Historical"))) {
+        if ( ($("#" + category).length == 0) ) { // Create new section if category doesn't exist
 
-        // Create new row
-        if (numOfColumns % 2 == 0) { // If it's even, time to create a new row
-          $("#categorySection").append('<div class="row">');
-          numOfColumns++;
-        } else {
-          numOfColumns++;
+          // Create new row
+          if (numOfColumns % 2 == 0) { // If it's even, time to create a new row
+            $("#categorySection").append('<div class="row">');
+            numOfColumns++;
+          } else {
+            numOfColumns++;
+          }
+
+
+          var newDivHTML = '<div id="section-' + category + '" class="col-sm-6"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">' + category + '</div><div id="' + category + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div>';
+          $("#categorySection").append(newDivHTML);
+
+          if (numOfColumns % 2 == 0) {
+            $("#categorySection").append('</div>');
+          }
+
+          var table = $('<table id="' + category + '-table"></table>').addClass('table table-bordered table-striped sp-databox-table-sm dashboardTable');
+          var body = $('<tbody>');
+          table.append(body);
+          if (savedFlightplans == 0 && completedFlightplans == 0) {
+            var tableLineItem = '<tr><td><a href="/flightplan?id=' + id + '">' + title + '</a></td></tr>';
+          } else if (savedFlightplans >= 1 && completedFlightplans == 0) {
+            var tableLineItem = '<tr><td><a href="/flightplan?id=' + id + '">' + title + '</a> <a href="/flightplan?id=' + id + '&load=inflight"><span class="badge">' + savedFlightplans + '</span></a></td></tr>';
+          }
+          else if (savedFlightplans == 0 && completedFlightplans >= 1) {
+            var tableLineItem = '<tr><td><a href="/flightplan?id=' + id + '">' + title + '</a> <a href="/flightplan?id=' + id + '&load=completed"><span class="badge badge-success savedBadge">' + completedFlightplans + '</span></a></td></tr>';
+          } else if (savedFlightplans >= 1 && completedFlightplans >= 1) {
+            var tableLineItem = '<tr><td><a href="/flightplan?id=' + id + '">' + title + '</a> <a href="/flightplan?id=' + id + '&load=inflight"><span class="badge">' + savedFlightplans + '</span></a>&nbsp;<a href="/flightplan?id=' + id + '&load=completed"><span class="badge badge-success savedBadge">' + completedFlightplans + '</span></a></td></tr>';
+          }
+          table.append(tableLineItem);
+          var tableEnd = $('</tbody>');
+          table.append(tableEnd);
+          $("#" + category).append(table);
+        } else { // Add to section if it already exists
+          if (savedFlightplans == 0 && completedFlightplans == 0) {
+            var tableLineItem = '<tr><td><a href="/flightplan?id=' + id + '">' + title + '</a></td></tr>';
+          } else if (savedFlightplans >= 1 && completedFlightplans == 0) {
+            var tableLineItem = '<tr><td><a href="/flightplan?id=' + id + '">' + title + '</a> <a href="/flightplan?id=' + id + '&load=inflight"><span class="badge">' + savedFlightplans + '</span></a></td></tr>';
+          }
+          else if (savedFlightplans == 0 && completedFlightplans >= 1) {
+            var tableLineItem = '<tr><td><a href="/flightplan?id=' + id + '">' + title + '</a> <a href="/flightplan?id=' + id + '&load=completed"><span class="badge badge-success savedBadge">' + completedFlightplans + '</span></a></td></tr>';
+          } else if (savedFlightplans >= 1 && completedFlightplans >= 1) {
+            var tableLineItem = '<tr><td><a href="/flightplan?id=' + id + '">' + title + '</a> <a href="/flightplan?id=' + id + '&load=inflight"><span class="badge">' + savedFlightplans + '</span></a>&nbsp;<a href="/flightplan?id=' + id + '&load=completed"><span class="badge badge-success savedBadge">' + completedFlightplans + '</span></a></td></tr>';
+          }
+          $('#' + category + '-table tr:last').after(tableLineItem);
+          $('#' + category + '-table tr:last').trigger("update");
         }
 
-
-        var newDivHTML = '<div id="section-' + category + '" class="col-sm-6"><div class="row"><div class="col-md-12"><div class="panel"><div class="panel-heading sp-databox-panel-heading">' + category + '</div><div id="' + category + '" class="panel-body sp-databox-panel-body"></div></div></div></div></div>';
-        $("#categorySection").append(newDivHTML);
-
-        if (numOfColumns % 2 == 0) {
-          $("#categorySection").append('</div>');
-        }
-
-        var table = $('<table id="' + category + '-table"></table>').addClass('table table-bordered table-striped sp-databox-table-sm dashboardTable');
-        var body = $('<tbody>');
-        table.append(body);
-        if (savedFlightplans == 0 && completedFlightplans == 0) {
-          var tableLineItem = '<tr><td><a href="/flightplan?id=' + id + '">' + title + '</a></td></tr>';
-
-        } else if (savedFlightplans >= 1 && completedFlightplans == 0) {
-          var tableLineItem = '<tr><td><a href="/flightplan?id=' + id + '">' + title + '</a> <a href="/flightplan?id=' + id + '&load=inflight"><span class="badge">' + savedFlightplans + '</span></a></td></tr>';
-        }
-        else if (savedFlightplans == 0 && completedFlightplans >= 1) {
-          var tableLineItem = '<tr><td><a href="/flightplan?id=' + id + '">' + title + '</a> <a href="/flightplan?id=' + id + '&load=completed"><span class="badge badge-success savedBadge">' + completedFlightplans + '</span></a></td></tr>';
-        } else if (savedFlightplans >= 1 && completedFlightplans >= 1) {
-          var tableLineItem = '<tr><td><a href="/flightplan?id=' + id + '">' + title + '</a> <a href="/flightplan?id=' + id + '&load=inflight"><span class="badge">' + savedFlightplans + '</span></a>&nbsp;<a href="/flightplan?id=' + id + '&load=completed"><span class="badge badge-success savedBadge">' + completedFlightplans + '</span></a></td></tr>';
-        }
-        table.append(tableLineItem);
-        var tableEnd = $('</tbody>');
-        table.append(tableEnd);
-
-        $("#" + category).append(table);
-      } else { // Add to section if it already exists
-        if (savedFlightplans == 0 && completedFlightplans == 0) {
-          var tableLineItem = '<tr><td><a href="/flightplan?id=' + id + '">' + title + '</a></td></tr>';
-
-        } else if (savedFlightplans >= 1 && completedFlightplans == 0) {
-          var tableLineItem = '<tr><td><a href="/flightplan?id=' + id + '">' + title + '</a> <a href="/flightplan?id=' + id + '&load=inflight"><span class="badge">' + savedFlightplans + '</span></a></td></tr>';
-        }
-        else if (savedFlightplans == 0 && completedFlightplans >= 1) {
-          var tableLineItem = '<tr><td><a href="/flightplan?id=' + id + '">' + title + '</a> <a href="/flightplan?id=' + id + '&load=completed"><span class="badge badge-success savedBadge">' + completedFlightplans + '</span></a></td></tr>';
-        } else if (savedFlightplans >= 1 && completedFlightplans >= 1) {
-          var tableLineItem = '<tr><td><a href="/flightplan?id=' + id + '">' + title + '</a> <a href="/flightplan?id=' + id + '&load=inflight"><span class="badge">' + savedFlightplans + '</span></a>&nbsp;<a href="/flightplan?id=' + id + '&load=completed"><span class="badge badge-success savedBadge">' + completedFlightplans + '</span></a></td></tr>';
-        }
-        $('#' + category + '-table tr:last').after(tableLineItem);
-        $('#' + category + '-table tr:last').trigger("update");
+        populateChart();
       }
 
-      populateChart();
+
     });
 
 }

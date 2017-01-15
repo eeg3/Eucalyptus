@@ -664,10 +664,6 @@ function init () {
 
   createStep(1);
 
-  $("#testButton").click(function() {
-    testExportRef();
-  });
-
   $('#importExistingDiv').hide();
 
   // Enable tooltips after all the steps are processed.
@@ -866,6 +862,7 @@ function init () {
     helper.get("/api/flightplan/")
       .then(function(data) {
         var flightplan = data;
+        var activeInflights = false;
 
         // Clear old loads
         $('#flightplanListTable tr').not(function(){ return !!$(this).has('th').length; }).remove();
@@ -880,14 +877,23 @@ function init () {
               rowToAdd += "<td>" + flightplan[i][nodesToDisplay[j]] + "</td>";
             }
           }
+
+
+
           rowToAdd += '<td>';
-          rowToAdd += '<button id="open-' + flightplan[i]["_id"] + '" title="Load Saved Progress" type="button" class="btn btn-success btn-xs loadBtn"><i class="fa fa-folder-open-o"></i></button>';
+          if (!(flightplan[i]["title"].includes("Historical"))) {
+            rowToAdd += '<button id="open-' + flightplan[i]["_id"] + '" title="Load Saved Progress" type="button" class="btn btn-success btn-xs loadBtn"><i class="fa fa-folder-open-o"></i></button>';
+          }
           rowToAdd += '<button id="del-' + flightplan[i]["_id"] + '" title="Delete Saved Progress" type="button" class="btn btn-danger btn-xs deleteBtn"><i class="fa fa-trash-o"></i></button>';
           rowToAdd += '</td>';
           rowToAdd += "</tr>";
+
+
           $('#flightplanListTable tr:last').after(rowToAdd);
 
         }
+
+        //here
         $('#flightplanListTable').trigger("update");
 
         $(".loadBtn").click(function() {
