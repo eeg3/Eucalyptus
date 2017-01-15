@@ -1,0 +1,15 @@
+[ Installation ]
+
+To install, execute the installer.sh file within this directory. This installer will create the initial database for Eucalyptus with the built-in Administrator and an example FlightPlan.
+
+The default built-in Administrator credentials are:
+u: admin
+p: rtteuc123
+
+The installer.sh script creates a backup of all mongodb databases first. In the event the installer overwrites any databases, the backups are stored within the 'dump' directory.
+
+---------------
+
+[ Uninstallation ]
+
+To remove the eucalyptus database from MongoDB, simply run the remove_db.sh script.

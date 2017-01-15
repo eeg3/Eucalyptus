@@ -26,9 +26,9 @@ var https = require('https');
 /******* Configurable Parameters *******/
 
 // Database Name
-var databaseName = "eucalyptusDB4";
+var databaseName = "eucalyptus";
 // SSL parameters: disabled by default, define key & cert files to use if enable
-var ssl = true;
+var ssl = false;
 var sslKeyLoc = "../ssl/server.key";
 var sslCertLoc = "../ssl/server.crt";
 // Pick a port for the server to run on
