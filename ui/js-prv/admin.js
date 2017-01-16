@@ -97,8 +97,12 @@ function init () {
 
     if (walkthrough == "true") {
       userPatch["walkthroughDashboard"] = true;
+      userPatch["walkthroughFlightplan"] = true;
+      userPatch["walkthroughFpbuilder"] = true;
     } else if (walkthrough == "false") {
       userPatch["walkthroughDashboard"] = false;
+      userPatch["walkthroughFlightplan"] = false;
+      userPatch["walkthroughFpbuilder"] = false;
     }
 
     if (userEnabled == "true") {
