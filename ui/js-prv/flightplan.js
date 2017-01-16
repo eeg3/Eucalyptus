@@ -225,6 +225,13 @@ function getFlightplan() {
           var flightplanSteps = flightplan[i]["steps"];
           displaySummary(); // Generate the Summary section.
           parseSteps(flightplanSteps); // Generate the Steps section.
+
+          // Check for Historical in name, and if so, disable the ability to save or complete anything
+          if (flightplan[i]["title"].includes("Historical")) {
+            //disable buttons
+            $(".saveFP").prop("disabled", true);
+            $("#completeSubmit").prop("disabled", true);
+          }
         }
       }
 

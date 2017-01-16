@@ -9,6 +9,7 @@ var loadedFlightplan = false;
 var loadedFpId = undefined;
 var loadedFpName = undefined;
 var loadedFpRevision = undefined;
+var loadedFpInflights = undefined;
 var obj;
 var currentUser = "";
 
@@ -485,10 +486,15 @@ function exportFlightplan() {
       flightplanPost["steps"] = stepsPost;
     }
     if (loadedFlightplan) {
-      if (1==1) { // Need to add logic to only do this if there are saved flights
+
+      // If there are saved inflights for the current revision, keep it and rename it to historical.
+      // If there aren't any saved inflights for the current revision, just delete it.
+      if (loadedFpInflights) {
         var previousFlightplanPost = {};
-        previousFlightplanPost["title"] = "[Historical] " + loadedFpName + " - " + currentTimestamp();
+        previousFlightplanPost["title"] = "[Historical] " + loadedFpName + " v" + loadedFpRevision + " - " + currentTimestamp();
         helper.patch("/api/flightplan/" + loadedFpId, previousFlightplanPost);
+      } else {
+        helper.del("/api/flightplan/" + loadedFpId);
       }
 
       flightplanPost["revision"] = parseInt(loadedFpRevision) + 1;
@@ -542,6 +548,19 @@ function getFlightplan(id) {
           createBoard(flightplan[i]["steps"]);
           hookUpAddDelButtons();
           hookUpInputValidation();
+
+          // This sets the global loadedFpInflights variable to true if it has any saved or completed inflights. This is later used to patch or delete the old version (if none, it gets deleted).
+          helper.get("/api/inflight/")
+            .then(function(data){
+              var inflight = data;
+
+              for (var i = 0; i < data.length; i++) {
+                if (inflight[i]["referencedFlightplan"] == loadedFpId) {
+                  loadedFpInflights = true;
+                }
+              }
+            });
+
         }
       }
 
@@ -654,6 +673,7 @@ function testExportRef() {
 
   console.log(refDocString);
 }
+
 
 function init () {
 
@@ -906,6 +926,19 @@ function init () {
 
         $(".deleteBtn").click(function() {
           helper.del("/api/flightplan/" + (this.id).split("-")[1]);
+          var clickedFpId = (this.id).split("-")[1];
+          // Delete any inflights with referencedFlightplan = (this.id).split("-")[1]
+          helper.get("/api/inflight/")
+            .then(function(data){
+              var inflight = data;
+
+              for (var i = 0; i < data.length; i++) {
+                if (inflight[i]["referencedFlightplan"] == clickedFpId) {
+                  helper.del("/api/inflight/" + inflight[i]["_id"]);
+                }
+              }
+            });
+
           formModified = false; // Reset this or it will ask if we want to reload after submitting.
           $(this).closest('tr').remove();
         });
@@ -928,6 +961,7 @@ function init () {
           });
           introguide.start();
         });
+
 
       });
 

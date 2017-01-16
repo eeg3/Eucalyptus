@@ -184,7 +184,6 @@ function populateCompleted() {
 function convertReferenceToTitle() {
   // Re-process all entries and convert the referencedFlightplan ID to its Title
   $("td[class^='referencedFlightplan']").each(function () {
-    console.log("rfp this.id: " + $(this).html());
     var trId = $(this).html();
     helper.get("/api/flightplan/")
       .then(function(data){
