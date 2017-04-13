@@ -463,7 +463,7 @@ th {
 }
 
 #loginBody {
-background: linear-gradient(rgba(64,64,64,.75),rgba(64,64,64,.75)), url(/img/preso-3.png) no-repeat center center fixed;
+background: linear-gradient(rgba(64,64,64,.75),rgba(64,64,64,.75)), url(/img/head.png) no-repeat center center fixed;
 -webkit-background-size: cover;
 -moz-background-size: cover;
 -o-background-size: cover;
@@ -471,7 +471,7 @@ background-size: cover;
 }
 
 #indexBody {
-background: linear-gradient(rgba(64,64,64,.75),rgba(64,64,64,.75)), url(/img/preso-3.png) no-repeat center center fixed;
+background: linear-gradient(rgba(64,64,64,.75),rgba(64,64,64,.75)), url(/img/head.png) no-repeat center center fixed;
 -webkit-background-size: cover;
 -moz-background-size: cover;
 -o-background-size: cover;
@@ -479,7 +479,7 @@ background-size: cover;
 }
 
 #buildBody {
-background: linear-gradient(rgba(64,64,64,.75),rgba(64,64,64,.75)), url(/img/preso-3.png) no-repeat center center fixed;
+background: linear-gradient(rgba(64,64,64,.75),rgba(64,64,64,.75)), url(/img/head.png) no-repeat center center fixed;
 -webkit-background-size: cover;
 -moz-background-size: cover;
 -o-background-size: cover;
@@ -487,7 +487,7 @@ background-size: cover;
 }
 
 #flightBody {
-background: linear-gradient(rgba(64,64,64,.75),rgba(64,64,64,.75)), url(/img/preso-3.png) no-repeat center center fixed;
+background: linear-gradient(rgba(64,64,64,.75),rgba(64,64,64,.75)), url(/img/head.png) no-repeat center center fixed;
 -webkit-background-size: cover;
 -moz-background-size: cover;
 -o-background-size: cover;

@@ -187,7 +187,7 @@ function parseSteps(steps) {
     table.append(tableEnd);
 
     $("#" + stepNumber).append(table);
-    $("#" + stepNumber).append('<textarea id="notes-' + stepNumber + '" class="notesTextAreaStep" placeholder="Were any additional actions taken as part of this step?" />');
+    $("#" + stepNumber).append('<textarea id="notes-' + stepNumber + '" class="notesTextAreaStep" placeholder="Additional Notes?" />');
   }
 
   // We want to track if anything changes so that we can warn the user if they try to exit before saving.

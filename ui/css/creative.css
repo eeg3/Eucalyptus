@@ -158,7 +158,7 @@ aside {
   -o-background-size: cover;
   background-position: center;
   /*background-image: url('../img/header.jpg');*/
-  background-image:   linear-gradient(rgba(64,64,64,.75),rgba(64,64,64,.75)), url('../img/preso-3.png');
+  background-image:   linear-gradient(rgba(64,64,64,.75),rgba(64,64,64,.75)), url('../img/head.png');
   text-align: center;
   color: white;
 }
@@ -173,7 +173,7 @@ aside {
   background-size: cover;
   -o-background-size: cover;
   background-position: center;
-  background-image:   linear-gradient(rgba(64,64,64,.75),rgba(64,64,64,.75)), url('../img/preso-3.png');
+  background-image:   linear-gradient(rgba(64,64,64,.75),rgba(64,64,64,.75)), url('../img/head.png');
   text-align: center;
   color: white;
 }
