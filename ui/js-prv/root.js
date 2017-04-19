@@ -398,6 +398,7 @@ function init () {
       tooltipClass: 'customDefault'
     });
 
+    /*
     helper.get("/api/getUserInfo")
       .then(function(data) {
         $("#username").text(data[0]["name"]);
@@ -410,6 +411,7 @@ function init () {
           helper.patch("/users/" + data[0]["id"], userPatch);
         }
       });
+    */
 
   });
 }

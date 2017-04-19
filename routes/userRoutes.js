@@ -1,12 +1,13 @@
 var express = require('express');
 var passport = require('passport');
 var bcrypt   = require('bcrypt-nodejs');
+var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn();
 
 var routes = function(User) {
   var userRouter = express.Router();
 
   userRouter.route('/')
-    .post(isLoggedIn, function(req, res) {
+    .post(ensureLoggedIn, function(req, res) {
       var user = new User();
       if (!req.body.email) {
         res.status(400);
@@ -27,7 +28,7 @@ var routes = function(User) {
         res.send(user);
       }
     })
-    .get(isLoggedIn, function(req, res) {
+    .get(ensureLoggedIn, function(req, res) {
       var query = {};
 
       User.find({}, function(err,users) {
@@ -45,7 +46,7 @@ var routes = function(User) {
       });
     });
 
-    userRouter.use('/:userId', isLoggedIn, function(req, res, next) {
+    userRouter.use('/:userId', ensureLoggedIn, function(req, res, next) {
       User.findById(req.params.userId, function(err, user) {
         if (err) {
           res.status(500).send(err);
@@ -99,17 +100,8 @@ var routes = function(User) {
 
 
 /* GET users listing. */
-//router.get('/', isLoggedIn, function(req, res, next) {
+//router.get('/', ensureLoggedIn, function(req, res, next) {
 //  res.send('respond with a resource');
 //});
 
 module.exports = routes;
-
-function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated()) {
-    if (req.user.local.enabled == true) {
-      return next();
-    }
-  }
-  res.redirect('/login');
-}

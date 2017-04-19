@@ -16,7 +16,32 @@ var fs = require('fs');
 
 // Passport
 var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
+var Auth0Strategy = require('passport-auth0');
+
+// This will configure Passport to use Auth0
+var strategy = new Auth0Strategy({
+  domain:       "eeg3.auth0.com",
+  clientID:     "8NvOzTjcL8pxFNn1KCZIr13Zm9nQV9rP",
+  clientSecret: "iYPYnjj2s2TLF_vghmoAjLo6kDElAGzSAQY7kXb1NN7Oe_DNmQyv57OadTbAeI7X",
+  callbackURL:  'http://localhost:8001/callback'
+}, function(accessToken, refreshToken, extraParams, profile, done) {
+  // accessToken is the token to call Auth0 API (not needed in the most cases)
+  // extraParams.id_token has the JSON Web Token
+  // profile has all the information from the user
+  return done(null, profile);
+});
+
+// Here we are adding the Auth0 Strategy to our passport framework
+passport.use(strategy);
+
+// The searlize and deserialize user methods will allow us to get the user data once they are logged in.
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(user, done) {
+  done(null, user);
+});
 
 // Include Node's built-in http, https, and fs in order to setup HTTP & HTTPS access
 var http = require('http');
@@ -70,13 +95,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
-require('./libs/passport')(passport);
-
 app.use('/', routes);
-
-var User = require('./models/user');
-userRouter = require('./routes/userRoutes')(User);
-app.use('/users', userRouter);
 
 /***** Flightplan API *****/
 // Create a ORM Model based on the flightplanModel Schema

@@ -1,0 +1,51 @@
+<% include partials/head %>
+
+<body id="splashBody">
+
+<% include partials/navbar-preauth %>
+
+    <header id="splash-header-dashboard">
+        <div class="splash-header-content">
+            <div class="splash-header-content-inner">
+              <div class="col-sm-8 col-sm-offset-2">
+                <img src="/img/logo_only_header.png">
+                <p id="loginLead"  class="loginColor ">Login</p>
+                  <form id="loginForm" class="form-signin" action="/login" method="post">
+                    <label><span class="fa fa-sign-in"></span> Login</label>
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="email" placeholder="Email Address" required="" autofocus="" />
+                    </div>
+                    <div class="form-group">
+                      <input type="password" class="form-control" name="password" placeholder="Password" required ="" />
+                    </div>
+                    <div>
+                      <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+                    </div>
+                    <% if (message != null) { %>
+                    	<div class="alert-danger"><%= message %></div>
+                    <% } %>
+                    <i class="fa fa-sign-in"></i> Need an account?<a href="/signup"> Sign Up</a>
+                  </form>
+
+              </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="bg-primary" id="about">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 text-center">
+                    <h2 class="section-heading">Solving Complexity with Simplicity</h2>
+                    <hr class="light">
+                    <p class="text-faded">Eucalyptus leverages <b>Flight Plans</b> to provide teams with easy, step-by-step guidance to manage systems. Every time a <b>Pilot</b> takes off, they can leverage <b>Flight Plans</b> to guide, track, and document their <b>Flights</b>.<br><br>
+                      <b>Flights</b> utilizing <b>FlightPlans</b> can be saved, loaded, and stored to allow picking up where you left off, or simply checking back later to confirm what how the <b>flight</b> was navigated. When completing a <b>flight</b>, notes are saved per each step and sub-step to allow tracking progress.</p>
+                    <a href="#features" class="page-scroll btn btn-splash-default btn-splash-xl sr-button">Explore Features!</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+
+</html>
