@@ -9,12 +9,21 @@
 </html>
 
 <script>
-var lock = new Auth0Lock('8NvOzTjcL8pxFNn1KCZIr13Zm9nQV9rP', 'eeg3.auth0.com', { auth: {
+var lock = new Auth0Lock('8NvOzTjcL8pxFNn1KCZIr13Zm9nQV9rP', 'eeg3.auth0.com', {
+    auth: {
           redirectUrl: 'http://localhost:8001/callback'
         , responseType: 'code'
         , params: {
           scope: 'openid name email picture'
         }
-      }});
+      },
+    theme: {
+      logo: '/img/logo_compact.png',
+      primaryColor: '#50af60'
+    },
+    languageDictionary: {
+      title: "Eucalyptus"
+    },
+  });
     lock.show();
 </script>

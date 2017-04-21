@@ -12,13 +12,14 @@ var formModified = false;
 
 function currentTimestamp() {
   var date = new Date();
+
   var timestamp = (date.getMonth()+1) + "/"
                 + (date.getDate()) + "/"
                 + date.getFullYear() + " @ "
                 + date.getHours() + ":" +
                 + date.getMinutes() + ":" +
                 + date.getSeconds();
-  $('#footer').append("<br /> Current Time: " + timestamp);
+  return timestamp;
 }
 
 // Makes it so checkboxes are enabled or disabled if the previous checkbox is checked or unchecked.
@@ -620,7 +621,7 @@ function init () {
     location.reload();
   });
 
-  currentTimestamp();
+  $('#footer').append("<br /> Current Time: " + currentTimestamp());
   getFlightplan();
 
   $("#delRows").click(function() {
@@ -828,15 +829,8 @@ function init () {
 
     helper.get("/api/getUserInfo")
       .then(function(data) {
-        currentUser = data[0]["name"];
-        $("#username").text(data[0]["name"]);
-        if(data[0]["walkthroughFlightplan"] == true) {
-          introguide.start();
-
-          var userPatch = {};
-          userPatch["walkthroughFlightplan"] = false;
-          helper.patch("/users/" + data[0]["id"], userPatch);
-        }
+        currentUser = data[0]["email"];
+        $("#username").text(data[0]["email"]);
       });
 
   });

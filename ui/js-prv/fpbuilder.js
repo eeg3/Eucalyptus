@@ -19,17 +19,13 @@ var substepOrder = [];
 
 function currentTimestamp() {
   var date = new Date();
-  /*
+
   var timestamp = (date.getMonth()+1) + "/"
                 + (date.getDate()) + "/"
                 + date.getFullYear() + " @ "
                 + date.getHours() + ":" +
                 + date.getMinutes() + ":" +
                 + date.getSeconds();
-  */
-  var timestamp = (date.getMonth()+1) + "/"
-                + (date.getDate()) + "/"
-                + date.getFullYear();
   return timestamp;
 }
 
@@ -713,8 +709,8 @@ function init () {
 
     helper.get("/api/getUserInfo")
       .then(function(data) {
-        currentUser = data[0]["name"];
-        $("#username").text(data[0]["name"]);
+        currentUser = data[0]["email"];
+        $("#username").text(data[0]["email"]);
       });
 
     // Leave Warning
@@ -803,17 +799,6 @@ function init () {
       ],
       tooltipClass: 'customDefault'
     });
-
-    helper.get("/api/getUserInfo")
-      .then(function(data) {
-        if(data[0]["walkthroughFpbuilder"] == true) {
-          introguide.start();
-
-          var userPatch = {};
-          userPatch["walkthroughFpbuilder"] = false;
-          helper.patch("/users/" + data[0]["id"], userPatch);
-        }
-      });
 
     $("#helpBtn").click(function() {
       introguide.start();

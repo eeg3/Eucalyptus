@@ -1,7 +1,6 @@
 var express = require('express');
 var passport = require('passport');
 var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn();
-var config = require('../config/base.js');
 var router = express.Router();
 
 var env = {
@@ -12,14 +11,13 @@ var env = {
 
 router.get('/', ensureLoggedIn, function(req, res, next) {
   res.render('index', { user: req.user });
-  //res.sendfile("index.html", {root: './ui'});
 });
 
 router.get('/login', function(req, res, next) {
   res.render('login', { user: req.user });
 });
 
-// We are also going to implement the callback route which will redirect the logged in user to the polls page if authentication succeeds.
+// Callback route which will redirect user to dashboard or where they came from if successful
 router.get('/callback',
   passport.authenticate('auth0', { failureRedirect: '/login' }),
   function(req, res) {
@@ -34,11 +32,12 @@ router.get('/robots.txt', function(req, res, next) {
   res.render('robots.ejs', { message: req.flash('loginMessage') });
 });
 
-/*
-router.get('/profile', ensureLoggedIn, function(req, res) {
-  res.render('profile.ejs', { user: req.user });
+router.get('/profile', ensureLoggedIn, function(req, res, next) {
+  res.render('profile', {
+    user: req.user,
+    userProfile: JSON.stringify(req.user, null, '  ')
+  });
 });
-*/
 
 router.get('/logout', function(req, res) {
   req.logout();
@@ -47,34 +46,23 @@ router.get('/logout', function(req, res) {
 
 router.get('/fpbuilder', ensureLoggedIn, function(req, res, next) {
   res.render('fpbuilder', { user: req.user });
-  //res.sendfile("index.html", {root: './ui'});
 });
 
 router.get('/flightplan', ensureLoggedIn, function(req, res, next) {
   res.render('flightplan', { user: req.user });
 });
 
-/*
-router.get('/admin', ensureLoggedIn, function(req, res, next) {
-  res.render('admin', { title: 'Express' });
-});
-*/
-
-/*
 router.get('/api/getUserInfo', ensureLoggedIn, function(req, res, next) {
   var userInfo = [
     {
-      id: req.user._id,
-      name: req.user.local.name,
-      email: req.user.local.email,
-      walkthroughDashboard: req.user.local.walkthroughDashboard,
-      walkthroughFlightplan: req.user.local.walkthroughFlightplan,
-      walkthroughFpbuilder: req.user.local.walkthroughFpbuilder
+      id: req.user.id,
+      name: req.user.name,
+      email: req.user._json.email
     }
   ];
   res.json(userInfo);
 });
-*/
+
 
 router.all('/js-prv/*', ensureLoggedIn);
 router.all('/js-pub/*');
