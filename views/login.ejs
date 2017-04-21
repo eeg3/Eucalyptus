@@ -9,9 +9,9 @@
 </html>
 
 <script>
-var lock = new Auth0Lock('8NvOzTjcL8pxFNn1KCZIr13Zm9nQV9rP', 'eeg3.auth0.com', {
+var lock = new Auth0Lock('<%= env.AUTH0_CLIENT_ID %>', '<%= env.AUTH0_DOMAIN %>', {
     auth: {
-          redirectUrl: 'http://localhost:8001/callback'
+          redirectUrl: '<%= env.AUTH0_CALLBACK_URL %>'
         , responseType: 'code'
         , params: {
           scope: 'openid name email picture'

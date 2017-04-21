@@ -4,9 +4,9 @@ var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn();
 var router = express.Router();
 
 var env = {
-  AUTH0_CLIENT_ID: "8NvOzTjcL8pxFNn1KCZIr13Zm9nQV9rP",
-  AUTH0_DOMAIN: "eeg3.auth0.com",
-  AUTH0_CALLBACK_URL: 'http://localhost:8001/callback'
+  AUTH0_CLIENT_ID: process.env.AUTH0_CLIENT_ID,
+  AUTH0_DOMAIN: process.env.AUTH0_DOMAIN,
+  AUTH0_CALLBACK_URL: process.env.AUTH0_CALLBACK_URL
 };
 
 router.get('/', ensureLoggedIn, function(req, res, next) {
@@ -14,7 +14,10 @@ router.get('/', ensureLoggedIn, function(req, res, next) {
 });
 
 router.get('/login', function(req, res, next) {
-  res.render('login', { user: req.user });
+  res.render('login', {
+    user: req.user,
+    env: env
+   });
 });
 
 // Callback route which will redirect user to dashboard or where they came from if successful
