@@ -14,6 +14,7 @@ var cookieParser = require('cookie-parser');
 var flash = require('connect-flash');
 var session = require('express-session');
 var fs = require('fs');
+var http = require('http');
 
 // Load Environment Variables
 dotenv.load();
@@ -47,29 +48,14 @@ passport.deserializeUser(function(user, done) {
   done(null, user);
 });
 
-// Include Node's built-in http, https, and fs in order to setup HTTP & HTTPS access
-var http = require('http');
-var https = require('https');
-
-/***************************************/
-/******* Configurable Parameters *******/
-
-// Database Name
-var databaseName = "eucalyptus";
-// SSL parameters: disabled by default, define key & cert files to use if enable
-var ssl = false;
-var sslKeyLoc = "../ssl/server.key";
-var sslCertLoc = "../ssl/server.crt";
-// Pick a port for the server to run on
-var port = process.env.PORT || 8001;
-// Use Basic Auth on API?
-var lockAPI = false;
-
-/**** End Configuration Parameters ****/
-/**************************************/
+// Database information
+var databaseServer = process.env.DATABASE_SERVER || "localhost";
+var databaseName = process.env.DATABASE_NAME || "eucalyptus";
+// Port for the server to run on
+var port = process.env.HTTP_PORT || 8001;
 
 /***** Connect to MongoDB *****/
-var dbConnection = 'mongodb://localhost/' + databaseName;
+var dbConnection = 'mongodb://' + databaseServer + '/' + databaseName;
 var db = mongoose.connect(dbConnection, function(err) {
   if (err) {
     console.log("Error connecting to database.");
@@ -148,19 +134,6 @@ app.use(function(err, req, res, next) {
   });
 });
 
-/***** HTTP(S) Server Functionality *****/
 // Start service with HTTP
 http.createServer(app).listen(port);
 console.log("Listening HTTP on Port: " + port);
-
-// Start service with HTTPS too, if enabled in config parameters.
-if (ssl) {
-  // Define SSL Key & Cert
-  var sslOptions = {
-    key: fs.readFileSync(sslKeyLoc),
-    cert: fs.readFileSync(sslCertLoc)
-  };
-
-  https.createServer(sslOptions, app).listen(8443);
-  console.log("Listening HTTPS on Port: 8443");
-}

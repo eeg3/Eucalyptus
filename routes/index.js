@@ -66,8 +66,7 @@ router.get('/api/getUserInfo', ensureLoggedIn, function(req, res, next) {
   res.json(userInfo);
 });
 
-
+// Protect private javascript files with authentication
 router.all('/js-prv/*', ensureLoggedIn);
-router.all('/js-pub/*');
 
 module.exports = router;
