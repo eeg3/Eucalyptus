@@ -8,13 +8,14 @@ var myChart = null;
 
 function currentTimestamp() {
   var date = new Date();
+
   var timestamp = (date.getMonth()+1) + "/"
                 + (date.getDate()) + "/"
                 + date.getFullYear() + " @ "
                 + date.getHours() + ":" +
                 + date.getMinutes() + ":" +
                 + date.getSeconds();
-  $('#footer').append("<br /> Current Time: " + timestamp);
+  return timestamp;
 }
 
 function parseFlightplans(id, title, category) {
@@ -308,7 +309,8 @@ function createChart(itemName, chartName) {
 }
 
 function init () {
-  currentTimestamp();
+  
+  $('#footer').append("<br /> Current Time: " + currentTimestamp());
   populateFlightplans(displayOption);
 
 
@@ -400,15 +402,8 @@ function init () {
 
     helper.get("/api/getUserInfo")
       .then(function(data) {
-        $("#username").text(data[0]["name"]);
-
-        if(data[0]["walkthroughDashboard"] == true) {
-          introguide.start();
-
-          var userPatch = {};
-          userPatch["walkthroughDashboard"] = false;
-          helper.patch("/users/" + data[0]["id"], userPatch);
-        }
+        currentUser = data[0]["email"];
+        $("#username").text(data[0]["email"]);
       });
 
   });

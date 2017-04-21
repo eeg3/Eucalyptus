@@ -1,20 +1,31 @@
 var express = require('express');
 var passport = require('passport');
-var config = require('../config/base.js');
+var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn();
 var router = express.Router();
 
-router.get('/', isLoggedIn, function(req, res, next) {
+var env = {
+  AUTH0_CLIENT_ID: process.env.AUTH0_CLIENT_ID,
+  AUTH0_DOMAIN: process.env.AUTH0_DOMAIN,
+  AUTH0_CALLBACK_URL: process.env.AUTH0_CALLBACK_URL
+};
+
+router.get('/', ensureLoggedIn, function(req, res, next) {
   res.render('index', { user: req.user });
-  //res.sendfile("index.html", {root: './ui'});
 });
 
 router.get('/login', function(req, res, next) {
-  if (req.isAuthenticated()) {
-    res.redirect('/');
-  } else {
-    res.render('login.ejs', { message: req.flash('loginMessage') });
-  }
+  res.render('login', {
+    user: req.user,
+    env: env
+   });
 });
+
+// Callback route which will redirect user to dashboard or where they came from if successful
+router.get('/callback',
+  passport.authenticate('auth0', { failureRedirect: '/login' }),
+  function(req, res) {
+    res.redirect(req.session.returnTo || '/');
+  });
 
 router.get('/about', function(req, res, next) {
   res.render('about.ejs', { message: req.flash('loginMessage') });
@@ -24,15 +35,11 @@ router.get('/robots.txt', function(req, res, next) {
   res.render('robots.ejs', { message: req.flash('loginMessage') });
 });
 
-router.get('/signup', function(req, res) {
-  res.render('signup.ejs', {
-    message: req.flash('loginMessage'),
-    adminEmail: config.adminEmail
-   });
-});
-
-router.get('/profile', isLoggedIn, function(req, res) {
-  res.render('profile.ejs', { user: req.user });
+router.get('/profile', ensureLoggedIn, function(req, res, next) {
+  res.render('profile', {
+    user: req.user,
+    userProfile: JSON.stringify(req.user, null, '  ')
+  });
 });
 
 router.get('/logout', function(req, res) {
@@ -40,61 +47,26 @@ router.get('/logout', function(req, res) {
   res.redirect('/');
 });
 
-router.post('/signup', passport.authenticate('local-signup', {
-  successRedirect: '/logout',
-  failureRedirect: '/signup',
-  failureFlash: true,
-}));
-
-router.post('/login', passport.authenticate('local-login', {
-  successReturnToOrRedirect: '/',
-  failureRedirect: '/login',
-  failureFlash: true,
-}));
-
-
-router.get('/fpbuilder', isLoggedIn, function(req, res, next) {
+router.get('/fpbuilder', ensureLoggedIn, function(req, res, next) {
   res.render('fpbuilder', { user: req.user });
-  //res.sendfile("index.html", {root: './ui'});
 });
 
-router.get('/flightplan', isLoggedIn, function(req, res, next) {
+router.get('/flightplan', ensureLoggedIn, function(req, res, next) {
   res.render('flightplan', { user: req.user });
 });
 
-router.get('/apitoolkit', isLoggedIn, function(req, res, next) {
-  res.render('apitoolkit', { title: 'Express' });
-});
-
-router.get('/admin', isLoggedIn, function(req, res, next) {
-  res.render('admin', { title: 'Express' });
-});
-
-router.get('/api/getUserInfo', isLoggedIn, function(req, res, next) {
+router.get('/api/getUserInfo', ensureLoggedIn, function(req, res, next) {
   var userInfo = [
     {
-      id: req.user._id,
-      name: req.user.local.name,
-      email: req.user.local.email,
-      walkthroughDashboard: req.user.local.walkthroughDashboard,
-      walkthroughFlightplan: req.user.local.walkthroughFlightplan,
-      walkthroughFpbuilder: req.user.local.walkthroughFpbuilder
+      id: req.user.id,
+      name: req.user.name,
+      email: req.user._json.email
     }
   ];
   res.json(userInfo);
 });
 
-router.all('/js-prv/*', isLoggedIn);
-router.all('/js-pub/*');
+// Protect private javascript files with authentication
+router.all('/js-prv/*', ensureLoggedIn);
 
 module.exports = router;
-
-function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated()) {
-    if (req.user.local.enabled == true) {
-      return next();
-    }
-  }
-  req.session.returnTo = req.originalUrl;
-  res.redirect('/login');
-}

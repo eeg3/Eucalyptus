@@ -1,5 +1,6 @@
 var express = require('express');
 var passport = require('passport');
+var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn();
 
 // We need the "Inflight" parameter to get the ORM model
 var routes = function(Inflight){
@@ -8,7 +9,7 @@ var routes = function(Inflight){
 
 // Handle POST to add a new Inflight
     inflightRouter.route('/')
-      .post(isLoggedIn, function(req, res){ // Handle POST
+      .post(ensureLoggedIn, function(req, res){ // Handle POST
           // We're creating, so let's create a new Inflight object based on what was posted
           var inflight = new Inflight(req.body);
 
@@ -26,7 +27,7 @@ var routes = function(Inflight){
               res.send(inflight);
           }
       }) // End .post
-      .get(isLoggedIn, function(req,res){ // Handle GET
+      .get(ensureLoggedIn, function(req,res){ // Handle GET
           // Lets handle a /?user= if applicable
           var query = {};
           if(req.query.category) { query.category = req.query.category; }
@@ -53,7 +54,7 @@ var routes = function(Inflight){
       });
 
 // We always want this to be executed when accessing by ID
-    inflightRouter.use('/:inflightId', isLoggedIn, function(req,res,next){
+    inflightRouter.use('/:inflightId', ensureLoggedIn, function(req,res,next){
         Inflight.findById(req.params.inflightId, function(err,inflight){
             if(err)
                 res.status(500).send(err);
@@ -127,12 +128,3 @@ var routes = function(Inflight){
 };
 
 module.exports = routes;
-
-function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated()) {
-    if (req.user.local.enabled == true) {
-      return next();
-    }
-  }
-  res.redirect('/login');
-}

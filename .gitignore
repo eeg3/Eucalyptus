@@ -2,3 +2,5 @@
 .DS_Store
 **/.DS_Store
 /ssl
+.env
+node_modules
