@@ -309,10 +309,9 @@ function createChart(itemName, chartName) {
 }
 
 function init () {
-  
+
   $('#footer').append("<br /> Current Time: " + currentTimestamp());
   populateFlightplans(displayOption);
-
 
   $(document).ready(function(){ // Enable tooltips after all the steps are processed.
 

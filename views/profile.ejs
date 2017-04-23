@@ -1,16 +1,62 @@
-<html>
-  <head>
-    <script src="https://cdn.auth0.com/js/lock/10.3/lock.min.js"></script>
-  </head>
+<% include partials/head %>
 
-  <body>
-    <div class="col-sm-10 col-sm-offset-1">
+<!-- Custom JS -->
+<script src="/js-prv/ApiHelper.js"></script>
+<script src="/js-prv/profile.js"></script>
+
+<!-- <script src="https://cdn.auth0.com/js/lock/10.3/lock.min.js"></script> -->
+
+<!-- Intro.JS -->
+<link href="/css/introjs.css" rel="stylesheet">
+  <script src="/js-pub/introjs/intro.js"></script>
+<!-- Custom Intro.JS CSS Tweaks -->
+<link href="/css/introjs_eucalyptus.css" rel="stylesheet">
+
+<<header id="introHeader" class="container-fluid">
+   <img src="/img/logo_only_header.png">
+   <p class="lead loginColor">User Profile</p>
+ </header>
+
+  <body id="loginBody">
+
+    <% include partials/navbar %>
+
+    <div class="col-sm-8 col-sm-offset-2">
       <div class="text-center">
-        <h1><%= user.nickname %></h1>
-        <pre><%= userProfile %></pre>
-        <a href="/" class="btn btn-default"><span class="fa fa-home"></span> Home</a>
+        <div class="jumbotron">
+          <h2><i class=" fa fa-user"></i> User Profile</h2><br>
+
+          <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-8">
+              <div class="panel panel-inverse">
+                <div class="panel-heading">Account Details</div>
+                <div class="panel-body">
+                  <span><strong>Display Name:</strong> <%= user.displayName %></span><br>
+                  <span><strong>Email:</strong> <%= user._json.email %></span><br>
+                  <span><strong>User Since:</strong> <%= user._json.created_at %></span><br>
+                  <span><strong>Last Password Change:</strong> <%= user._json.last_password_reset %></span><br>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-2"></div>
+          </div>
+
+          <div class="btn-group">
+            <button id="changePassword" type="button" class="btn btn-success btn-sm">Change Password</button>
+          </div>
+          <%if (passwordChange) { %>
+          <br><span>Password Reset Email sent!</span>
+          <% } %>
+
+          <hr>
+
+          <div class="btn-group">
+            <button id="logout" type="button" class="btn btn-danger"><i class="fa fa-sign-out"></i> Log Out</button>
+          </div>
+        </div>
       </div>
     </div>
-  </body>
 
+  </body>
 </html>

@@ -1,6 +1,7 @@
 var express = require('express');
 var passport = require('passport');
 var ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn();
+var request = require("request");
 var router = express.Router();
 
 var env = {
@@ -27,6 +28,28 @@ router.get('/callback',
     res.redirect(req.session.returnTo || '/');
   });
 
+router.get('/change_password', ensureLoggedIn, function(req, res, next) {
+  var options = { method: 'POST',
+    url: 'https://eeg3.auth0.com/dbconnections/change_password',
+    headers: { 'content-type': 'application/json' },
+    body:
+     { client_id: process.env.AUTH0_CLIENT_ID,
+       email: req.user._json.email,
+       connection: 'Username-Password-Authentication' },
+       json: true
+     };
+
+  request(options, function (error, response, body) {
+    if (error) throw new Error(error);
+
+    res.render('profile.ejs', {
+      user: req.user,
+      passwordChange: true
+    });
+  });
+
+});
+
 router.get('/about', function(req, res, next) {
   res.render('about.ejs', { message: req.flash('loginMessage') });
 });
@@ -36,9 +59,9 @@ router.get('/robots.txt', function(req, res, next) {
 });
 
 router.get('/profile', ensureLoggedIn, function(req, res, next) {
-  res.render('profile', {
+  res.render('profile.ejs', {
     user: req.user,
-    userProfile: JSON.stringify(req.user, null, '  ')
+    passwordChange: false
   });
 });
 
