@@ -1,6 +1,6 @@
 [ Installation ]
 
-To install, execute the installer.sh file within this directory. This installer will create the initial database for Eucalyptus with an example FlightPlan.
+To install, execute the installer.js file within this directory. This installer will create the initial database for Eucalyptus with an example FlightPlan, as well as configure Eucalyptus.
 
 The installer.sh script creates a backup of all mongodb databases first. In the event the installer overwrites any databases, the backups are stored within the 'dump' directory.
 
