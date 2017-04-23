@@ -5,9 +5,9 @@ var request = require("request");
 var router = express.Router();
 
 var env = {
-  AUTH0_CLIENT_ID: process.env.AUTH0_CLIENT_ID,
   AUTH0_DOMAIN: process.env.AUTH0_DOMAIN,
-  AUTH0_CALLBACK_URL: process.env.AUTH0_CALLBACK_URL
+  AUTH0_CLIENT_ID: process.env.SPA_AUTH0_CLIENT_ID,
+  AUTH0_CALLBACK_URL: process.env.SPA_AUTH0_CALLBACK_URL
 };
 
 router.get('/', ensureLoggedIn, function(req, res, next) {
@@ -21,6 +21,11 @@ router.get('/login', function(req, res, next) {
    });
 });
 
+router.get('/logout', function(req, res) {
+  req.logout();
+  res.redirect('/');
+});
+
 // Callback route which will redirect user to dashboard or where they came from if successful
 router.get('/callback',
   passport.authenticate('auth0', { failureRedirect: '/login' }),
@@ -28,30 +33,14 @@ router.get('/callback',
     res.redirect(req.session.returnTo || '/');
   });
 
-router.get('/change_password', ensureLoggedIn, function(req, res, next) {
-  var options = { method: 'POST',
-    url: 'https://eeg3.auth0.com/dbconnections/change_password',
-    headers: { 'content-type': 'application/json' },
-    body:
-     { client_id: process.env.AUTH0_CLIENT_ID,
-       email: req.user._json.email,
-       connection: 'Username-Password-Authentication' },
-       json: true
-     };
-
-  request(options, function (error, response, body) {
-    if (error) throw new Error(error);
-
-    res.render('profile.ejs', {
-      user: req.user,
-      passwordChange: true
-    });
-  });
-
-});
-
 router.get('/about', function(req, res, next) {
   res.render('about.ejs', { message: req.flash('loginMessage') });
+});
+
+router.get('/invite', ensureLoggedIn, function(req, res, next) {
+  res.render('invite.ejs', {
+    status: ""
+  });
 });
 
 router.get('/robots.txt', function(req, res, next) {
@@ -65,11 +54,6 @@ router.get('/profile', ensureLoggedIn, function(req, res, next) {
   });
 });
 
-router.get('/logout', function(req, res) {
-  req.logout();
-  res.redirect('/');
-});
-
 router.get('/fpbuilder', ensureLoggedIn, function(req, res, next) {
   res.render('fpbuilder', { user: req.user });
 });
@@ -78,16 +62,6 @@ router.get('/flightplan', ensureLoggedIn, function(req, res, next) {
   res.render('flightplan', { user: req.user });
 });
 
-router.get('/api/getUserInfo', ensureLoggedIn, function(req, res, next) {
-  var userInfo = [
-    {
-      id: req.user.id,
-      name: req.user.name,
-      email: req.user._json.email
-    }
-  ];
-  res.json(userInfo);
-});
 
 // Protect private javascript files with authentication
 router.all('/js-prv/*', ensureLoggedIn);

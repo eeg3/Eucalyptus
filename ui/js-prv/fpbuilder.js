@@ -707,7 +707,7 @@ function init () {
       formModified = true;
     });
 
-    helper.get("/api/getUserInfo")
+    helper.get("/api/user/")
       .then(function(data) {
         currentUser = data[0]["email"];
         $("#username").text(data[0]["email"]);

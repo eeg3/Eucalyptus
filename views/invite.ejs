@@ -1,0 +1,85 @@
+<% include partials/head %>
+
+<!-- Custom JS -->
+<script src="/js-prv/ApiHelper.js"></script>
+<script src="/js-prv/invite.js"></script>
+
+<!-- Intro.JS -->
+<link href="/css/introjs.css" rel="stylesheet">
+  <script src="/js-pub/introjs/intro.js"></script>
+<!-- Custom Intro.JS CSS Tweaks -->
+<link href="/css/introjs_eucalyptus.css" rel="stylesheet">
+
+<header id="introHeader" class="container-fluid">
+   <img src="/img/logo_only_header.png">
+   <p class="lead loginColor">Invite User</p>
+ </header>
+
+<body id="buildBody">
+  <% include partials/navbar %>
+
+  <div class="container-fluid">
+
+    <div id="summaryRow" class="row">
+      <div class="col-sm-12">
+        <div class="panel panel-inverse">
+          <div id="intro-panel-header" class="panel-heading">Invite New User</div>
+          <div class="panel-body">
+              <div class="row">
+                <div class="col-sm-12">
+                  <label>New User Details</label>
+                  <table id="table-references" class="table table-bordered table-striped sp-databox-table">
+                    <!--<thead>
+                      <tr><td>Name</td><td>URL</td></tr>
+                    </thead> -->
+                    <tbody>
+                      <tr id="userDetails">
+                        <td><input type="text" id="name" class="form-control" placeholder="Name" /></td>
+                        <td><input type="text" id="email" class="form-control" placeholder="Email" /></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12">
+                  <div id="submitFlightplan" class="btn-group">
+                    <button id="inviteUser" type="button" class="btn btn-success">Invite</button>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12">
+
+                  <%if (status == "Success") { %>
+                    <br>
+                    <div class="alert alert-success">
+                      <strong>Success!</strong> User has been added with the default password of 'eucalyptus'.
+                    </div>
+                  <% } %>
+
+                  <%if (status == "Bad Request") { %>
+                    <br>
+                    <div class="alert alert-danger">
+                      <strong>Error!</strong> User has not been added. Please check parameters and try again.
+                    </div>
+                  <% } %>
+
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div> <!-- End Container -->
+
+
+  <footer class="container-fluid">
+    <div class="alert alert-gray">
+      <p id="footer"><i class="fa fa-copyright"></i>&nbsp;2016 <a href="https://github.com/eeg3">https://github.com/eeg3</a>
+    </div>
+  </footer>
+
+</body>
+</html>

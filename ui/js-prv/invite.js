@@ -18,12 +18,10 @@ function init () {
 
   $(document).ready(function(){ // Enable tooltips after all the steps are processed.
 
-    $("#changePassword").click(function() {
-      window.location.href='/api/user/change_password';
-    });
-
-    $("#logout").click(function() {
-      window.location.href='/logout';
+    $("#inviteUser").click(function() {
+      if ($("#email").val() != "") {
+        window.location.href='/api/user/invite/' + $("#email").val();
+      }
     });
 
     $('[data-toggle="tooltip"]').tooltip();
