@@ -90,6 +90,7 @@ var routes = function(Flightplan){
             req.flightplan.product = req.body.product;
             req.flightplan.description = req.body.description;
             req.flightplan.outcome = req.body.outcome;
+            req.flightplan.refdoc = req.body.refdoc;
             req.flightplan.steps = req.body.steps;
             req.flightplan.save(function(err){
                 if(err)

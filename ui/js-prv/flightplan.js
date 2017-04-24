@@ -271,14 +271,33 @@ function displaySummary() {
 
           var flightplanDescription = flightplan[i]["description"];
           $("#flightplanDescription").html("<h3>" + flightplanDescription + "</h3>");
-          $("#flightplanDescription").append("<br><h5><b>Referenced Documentation</b></h5>");
-          $("#flightplanDescription").append('<ul class="docList">');
-          $("#flightplanDescription").append('<li class="docList"><a href="https://pubs.vmware.com/identity-manager-26/index.jsp#com.vmware.wsp-install_26/GUID-9055C5B4-9D5C-419C-B318-8B18D31D2CC8.html" target="_blank">Deploying VMware Identity Manager</a></li>');
-          $("#flightplanDescription").append('<li class="docList"><a href="https://pubs.vmware.com/identity-manager-26/index.jsp#com.vmware.wsp-install_26/GUID-9055C5B4-9D5C-419C-B318-8B18D31D2CC8.html" target="_blank">Preparing to Install VMware Identity Manager</a></li>');
-          $("#flightplanDescription").append('</ul>');
+
+          if (flightplan[i]["refdoc"] != "") {
+            putRefDoc(flightplan[i]["refdoc"]);
+          } 
         }
       }
     });
+}
+
+function putRefDoc(refdocItem) {
+
+  var refdoc = refdocItem.split("|||");
+  var numberOfSteps = refdoc.length;
+  var refNumber = null;
+
+  $("#flightplanDescription").append("<br><h5><b>Referenced Documentation</b></h5>");
+  $("#flightplanDescription").append('<ul class="docList">');
+
+  for(var i = 0; i <= refdoc.length; i++) {
+    $("#refName-" + i).val(refdoc[i].split(',,,')[0]);
+    $("#refUrl-" + i).val(refdoc[i].split(',,,')[1]);
+
+    $("#flightplanDescription").append('<li class="docList"><a href="' + refdoc[i].split(',,,')[1] + '" target="_blank">' + refdoc[i].split(',,,')[0] + '</a></li>');
+  }
+
+  $("#flightplanDescription").append('</ul>');
+
 }
 
 // Finds step quantity based on the DOM created by parseSteps(), and doesn't actually look at the API.

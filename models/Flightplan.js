@@ -20,6 +20,9 @@ var flightplanModel = new Schema({
   description: {
     type: String
   },
+  refdoc: {
+    type: String
+  },
   steps: {
     type: String
   }

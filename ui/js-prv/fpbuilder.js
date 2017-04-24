@@ -57,6 +57,8 @@ function addRef() {
   $("#refRow-" + currentRefNumber).after(tableLineItem);
 
   hookUpAddDelButtons();
+
+  return refNumber;
 }
 
 function createStep(stepNumber) {
@@ -459,6 +461,7 @@ function exportFlightplan() {
     var categoryPost = $("#category").val();
     var productPost = $("#product").val();
     var descriptionPost = $("#description").val();
+    var refdocPost = getRefDoc();
     var stepsPost = stepsString;
 
     var flightplanPost = {};
@@ -477,6 +480,9 @@ function exportFlightplan() {
     }
     if (descriptionPost !== "") {
       flightplanPost["description"] = descriptionPost;
+    }
+    if (refdocPost !== "") {
+      flightplanPost["refdoc"] = refdocPost;
     }
     if (stepsPost !== "") {
       flightplanPost["steps"] = stepsPost;
@@ -542,6 +548,7 @@ function getFlightplan(id) {
           loadedFpCategory = flightplan[i]["category"];
           displaySummary(id)
           createBoard(flightplan[i]["steps"]);
+          putRefDoc(flightplan[i]["refdoc"]);
           hookUpAddDelButtons();
           hookUpInputValidation();
 
@@ -618,7 +625,7 @@ function createBoard(steps) {
 
 }
 
-function testExportRef() {
+function getRefDoc() {
   var refDocString = "";
 
   for (var i = 0; i < 100; i++) {
@@ -668,8 +675,24 @@ function testExportRef() {
   }
 
   console.log(refDocString);
+  return refDocString;
 }
 
+function putRefDoc(refdocItem) {
+  var refdoc = refdocItem.split("|||");
+  var numberOfSteps = refdoc.length;
+  var refNumber = null;
+
+  for(var i = 1; i <= refdoc.length; i++) { // i = currentStep
+    if(!(i == refdoc.length)) {
+      refNumber = addRef();
+    }
+
+    $("#refName-" + i).val(refdoc[i-1].split(',,,')[0]);
+    $("#refUrl-" + i).val(refdoc[i-1].split(',,,')[1]);
+  }
+
+}
 
 function init () {
 
@@ -729,6 +752,12 @@ function init () {
 
   $("#createFlightplan").click(function() {
     exportFlightplan();
+  }); // Hook clicking Create FlightPlan
+
+
+
+  $("#testExportRef").click(function() {
+    testExportRef();
   }); // Hook clicking Create FlightPlan
 
   $("#createNewFP").click(function() {
